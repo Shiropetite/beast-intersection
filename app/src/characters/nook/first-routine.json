@@ -1,0 +1,123 @@
+{
+  "06:00": {
+    "text": "Se réveille",
+    "dialog": [
+      {
+        "text": "J'ai besoin d'un café..."
+      }
+    ]
+  },
+  "06:10": {
+    "text": "Se dirige vers la plage",
+    "position": {
+      "top": 420,
+      "left": 336
+    },
+    "dialog": [
+      {
+        "text": "café..."
+      }
+    ]
+  },
+  "06:20": {
+    "text": "Boit son café",
+    "dialog": [
+      {
+        "text": "café :)"
+      }
+    ]
+  },
+  "06:50": {
+    "text": "Se dirige vers la place",
+    "position": {
+      "top": 126,
+      "left": 336
+    },
+    "dialog": [
+      {
+        "text": "C'est parti pour le boulot !"
+      }
+    ]
+  },
+  "07:00": {
+    "text": "Travaille",
+    "dialog": [
+      {
+        "text": "Salut villageois..."
+      },
+      {
+        "choice": true,
+        "text": "Tu as besoin de quelque chose ?",
+        "yes": "Moi aussi... tu me passes un café ? :)",
+        "no": "Ah ? Ok..."
+      }
+    ]
+  },
+  "10:00": {
+    "text": "Va récolter des fruits",
+    "position": {
+      "top": 126,
+      "left": 462
+    },
+    "dialog": [
+      {
+        "text": "Mmmh quel bonne pomme... j'aimerai mangé une tarte au pomme..."
+      }
+    ]
+  },
+  "10:30": {
+    "text": "Travaille",
+    "position": {
+      "top": 126,
+      "left": 336
+    }
+  },
+  "13:00": {
+    "text": "Commence à manger",
+    "dialog": [
+      {
+        "text": "Num num num"
+      }
+    ]
+  },
+  "14:00": {
+    "text": "Travaille"
+  },
+  "15:00": {
+    "text": "Va récolter des fruits",
+    "position": {
+      "top": 126,
+      "left": 462
+    }
+  },
+  "15:30": {
+    "text": "Travaille",
+    "position": {
+      "top": 126,
+      "left": 336
+    }
+  },
+  "17:00": {
+    "text": "Va à la pèche",
+    "position": {
+      "top": 126,
+      "left": 126
+    }
+  },
+  "19:00": {
+    "text": "Prépare le feu",
+    "position": {
+      "top": 126,
+      "left": 336
+    }
+  },
+  "20:00": {
+    "text": "Commence à manger"
+  },
+  "20:30": {
+    "text": "Lit un livre"
+  },
+  "23:00": {
+    "text": "S'endors"
+  }
+}

@@ -1,0 +1,47 @@
+body {
+  background-color: rgb(90, 109, 134);
+  font-family: Arial;
+  font-size: 14px;
+  color: white;
+}
+
+#hero {
+  position: absolute;
+  background-color: white;
+  border: solid 3px black;
+  transition: all linear 0.1s;
+}
+
+#pnj {
+  position: absolute;
+  background-color: rgb(43, 255, 184);
+  border: solid 3px black;
+  transition: all linear 0.1s;
+}
+
+.chrono {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: rgb(208, 110, 75);
+  border: solid 5px brown;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dialog {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: rgb(208, 110, 75);
+  border: solid 5px brown;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
