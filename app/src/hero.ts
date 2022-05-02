@@ -1,4 +1,4 @@
-import { Direction, colisions } from '.';
+import { Direction} from '.';
 import { Character } from './character';
 
 export class Hero extends Character {
@@ -7,22 +7,8 @@ export class Hero extends Character {
     super('hero');
   }
 
-  colide(top: number, left: number) {
-    let isColision = false;
-    colisions.forEach((colision) => {
-      console.log("top", top, colision.top);
-      console.log("left", left, colision.left);
-
-      isColision = (left + 42) > colision.left && left < (colision.left + 42)
-                      && (top + 42) > colision.top && top < (colision.top + 42);
-
-      if(colision) return;
-    })
-    return isColision;
-  }
-
   move(key: Direction) {
-    const step = 40;
+    const step = 42;
     let top = super.getTop();
     let left = super.getLeft();
     

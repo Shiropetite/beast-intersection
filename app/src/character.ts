@@ -1,3 +1,5 @@
+import { colisions, isColliding } from ".";
+
 export class Character {
   private readonly type: string;
   // geometry
@@ -39,6 +41,16 @@ export class Character {
     element.style.left = `${this.left}px`;
     element.style.width = `${this.size}px`;
     element.style.height = `${this.size}px`;
+  }
+
+  colide(top: number, left: number) {
+    let isColision = false;
+    colisions.forEach((colision) => {
+      if(isColision === true) return;
+
+      isColision = isColliding(top, left, this.size, colision.top, colision.left, colision.size);
+    })
+    return isColision;
   }
 
   // getter & setter

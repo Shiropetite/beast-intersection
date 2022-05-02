@@ -42,6 +42,10 @@ export const routine = (time: string) => {
   })
 }
 
+export const isColliding = (top1: number, left1: number, size1: number, top2: number, left2: number, size2: number) => 
+  (left1 + size1) > left2 && left1 < (left2 + size2)
+    && (top1 + size1) > top2 && top1 < (top2 + size2);
+
 const onLoad = () => {
   chrono = new Chrono();
   dialog = new Dialog();
@@ -49,6 +53,7 @@ const onLoad = () => {
   hero = new Hero();
   nook = new PNJ('Tom Nook', 126, 336, nookRoutine);
   pnjs.push(nook);
+  colisions.push(hero);
   colisions.push(nook);
 } 
 
