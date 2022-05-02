@@ -34,6 +34,7 @@ let dialog: Dialog = null;
 let hero: Hero = null;
 let nook: PNJ = null;
 const pnjs: PNJ[] = [];
+export const colisions: any[] = [];
 
 export const routine = (time: string) => {
   pnjs.forEach((pnj) => {
@@ -48,6 +49,7 @@ const onLoad = () => {
   hero = new Hero();
   nook = new PNJ('Tom Nook', 126, 336, nookRoutine);
   pnjs.push(nook);
+  colisions.push(nook);
 } 
 
 const keyListener = (event: any) => {
