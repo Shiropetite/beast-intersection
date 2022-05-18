@@ -1,4 +1,4 @@
-import { routine } from ".";
+import { cameraHTML, routine } from ".";
 
 export class Chrono {
   private readonly htmlElement: HTMLElement;
@@ -21,7 +21,7 @@ export class Chrono {
     const element = document.createElement('div');
     element.id = "chrono";
     element.classList.add('chrono');
-    document.body.appendChild(element);
+    cameraHTML.appendChild(element);
   }
 
   update() { 

@@ -8,7 +8,7 @@ export class Hero extends Character {
   }
 
   move(key: Direction) {
-    const step = 42;
+    const step = 64 * 2;
     let top = super.getTop();
     let left = super.getLeft();
     
@@ -30,9 +30,13 @@ export class Hero extends Character {
     if(!this.colide(top, left)) {
       this.setTop(top);
       this.setLeft(left);
+
+      const map = document.getElementById('map');
+      map.style.transform = `translate3d( ${-left + (64 * 8)}px, ${-top + (64 * 4)}px, 0 )`;
     };
     
-    super.update();
+    super.update();  
+
   }
 }
 

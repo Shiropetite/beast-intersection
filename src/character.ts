@@ -1,4 +1,4 @@
-import { colisions, isColliding } from ".";
+import { colisions, isColliding, mapHTML } from ".";
 
 export class Character {
   private readonly type: string;
@@ -13,8 +13,8 @@ export class Character {
   public constructor(...parameters: any[]) { 
     if(parameters.length === 1) {
       this.type = parameters[0];
-      this.top = 0;
-      this.left = 0;
+      this.top = 64 * 4;
+      this.left = 64 * 8;
     }
 
     if(parameters.length === 3) {
@@ -23,7 +23,7 @@ export class Character {
       this.left = parameters[2];
     }
 
-    this.size = 42;
+    this.size = 64 * 2 - 6;
     this.create();
     this.update();
   }
@@ -31,14 +31,12 @@ export class Character {
   create(): void {
     const element = document.createElement('div');
     element.id = this.type;
-    document.body.appendChild(element);
+    mapHTML.appendChild(element);
   }
 
   update(): void {
     const element = document.getElementById(this.type);
-    
-    element.style.top = `${this.top}px`;
-    element.style.left = `${this.left}px`;
+    element.style.transform = `translate3d( ${this.left}px, ${this.top}px, 0 )`;
     element.style.width = `${this.size}px`;
     element.style.height = `${this.size}px`;
   }
@@ -47,8 +45,10 @@ export class Character {
     let isColision = false;
     colisions.forEach((colision) => {
       if(isColision === true) return;
+      const width = colision?.width ?? colision?.size
+      const height = colision?.height ?? colision?.size
 
-      isColision = isColliding(top, left, this.size, colision.top, colision.left, colision.size);
+      isColision = isColliding(top, left, this.size, this.size, colision.top, colision.left, width, height);
     })
     return isColision;
   }

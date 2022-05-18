@@ -23,33 +23,35 @@ export class PNJ extends Character {
   }
 
   move(finalTop: number, finalLeft: number) {
-    const steps = 42;
+    const steps = 64 * 2;
+    const finTop = finalTop * 2 * 64
+    const finTLeft = finalLeft * 2 * 64
     
     const walk = setInterval(() => {
       const top = this.getTop();
       const left = this.getLeft();
 
-      if(top === finalTop && left === finalLeft) { clearInterval(walk) }
+      if(top === finTop && left === finTLeft) { clearInterval(walk) }
 
-      if(top < finalTop && !this.colide(top + steps, left)) {
+      if(top < finTop && !this.colide(top + steps, left)) {
         super.setTop(top + steps)
         this.update();
         return;
       }
 
-      if(top > finalTop && !this.colide(top - steps, left)) {
+      if(top > finTop && !this.colide(top - steps, left)) {
         super.setTop(top - steps)
         this.update();
         return;
       }
 
-      if(left < finalLeft && !this.colide(top, left + steps)) {
+      if(left < finTLeft && !this.colide(top, left + steps)) {
         super.setLeft(left + steps)
         this.update();
         return;
       }
 
-      if(left > finalLeft && !this.colide(top, left - steps)) {
+      if(left > finTLeft && !this.colide(top, left - steps)) {
         super.setLeft(left - steps)
         this.update();
         return;

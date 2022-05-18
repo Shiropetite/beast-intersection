@@ -1,3 +1,4 @@
+import { cameraHTML } from '.';
 import { PNJ } from './pnj';
 
 export class Dialog {
@@ -19,7 +20,7 @@ export class Dialog {
     const element = document.createElement("div");
     element.id = "dialog"
     element.classList.add('dialog');
-    document.body.appendChild(element);
+    cameraHTML.appendChild(element);
   }
 
   interact(pnj: PNJ) {

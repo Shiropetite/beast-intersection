@@ -1,0 +1,97 @@
+:root {
+  --pixel-size: 2px;
+  --grid-cell: calc( var(--pixel-size) * 2 * 32 );
+}
+
+body {
+  background-color: rgb(24, 29, 35);
+  font-family: Arial;
+  font-size: 14px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.camera {
+  width: calc(var(--grid-cell) * 9);
+  height: calc(var(--grid-cell) * 5);
+  overflow: hidden;
+  background: #000000;
+  position:relative;
+  border: solid 3px white
+}
+
+.map {
+  image-rendering: pixelated;
+  background-image: url(./assets/map.png);
+  background-size: 100%;
+  width: calc(16 * var(--grid-cell)); 
+  height: calc(10 * var(--grid-cell));
+  position: relative;
+  transition: all linear 0.1s;
+}
+
+#hero {
+  position: absolute;
+  background-color: white;
+  border: solid 3px black;
+  transition: all linear 0.1s;
+}
+
+#pnj {
+  position: absolute;
+  background-color: rgb(43, 255, 184);
+  border: solid 3px black;
+  transition: all linear 0.1s;
+}
+
+.chrono {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: rgb(208, 110, 75);
+  border: solid 5px brown;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dialog {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: rgb(208, 110, 75);
+  border: solid 5px brown;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+#inventory {
+  z-index: 9999;
+  position: absolute;
+  background-color: rgb(208, 110, 75);
+  border: solid 5px brown;
+  border-radius: 6px;
+  left: 50%;
+  bottom: 30px;
+  bottom: calc(64 * 2)px;
+  transform: translate(-50%, 0);
+}
+
+td {
+  border: solid 1px brown;
+  width: 40px;
+  height: 40px;
+}
+
+.selected {
+  background-color: rgb(255, 255, 150);
+}

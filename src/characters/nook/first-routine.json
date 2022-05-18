@@ -10,8 +10,8 @@
   "06:10": {
     "text": "Se dirige vers la plage",
     "position": {
-      "top": 420,
-      "left": 336
+      "top": 7,
+      "left": 2
     },
     "dialog": [
       {
@@ -30,8 +30,8 @@
   "06:50": {
     "text": "Se dirige vers la place",
     "position": {
-      "top": 126,
-      "left": 336
+      "top": 4,
+      "left": 2
     },
     "dialog": [
       {
@@ -55,10 +55,6 @@
   },
   "10:00": {
     "text": "Va récolter des fruits",
-    "position": {
-      "top": 126,
-      "left": 462
-    },
     "dialog": [
       {
         "text": "Mmmh quel bonne pomme... j'aimerai mangé une tarte au pomme..."
@@ -66,11 +62,7 @@
     ]
   },
   "10:30": {
-    "text": "Travaille",
-    "position": {
-      "top": 126,
-      "left": 336
-    }
+    "text": "Travaille"
   },
   "13:00": {
     "text": "Commence à manger",
@@ -84,32 +76,16 @@
     "text": "Travaille"
   },
   "15:00": {
-    "text": "Va récolter des fruits",
-    "position": {
-      "top": 126,
-      "left": 462
-    }
+    "text": "Va récolter des fruits"
   },
   "15:30": {
-    "text": "Travaille",
-    "position": {
-      "top": 126,
-      "left": 336
-    }
+    "text": "Travaille"
   },
   "17:00": {
-    "text": "Va à la pèche",
-    "position": {
-      "top": 126,
-      "left": 126
-    }
+    "text": "Va à la pèche"
   },
   "19:00": {
-    "text": "Prépare le feu",
-    "position": {
-      "top": 126,
-      "left": 336
-    }
+    "text": "Prépare le feu"
   },
   "20:00": {
     "text": "Commence à manger"
