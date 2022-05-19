@@ -54,6 +54,8 @@ export class Character {
   }
 
   // getter & setter
+  getSize(): number { return this.size; }
+
   getTop(): number { return this.top; }
   setTop(top: number): void { this.top = top; }
 

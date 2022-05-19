@@ -70,6 +70,20 @@ export const colisions: any[] = [
   } ,
 ];
 
+let dialogOpen: any = null
+
+export const interact = () => {
+  pnjs.forEach((pnj) => {
+    const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
+                                pnj.getTop() - (64 * 2), pnj.getLeft() - (64 * 2), pnj.getSize() + (64 * 2 * 2), pnj.getSize() + (64 * 2 * 2));
+    if(collide) {
+      dialog.interact(pnj);
+      dialogOpen = pnj
+      chrono.stop();
+    }
+  })
+}
+
 export const routine = (time: string) => {
   pnjs.forEach((pnj) => {
     pnj.doRoutine(time);
@@ -119,8 +133,18 @@ const keyListener = (event: any) => {
     }
     return;
   }
-  if(chrono.isRunning() && event.key === Key.INTERACT) {
-    dialog.interact(nook);
+  if(event.key === Key.INTERACT) {
+    if(!dialog.isVisible() && chrono.isRunning()) {
+      interact();
+    }
+    else if(dialogOpen !== null){
+      dialog.interact(dialogOpen)
+      
+      if(!dialog.isVisible()) {
+        dialogOpen = null;
+        chrono.start()
+      }
+    }
     return;
   }
   if(chrono.isRunning() && event.key === Key.INVENTORY) {
@@ -135,7 +159,7 @@ const keyListener = (event: any) => {
     hero.move(event.key);
     return;
   }
-  if(chrono.isRunning() && dialog.haveChoice() && ['z', 's'].includes(event.key)) {
+  if(!chrono.isRunning() && dialog.haveChoice() && ['z', 's'].includes(event.key)) {
     dialog.updateChoice(event.key);
     return;
   }
