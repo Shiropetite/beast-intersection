@@ -3,8 +3,6 @@ import { PNJ } from './pnj';
 
 export class Dialog {
   private readonly htmlElement: HTMLElement;
-  private pnj: PNJ;
-  private currentLine: number;
   private choice: string | null;
 
   constructor() { 
@@ -12,7 +10,6 @@ export class Dialog {
 
     this.htmlElement = document.getElementById("dialog");
     this.htmlElement.style.display = 'none';
-    this.currentLine = 0;
     this.choice = null;
   }
 
@@ -23,40 +20,9 @@ export class Dialog {
     cameraHTML.appendChild(element);
   }
 
-  interact(pnj: PNJ) {
-    this.pnj = pnj;
-    const currentDialog = this.pnj.getAction().dialog;
-
-    if(currentDialog) {
-      if(!this.isVisible()) this.show();
-      if(this.currentLine === currentDialog.length) {
-        this.hide();
-        return;
-      }
-
-      const line = currentDialog[this.currentLine];
-      if(this.haveChoice()) {
-        this.htmlElement.innerHTML = line[this.choice];
-        this.choice = null;
-        this.currentLine++;
-        return
-      }
-      else {
-        this.htmlElement.innerHTML = line.text;
-      }
-
-      if(line.choice) {
-        this.addChoice();
-      }
-      else {
-        this.currentLine++;
-      }
-    }
-    else {
-      if(this.isVisible()) {
-        this.hide();
-      }
-    }
+  update(text: string) {
+    this.htmlElement.innerHTML = text;
+    this.choice = null;
   }
 
   addChoice() {
@@ -81,6 +47,8 @@ export class Dialog {
     }
   }
 
+  getChoice() { return this.choice }
+
   haveChoice() { return this.choice !== null }
 
   show() {
@@ -89,8 +57,7 @@ export class Dialog {
 
   hide() {
     this.htmlElement.style.display = 'none';
-    this.pnj = null;
-    this.currentLine = 0;
+    this.htmlElement.innerHTML = "";
   }
 
   isVisible() { 

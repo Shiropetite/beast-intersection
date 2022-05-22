@@ -11,7 +11,7 @@ export class Inventory {
     for(let i = 0; i < this.height; i++) {
       const line = []
       for(let j = 0; j < this.width; j++) {
-        line.push({})
+        line.push(null)
       }
       this.tab.push(line);
     }
@@ -39,6 +39,12 @@ export class Inventory {
     cameraHTML.appendChild(element);
   }
 
+  update(x: number, y: number): void {
+    const cell = document.getElementById(`${y}-${x}`)
+    cell.classList.add(this.tab[y][x]);
+    cell.innerHTML = this.tab[y][x];
+  }
+
   show(): void {
     this.htmlElement.style.display = 'block';
   }
@@ -52,6 +58,26 @@ export class Inventory {
 
   isVisible(): boolean {
     return this.htmlElement.style.display === 'block';
+  }
+
+  addObject(object: string): void {
+    let isUpdate = false;
+    let position: any = {x: 0, y: 0, item: null}
+
+    this.tab.forEach((line, idxLine) => {
+      if(isUpdate) return;
+
+      line.forEach((item, idxItem) => {
+        if(isUpdate) return;
+        if(item === null) {
+          position = {x: idxItem, y: idxLine, item: object}
+          isUpdate = true;
+        }
+      })
+    })
+
+    this.tab[position.y][position.x] = position.item;
+    this.update(position.x, position.y);
   }
 
   addSelected(): void {

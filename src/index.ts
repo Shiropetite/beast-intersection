@@ -7,6 +7,7 @@ import { PNJ } from './pnj';
 import { Chrono } from './chrono';
 import { Dialog } from './dialog';
 import { Inventory } from './inventory';
+import { Resource } from './resource';
 
 // routine
 const nookRoutine = require('./characters/nook/first-routine.json');
@@ -39,6 +40,7 @@ let inventory: Inventory = null;
 let hero: Hero = null;
 let nook: PNJ = null;
 const pnjs: PNJ[] = [];
+const ressources: Resource[] = []
 export const colisions: any[] = [
   // mur de gauche
   {
@@ -64,7 +66,7 @@ export const colisions: any[] = [
   // mur du bas
   {
     top: 64 * 2 * 9,
-    left: 0,
+    left: 64 * 2,
     width: 64 * 2 * 14 - 6,
     height: 64 * 2 
   } ,
@@ -73,13 +75,27 @@ export const colisions: any[] = [
 let dialogOpen: any = null
 
 export const interact = () => {
+  let isAction = false;
   pnjs.forEach((pnj) => {
     const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
                                 pnj.getTop() - (64 * 2), pnj.getLeft() - (64 * 2), pnj.getSize() + (64 * 2 * 2), pnj.getSize() + (64 * 2 * 2));
-    if(collide) {
-      dialog.interact(pnj);
+    if(collide && !!pnj.getAction()) {
+      pnj.interact(dialog);
       dialogOpen = pnj
       chrono.stop();
+      isAction = true
+    }
+  })
+
+  if(isAction) return;
+
+  ressources.forEach((ressource) => {
+    const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
+                                ressource.getTop(), ressource.getLeft(), ressource.getSize(), ressource.getSize());
+    if(collide) {
+      console.log("Vous ramassez un " + ressource.getType());
+      inventory.addObject(ressource.getType())
+      ressource.remove(dialog)
     }
   })
 }
@@ -119,6 +135,7 @@ const onLoad = () => {
   hero = new Hero();
   nook = new PNJ('Tom Nook', 64 * 2 * 3, 64 * 2 * 2, nookRoutine);
   pnjs.push(nook);
+  ressources.push(new Resource('caillou', (64 * 2 * 7 + 30), (64 * 2 * 4 + 30)))
   colisions.push(hero);
   colisions.push(nook);
 } 
@@ -138,12 +155,15 @@ const keyListener = (event: any) => {
       interact();
     }
     else if(dialogOpen !== null){
-      dialog.interact(dialogOpen)
+      dialogOpen.interact(dialog)
       
       if(!dialog.isVisible()) {
         dialogOpen = null;
         chrono.start()
       }
+    }
+    else if (dialog.isVisible()){
+      dialog.hide();
     }
     return;
   }

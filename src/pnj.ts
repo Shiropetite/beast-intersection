@@ -1,24 +1,61 @@
 import { Character } from './character';
+import { Dialog } from './dialog';
 
 export class PNJ extends Character {
   private routine: any;
   private name: string;
   private currentAction: any;
+  private currentDialog: number;
 
   constructor(name: string, top: number, left: number, routine: any) {
     super('pnj', top, left);
     this.name = name;
     this.routine = routine;
+    this.currentDialog = 0;
   }
 
   doRoutine(time: string) {
     if(Object.keys(this.routine).includes(time)) {
+      this.currentDialog = 0;
       this.currentAction = this.routine[time];
       console.log(this.currentAction.text);
 
       if(this.currentAction.position) {
         this.move(this.currentAction.position.top, this.currentAction.position.left)
       }
+    }
+  }
+
+  interact(dialog: Dialog) {
+    if(dialog.isVisible()) {
+      console.log(this.currentAction.dialog.length, this.currentDialog)
+      if(this.currentAction.dialog.length > this.currentDialog) {
+        if(dialog.haveChoice()) {
+          dialog.update(this.currentAction.dialog[this.currentDialog][dialog.getChoice()]);
+          this.currentDialog++;
+          return;
+        }
+        else {
+          dialog.update(this.currentAction.dialog[this.currentDialog].text);
+        }
+        
+        if(this.currentAction.dialog[this.currentDialog]?.choice === true) {
+          dialog.addChoice();
+        }
+        else {
+          this.currentDialog++;
+        }
+        
+      }
+      else {
+        dialog.hide();
+        this.currentDialog = 0;
+      }
+    }
+    else {
+      dialog.update(this.currentAction.dialog[this.currentDialog].text);
+      dialog.show();
+      this.currentDialog++;
     }
   }
 

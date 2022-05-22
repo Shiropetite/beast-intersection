@@ -38,11 +38,23 @@ body {
   background-color: white;
   border: solid 3px black;
   transition: all linear 0.1s;
+  z-index: 1000;
 }
 
 #pnj {
   position: absolute;
   background-color: rgb(43, 255, 184);
+  border: solid 3px black;
+  transition: all linear 0.1s;
+}
+
+.caillou {
+  background-color: grey;
+}
+
+#caillou {
+  position: absolute;
+  background-color: grey;
   border: solid 3px black;
   transition: all linear 0.1s;
 }
@@ -90,8 +102,10 @@ td {
   border: solid 1px brown;
   width: 40px;
   height: 40px;
+  text-align: center;
 }
 
 .selected {
   background-color: rgb(255, 255, 150);
+  color: black
 }
