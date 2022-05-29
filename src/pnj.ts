@@ -28,7 +28,6 @@ export class PNJ extends Character {
 
   interact(dialog: Dialog) {
     if(dialog.isVisible()) {
-      console.log(this.currentAction.dialog.length, this.currentDialog)
       if(this.currentAction.dialog.length > this.currentDialog) {
         if(dialog.haveChoice()) {
           dialog.update(this.currentAction.dialog[this.currentDialog][dialog.getChoice()]);

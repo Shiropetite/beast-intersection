@@ -117,7 +117,7 @@ td {
   transition: all linear 0.1s;
 }
 
-.life-receptacle {
+.life-container {
   position: absolute;
   width: 128px;
   height: 10px;

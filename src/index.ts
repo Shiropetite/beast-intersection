@@ -8,7 +8,7 @@ import { Chrono } from './chrono';
 import { Dialog } from './dialog';
 import { Inventory } from './inventory';
 import { Resource } from './resource';
-import { Fish } from './fish';
+import { Fish, FishSpecies } from './fish';
 import { Entity } from './entity';
 
 // routine
@@ -88,7 +88,7 @@ export const interact = async () => {
   pnjs.forEach((pnj) => {
     const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
                                 pnj.getTop() - (64 * 2), pnj.getLeft() - (64 * 2), pnj.getSize() + (64 * 2 * 2), pnj.getSize() + (64 * 2 * 2));
-    if(collide && !!pnj.getAction()) {
+    if(collide && !!pnj.getAction().dialog) {
       pnj.interact(dialog);
       dialogOpen = pnj
       chrono.stop();
@@ -162,8 +162,8 @@ const onLoad = () => {
   colisions.push(hero);
   colisions.push(nook);
 
-  entities.push(new Fish('bar commun', 100, (box * 4), (box * 9), 0, -box));
-  entities.push(new Fish('saumon', 200, (box * 7), (box * 9), 0, -box));
+  entities.push(new Fish(FishSpecies.BAR_COMMUN, 100, (box * 4), (box * 9), 0, -box));
+  entities.push(new Fish(FishSpecies.SAUMON, 300, (box * 7), (box * 9), 0, -box));
 } 
 
 export let wait: boolean = false;
