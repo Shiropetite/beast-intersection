@@ -46,9 +46,6 @@ export class Entity {
       this.hitWidth = parameters[7];
       this.hitHeight = parameters[8];
     }
-
-    this.create();
-    this.update();
   }
 
   // Create HTML
@@ -89,6 +86,8 @@ export class Entity {
   }
 
   // getter & setter
+  getId(): string { return this.id }
+
   getWidth(): number { return this.width; }
   getHeight(): number { return this.height; }
 

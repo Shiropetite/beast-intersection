@@ -59,14 +59,6 @@ body {
   transition: all linear 0.1s;
 }
 
-
-#fish {
-  position: absolute;
-  background-color: rgb(0, 0, 255);
-  border: solid 3px black;
-  transition: all linear 0.1s;
-}
-
 .chrono {
   position: absolute;
   top: 0;
@@ -118,7 +110,14 @@ td {
   color: black
 }
 
-#life-receptacle {
+.fish {
+  position: absolute;
+  background-color: rgb(0, 0, 255);
+  border: solid 3px black;
+  transition: all linear 0.1s;
+}
+
+.life-receptacle {
   position: absolute;
   width: 128px;
   height: 10px;
@@ -126,7 +125,7 @@ td {
   z-index: 10;
 }
 
-#life {
+.life {
   position: absolute;
   width: 128px;
   height: 10px;

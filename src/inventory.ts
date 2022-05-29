@@ -41,7 +41,6 @@ export class Inventory {
 
   update(x: number, y: number): void {
     const cell = document.getElementById(`${y}-${x}`)
-    cell.classList.add(this.tab[y][x]);
     cell.innerHTML = this.tab[y][x];
   }
 

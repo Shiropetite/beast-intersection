@@ -83,7 +83,7 @@ let dialogOpen: any = null
 
 export const box = 64 * 2;
 
-export const interact = () => {
+export const interact = async () => {
   let isAction = false;
   pnjs.forEach((pnj) => {
     const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
@@ -109,14 +109,14 @@ export const interact = () => {
   })
 
   let toRemove = -1;
-  entities.forEach(async (entity, index) => {
-    const collide = entity.colide(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize())
+  for(let i = 0; i < entities.length; i++) {
+    const collide = entities[i].colide(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize())
     
     if(collide) {
-      const remove = await entity.interact();
-      if(remove) toRemove = index;
+      const remove = await entities[i].interact();
+      if(remove) toRemove = i;
     }
-  })
+  }
 
   if(toRemove >= 0) {
     entities = entities.filter((_, i) => i !== toRemove)
@@ -162,11 +162,12 @@ const onLoad = () => {
   colisions.push(hero);
   colisions.push(nook);
 
-  entities.push(new Fish(100, (box * 4), (box * 9), 0, -box));
+  entities.push(new Fish('bar commun', 100, (box * 4), (box * 9), 0, -box));
+  entities.push(new Fish('saumon', 200, (box * 7), (box * 9), 0, -box));
 } 
 
 export let wait: boolean = false;
-const keyListener = (event: any) => {
+const keyListener = async (event: any) => {
   if(wait) return;
   wait = true;
   setTimeout(() => { wait = false }, 150)
@@ -181,7 +182,7 @@ const keyListener = (event: any) => {
   }
   if(hero.getCanInteract() && event.key === Key.INTERACT) {
     if(!dialog.isVisible() && chrono.isRunning()) {
-      interact();
+      await interact();
     }
     else if(dialogOpen !== null){
       dialogOpen.interact(dialog)
