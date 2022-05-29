@@ -48,15 +48,16 @@ body {
   transition: all linear 0.1s;
 }
 
-.caillou {
-  background-color: grey;
+.branche {
+  position: absolute;
+  background-color: brown;
+  border: solid 3px black;
 }
 
-#caillou {
+.pierre {
   position: absolute;
   background-color: grey;
   border: solid 3px black;
-  transition: all linear 0.1s;
 }
 
 .chrono {

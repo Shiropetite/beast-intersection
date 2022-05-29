@@ -1,58 +1,47 @@
-import { mapHTML } from ".";
-import { Dialog } from './dialog';
+import { box, dialog, hero, inventory, sleep } from ".";
+import { Entity } from "./entity";
 
-export class Resource {
-  private readonly id: string;
-  // geometry
-  private readonly size: number;
-  private top: number;
-  private left: number;
+let ressourceCounter = 0;
 
-  // constructor
-  public constructor(id:string);
-  public constructor(id: string, top: number, left: number);
-  public constructor(...parameters: any[]) { 
-    if(parameters.length === 1) {
-      this.id = parameters[0];
-      this.top = 64 * 4;
-      this.left = 64 * 8;
-    }
+export enum ResourceType {
+  PIERRE="pierre",
+  BRANCHE="branche"
+}
 
-    if(parameters.length === 3) {
-      this.id = parameters[0];
-      this.top = parameters[1];
-      this.left = parameters[2];
-    }
+export class Resource extends Entity {
+  private name: ResourceType; // Espece de poisson
 
-    this.size = 64  ;
+  constructor(name: ResourceType, top: number, left: number, ) {
+    super(`ressource-${ressourceCounter++}`, top, left, box - 6, box - 6);
+    this.name = name;
+
     this.create();
+    this.update();
   }
 
   create(): void {
-    const element = document.createElement('div');
-    element.id = this.id;
-    element.style.top = `${this.top}px`;
-    element.style.left = `${this.left}px`;
-    element.style.width = `${this.size}px`;
-    element.style.height = `${this.size}px`;
-    mapHTML.appendChild(element);
+    super.create();
+    document.getElementById(this.getId()).classList.add(this.name);
   }
 
-  remove(dialog: Dialog): void {
-    const element = document.getElementById(this.id);
-    mapHTML.removeChild(element);
+  async interact(): Promise<boolean> {
+    hero.setCanInteract(false);
+    hero.setCanMove(false);
+    
+    super.remove();
+
+    dialog.update(`Vous ramassez un ${this.name} !`);
     dialog.show();
-    dialog.update(`Vous avez trouvé un ${this.id} !`)
+   
+    inventory.addObject(this.name);
+
+    await sleep(2000);
+
+    dialog.hide();
+
+    hero.setCanInteract(true);
+    hero.setCanMove(true);
+    return true;
   }
-
-  // getter & setter
-  getType(): string { return this.id }
-  getSize(): number { return this.size; }
-
-  getTop(): number { return this.top; }
-  setTop(top: number): void { this.top = top; }
-
-  getLeft(): number { return this.left; }
-  setLeft(left: number): void { this.left = left; }
 
 }

@@ -7,7 +7,7 @@ import { PNJ } from './pnj';
 import { Chrono } from './chrono';
 import { Dialog } from './dialog';
 import { Inventory } from './inventory';
-import { Resource } from './resource';
+import { Resource, ResourceType } from './resource';
 import { Fish, FishSpecies } from './fish';
 import { Entity } from './entity';
 
@@ -37,6 +37,8 @@ export enum Key {
   DOWN='s'
 }
 
+export const box = 64 * 2;
+
 export let cameraHTML: HTMLElement = null;
 export let mapHTML: HTMLElement = null;
 let chrono: Chrono = null;
@@ -46,48 +48,52 @@ export let inventory: Inventory = null;
 export let hero: Hero = null;
 let nook: PNJ = null;
 const pnjs: PNJ[] = [];
-const ressources: Resource[] = []
 let entities: Entity[] = []
 export const colisions: any[] = [
   // mur de gauche
   {
     top: 0,
     left: 0,
-    width: 64 * 2 - 6,
-    height: 64 * 2 * 10
+    width: box - 6,
+    height: box * 10
   },
   // mur du haut
   {
     top: 0,
-    left: 64 * 2,
-    width: 64 * 2 * 14 - 6,
-    height: 64 * 2 
+    left: box,
+    width: box * 14 - 6,
+    height: box 
   } ,
   // mur de droite
   {
     top: 0,
-    left: 64 * 2 * 15,
-    width: 64 * 2,
-    height: 64 * 2 * 10
+    left: box * 15,
+    width: box,
+    height: box * 10
   },
   // mur du bas
   {
-    top: 64 * 2 * 9,
-    left: 64 * 2,
-    width: 64 * 2 * 14 - 6,
-    height: 64 * 2 
-  } ,
+    top: box * 9,
+    left: box,
+    width: box * 14 - 6,
+    height: box 
+  },
+  // riviere
+  {
+    top: 0,
+    left: box * 9,
+    width: box * 2,
+    height: box * 10
+  },
 ];
 
 let dialogOpen: any = null
-
-export const box = 64 * 2;
 
 export const interact = async () => {
   let isAction = false;
   pnjs.forEach((pnj) => {
     const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
-                                pnj.getTop() - (64 * 2), pnj.getLeft() - (64 * 2), pnj.getSize() + (64 * 2 * 2), pnj.getSize() + (64 * 2 * 2));
+                                pnj.getTop() - (box), pnj.getLeft() - (box), pnj.getSize() + (box * 2), pnj.getSize() + (box * 2));
     if(collide && !!pnj.getAction().dialog) {
       pnj.interact(dialog);
       dialogOpen = pnj
@@ -97,16 +103,6 @@ export const interact = async () => {
   })
 
   if(isAction) return;
-
-  ressources.forEach((ressource) => {
-    const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
-                                ressource.getTop(), ressource.getLeft(), ressource.getSize(), ressource.getSize());
-    if(collide) {
-      console.log("Vous ramassez un " + ressource.getType());
-      inventory.addObject(ressource.getType())
-      ressource.remove(dialog)
-    }
-  })
 
   let toRemove = -1;
   for(let i = 0; i < entities.length; i++) {
@@ -156,12 +152,15 @@ const onLoad = () => {
   inventory = new Inventory();
 
   hero = new Hero();
-  nook = new PNJ('Tom Nook', 64 * 2 * 3, 64 * 2 * 2, nookRoutine);
+  nook = new PNJ('Tom Nook', box * 3, box * 2, nookRoutine);
   pnjs.push(nook);
-  ressources.push(new Resource('caillou', (64 * 2 * 7 + 30), (64 * 2 * 4 + 30)))
+  
   colisions.push(hero);
   colisions.push(nook);
 
+
+  entities.push(new Resource(ResourceType.PIERRE, (box * 7), (box * 4)));
+  entities.push(new Resource(ResourceType.BRANCHE, (box * 2), (box * 7)));
   entities.push(new Fish(FishSpecies.BAR_COMMUN, 100, (box * 4), (box * 9), 0, -box));
   entities.push(new Fish(FishSpecies.SAUMON, 300, (box * 7), (box * 9), 0, -box));
 } 
