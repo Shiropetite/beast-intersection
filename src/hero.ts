@@ -3,6 +3,7 @@ import { Character } from './character';
 
 export class Hero extends Character {
   private canMove: boolean = true
+  private canInteract: boolean = true
 
   constructor() {
     super('hero');
@@ -12,8 +13,16 @@ export class Hero extends Character {
     this.canMove = canMove;
   }
 
+  setCanInteract(canInteract: boolean): void {
+    this.canInteract = canInteract;
+  }
+
   getCanMove(): boolean {
     return this.canMove;
+  }
+
+  getCanInteract(): boolean {
+    return this.canInteract;
   }
 
   move(key: Direction) {

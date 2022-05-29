@@ -30,7 +30,9 @@ export class Fish extends Entity {
   }
 
   async beginCatch() {
+    hero.setCanInteract(false);
     hero.setCanMove(false);
+    this.isCatching = true;
     dialog.show();
     dialog.update(`Le poisson a mordu à l'hameçon !`);
 
@@ -38,10 +40,11 @@ export class Fish extends Entity {
 
     dialog.hide();
     this.showLife();
-    this.isCatching = true;
+    hero.setCanInteract(true)
   }
 
   async stopCatch() {
+    hero.setCanInteract(false);
     this.remove();
 
     dialog.show();
@@ -50,6 +53,7 @@ export class Fish extends Entity {
     await sleep(2000);
 
     dialog.hide();
+    hero.setCanInteract(true);
     hero.setCanMove(true);
   }
 

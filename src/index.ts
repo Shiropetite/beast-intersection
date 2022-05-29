@@ -165,8 +165,12 @@ const onLoad = () => {
   entities.push(new Fish(100, (box * 4), (box * 9), 0, -box));
 } 
 
+export let wait: boolean = false;
 const keyListener = (event: any) => {
-  if(event.key === Key.PAUSE) {
+  if(wait) return;
+  wait = true;
+  setTimeout(() => { wait = false }, 150)
+  if(hero.getCanInteract() && event.key === Key.PAUSE) {
     if(chrono.isRunning()) {
       chrono.stop();
     }
@@ -175,7 +179,7 @@ const keyListener = (event: any) => {
     }
     return;
   }
-  if(event.key === Key.INTERACT) {
+  if(hero.getCanInteract() && event.key === Key.INTERACT) {
     if(!dialog.isVisible() && chrono.isRunning()) {
       interact();
     }
