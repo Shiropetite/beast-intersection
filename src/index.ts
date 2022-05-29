@@ -8,9 +8,15 @@ import { Chrono } from './chrono';
 import { Dialog } from './dialog';
 import { Inventory } from './inventory';
 import { Resource } from './resource';
+import { Fish } from './fish';
+import { Entity } from './entity';
 
 // routine
 const nookRoutine = require('./characters/nook/first-routine.json');
+
+export const sleep = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export enum Direction {
   UP='z',
@@ -34,13 +40,14 @@ export enum Key {
 export let cameraHTML: HTMLElement = null;
 export let mapHTML: HTMLElement = null;
 let chrono: Chrono = null;
-let dialog: Dialog = null;
-let inventory: Inventory = null;
+export let dialog: Dialog = null;
+export let inventory: Inventory = null;
 
-let hero: Hero = null;
+export let hero: Hero = null;
 let nook: PNJ = null;
 const pnjs: PNJ[] = [];
 const ressources: Resource[] = []
+let entities: Entity[] = []
 export const colisions: any[] = [
   // mur de gauche
   {
@@ -74,6 +81,8 @@ export const colisions: any[] = [
 
 let dialogOpen: any = null
 
+export const box = 64 * 2;
+
 export const interact = () => {
   let isAction = false;
   pnjs.forEach((pnj) => {
@@ -98,6 +107,20 @@ export const interact = () => {
       ressource.remove(dialog)
     }
   })
+
+  let toRemove = -1;
+  entities.forEach(async (entity, index) => {
+    const collide = entity.colide(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize())
+    
+    if(collide) {
+      const remove = await entity.interact();
+      if(remove) toRemove = index;
+    }
+  })
+
+  if(toRemove >= 0) {
+    entities = entities.filter((_, i) => i !== toRemove)
+  }
 }
 
 export const routine = (time: string) => {
@@ -138,6 +161,8 @@ const onLoad = () => {
   ressources.push(new Resource('caillou', (64 * 2 * 7 + 30), (64 * 2 * 4 + 30)))
   colisions.push(hero);
   colisions.push(nook);
+
+  entities.push(new Fish(100, (box * 4), (box * 9), 0, -box));
 } 
 
 const keyListener = (event: any) => {
@@ -175,7 +200,7 @@ const keyListener = (event: any) => {
     inventory.moveCursor(event.key);
     return;
   }
-  if(chrono.isRunning() && !dialog.isVisible() && Object.values(Direction).includes(event.key)) {
+  if(hero.getCanMove() && chrono.isRunning() && !dialog.isVisible() && Object.values(Direction).includes(event.key)) {
     hero.move(event.key);
     return;
   }

@@ -2,9 +2,18 @@ import { Direction} from '.';
 import { Character } from './character';
 
 export class Hero extends Character {
+  private canMove: boolean = true
 
   constructor() {
     super('hero');
+  }
+
+  setCanMove(canMove: boolean): void {
+    this.canMove = canMove;
+  }
+
+  getCanMove(): boolean {
+    return this.canMove;
   }
 
   move(key: Direction) {
