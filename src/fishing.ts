@@ -8,33 +8,33 @@ export enum FishSpecies {
   SAUMON="saumon"
 }
 
+let isCatching: boolean = false; // Est ce que le joueur attrape le poisson
+let lifeInterval: NodeJS.Timer; // intervale dans lequel le poisson se régenère
+let angryInterval: NodeJS.Timer; // intervale dans lequel le poisson est en colère
+let isAngry: boolean = false; // Est ce que le poisson est en colère
+
 export class Fish extends Entity {
-  private readonly MAX_LIFE: number; // Vie total du poisson
-  private isCatching: boolean = false; // Est ce que le joueur attrape le poisson
-  private number: number; // numéro du poisson
-  private lifeInterval: NodeJS.Timer; // intervale dans lequel le poisson se régenère
-  private angryInterval: NodeJS.Timer; // intervale dans lequel le poisson est en colère
-  private isAngry: boolean = false; // Est ce que le poisson est en colère
-  
-  private name: FishSpecies; // Espece de poisson
-  private life: number; // Vie du poison
-  private regeneration: number; // Nombre de pv que le poisson régénère
-  private angryTime: number; // Temps en miliseconde dans lequel le poisson est en colère
+  private readonly MAX_LIFE: number; // Vie totale du poisson
+  private name: FishSpecies; // Éspece de poisson
+  private life: number; // Vie actuelle du poisson
+  private regeneration: number; // Nombre de pv que le poisson régénère par "seconde"
+  private angryTime: number; // Temps en milliseconde durant lequel le poisson est en colère
+  private angryFrequency: number; // Temps en milliseconde entre chaque frénésie
+  private tensionMultiplier: number; // Multiplicateur de tension infligé à la canne à peche
 
   constructor(name: FishSpecies, life: number, top: number, left: number, hitTop: number, hitLeft: number) {
-    super(`fish-${fishCounter + 1}`, top, left, box - 6, box - 6, hitTop, hitLeft, box, box);
-    this.number = fishCounter++;
+    super(`fish-${fishCounter++}`, 'fish', box - 6, box - 6, top, left, hitTop, hitLeft, box, box);
     this.MAX_LIFE = life;
     this.life = life;
     this.name = name;
 
-    this.create();
-    this.update();
+    this.createHTML();
+    super.updateHTML();
   }
 
   async interact(): Promise<boolean> {
-    if(this.isCatching) {
-      if(this.isAngry) {
+    if(isCatching) {
+      if(isAngry) {
         this.life -= 1;
       }
       else {
@@ -54,9 +54,25 @@ export class Fish extends Entity {
   }
 
   async beginCatch(): Promise<void> {
+    const lifeContainer = document.createElement('div');
+    lifeContainer.id = `life-container`;
+    lifeContainer.classList.add('life-container')
+    lifeContainer.style.top = `${this.getTop() - 30}px`;
+    lifeContainer.style.left = `${this.getLeft()}px`;
+    lifeContainer.style.display = 'none';
+    mapHTML.appendChild(lifeContainer);
+
+    const life = document.createElement('div');
+    life.id = `life`;
+    life.classList.add('life');
+    life.style.top = `${this.getTop() - 30}px`;
+    life.style.left = `${this.getLeft()}px`;
+    life.style.display = 'none';
+    mapHTML.appendChild(life);
+
     hero.setCanInteract(false);
     hero.setCanMove(false);
-    this.isCatching = true;
+    isCatching = true;
 
     dialog.update(`Le poisson a mordu à l'hameçon !`);
     dialog.show();
@@ -67,7 +83,7 @@ export class Fish extends Entity {
     this.showLife();
     hero.setCanInteract(true);
 
-    this.lifeInterval = setInterval(() => { 
+    lifeInterval = setInterval(() => { 
       if(this.life < this.MAX_LIFE) {
         this.life += 1; this.updateLife()
       }
@@ -77,11 +93,11 @@ export class Fish extends Entity {
   }
 
   async stopCatch(): Promise<void> {
-    clearInterval(this.lifeInterval);
-    clearInterval(this.angryInterval);
+    clearInterval(lifeInterval);
+    clearInterval(angryInterval);
 
     hero.setCanInteract(false);
-    this.remove();
+    this.removeHTML();
 
     dialog.update(`Vous avez attapé un ${this.name} !!! :)`);
     dialog.show();
@@ -94,45 +110,30 @@ export class Fish extends Entity {
 
     hero.setCanInteract(true);
     hero.setCanMove(true);
+    isCatching = false;
   }
 
   addAngryMode(): void {
-    this.angryInterval = setInterval(() => {
-      this.isAngry = true;
+    angryInterval = setInterval(() => {
+      isAngry = true;
       document.getElementById(this.getId()).style.backgroundColor = 'red';
       setTimeout(() => { 
-        this.isAngry = false;
+        isAngry = false;
         document.getElementById(this.getId()).style.backgroundColor = 'blue';
       }, 2500)
     }, 5000)
-  }
+  }  
 
   // Créer tout les éléments HTML concernant le poisson
-  create(): void {
-    super.create();
+  createHTML(): void {
+    super.createHTML();
     const fish = document.getElementById(this.getId());
     fish.classList.add('fish')
-
-    const lifeContainer = document.createElement('div');
-    lifeContainer.id = `life-container-${this.number}`;
-    lifeContainer.classList.add('life-container')
-    lifeContainer.style.top = `${this.getTop() - 30}px`;
-    lifeContainer.style.left = `${this.getLeft()}px`;
-    lifeContainer.style.display = 'none'
-    mapHTML.appendChild(lifeContainer);
-
-    const life = document.createElement('div');
-    life.id = `life-${this.number}`;
-    life.classList.add('life')
-    life.style.top = `${this.getTop() - 30}px`;
-    life.style.left = `${this.getLeft()}px`;
-    life.style.display = 'none'
-    mapHTML.appendChild(life);
   }
 
   // Met a jour l'HTML de la vie du poisson
   updateLife(): void {
-    const element = document.getElementById(`life-${this.number}`);
+    const element = document.getElementById(`life`);
 
     if(this.life < 66 / 100 * this.MAX_LIFE) {
       element.style.backgroundColor = 'yellow';
@@ -149,14 +150,14 @@ export class Fish extends Entity {
 
   // Affiche la vie du poisson 
   showLife() {
-    document.getElementById(`life-container-${this.number}`).style.display = 'block'
-    document.getElementById(`life-${this.number}`).style.display = 'block'
+    document.getElementById(`life-container`).style.display = 'block'
+    document.getElementById(`life`).style.display = 'block'
   }
 
   // Supprime tout les éléments HTML concernant le poisson
-  remove(): void {
-    super.remove();
-    mapHTML.removeChild(document.getElementById(`life-container-${this.number}`))
-    mapHTML.removeChild(document.getElementById(`life-${this.number}`))
+  removeHTML(): void {
+    super.removeHTML();
+    mapHTML.removeChild(document.getElementById(`life-container`))
+    mapHTML.removeChild(document.getElementById(`life`))
   }
 }

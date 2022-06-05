@@ -1,31 +1,32 @@
 import { cameraHTML, routine } from ".";
 
 export class Chrono {
-  private readonly htmlElement: HTMLElement;
   private interval: NodeJS.Timer;
   private hour: number;
   private minute: number;
 
-  public constructor() {
-    this.hour = 5;
-    this.minute = 50;
+  //#region Constructor
+  public constructor(hour: number, minute: number) {
+    this.hour = hour;
+    this.minute = minute;
 
-    this.create();
-    this.htmlElement = document.getElementById("chrono");
-    
-    this.update();
+    this.createHTML();
+    this.updateHTML();
     this.start();
   }
+  //#endregion
 
-  create() {
+  //#region Methods
+  createHTML() {
     const element = document.createElement('div');
     element.id = "chrono";
     element.classList.add('chrono');
     cameraHTML.appendChild(element);
   }
 
-  update() { 
-    this.htmlElement.innerText = this.toString();
+  updateHTML() { 
+    const element = document.getElementById('chrono');
+    element.innerText = this.toString();
   }
 
   start() {
@@ -43,10 +44,10 @@ export class Chrono {
         this.minute += 10;
       }
 
-      this.update();
+      this.updateHTML();
+
       routine(this.toString());
-      
-    }, 2000)
+    }, 2000);
   }
 
   stop() { 
@@ -61,4 +62,5 @@ export class Chrono {
     const minute = `${this.minute < 10 ? '0' : ''}${this.minute}`;
     return `${hour}:${minute}`;
   }
+  //#endregion
 }

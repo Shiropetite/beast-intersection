@@ -5,8 +5,8 @@ export class Hero extends Character {
   private canMove: boolean = true
   private canInteract: boolean = true
 
-  constructor() {
-    super('hero');
+  constructor(top: number, left: number) {
+    super('hero', 'hero', top, left);
   }
 
   setCanMove(canMove: boolean): void {
@@ -53,7 +53,7 @@ export class Hero extends Character {
       map.style.transform = `translate3d( ${-left + (64 * 8)}px, ${-top + (64 * 4)}px, 0 )`;
     };
     
-    super.update();  
+    super.updateHTML();  
 
   }
 }

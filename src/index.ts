@@ -8,7 +8,7 @@ import { Chrono } from './chrono';
 import { Dialog } from './dialog';
 import { Inventory } from './inventory';
 import { Resource, ResourceType } from './resource';
-import { Fish, FishSpecies } from './fish';
+import { Fish, FishSpecies } from './fishing';
 import { Entity } from './entity';
 
 // routine
@@ -92,8 +92,8 @@ let dialogOpen: any = null
 export const interact = async () => {
   let isAction = false;
   pnjs.forEach((pnj) => {
-    const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize(),
-                                pnj.getTop() - (box), pnj.getLeft() - (box), pnj.getSize() + (box * 2), pnj.getSize() + (box * 2));
+    const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getWidth(), hero.getHeight(),
+                                pnj.getTop() - (box), pnj.getLeft() - (box), pnj.getWidth() + (box * 2), pnj.getHeight() + (box * 2));
     if(collide && !!pnj.getAction().dialog) {
       pnj.interact(dialog);
       dialogOpen = pnj
@@ -106,7 +106,7 @@ export const interact = async () => {
 
   let toRemove = -1;
   for(let i = 0; i < entities.length; i++) {
-    const collide = entities[i].colide(hero.getTop(), hero.getLeft(), hero.getSize(), hero.getSize())
+    const collide = entities[i].colide(hero.getTop(), hero.getLeft(), hero.getWidth(), hero.getHeight())
     
     if(collide) {
       const remove = await entities[i].interact();
@@ -147,11 +147,11 @@ const onLoad = () => {
   
   cameraHTML = document.getElementById('camera');
   mapHTML = document.getElementById('map');
-  chrono = new Chrono();
+  chrono = new Chrono(6,0);
   dialog = new Dialog();
   inventory = new Inventory();
 
-  hero = new Hero();
+  hero = new Hero(box * 2, box * 4);
   nook = new PNJ('Tom Nook', box * 3, box * 2, nookRoutine);
   pnjs.push(nook);
   

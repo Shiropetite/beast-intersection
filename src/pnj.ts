@@ -8,7 +8,7 @@ export class PNJ extends Character {
   private currentDialog: number;
 
   constructor(name: string, top: number, left: number, routine: any) {
-    super('pnj', top, left);
+    super('pnj', 'pnj', top, left);
     this.name = name;
     this.routine = routine;
     this.currentDialog = 0;
@@ -71,25 +71,25 @@ export class PNJ extends Character {
 
       if(top < finTop && !this.colide(top + steps, left)) {
         super.setTop(top + steps)
-        this.update();
+        super.updateHTML();
         return;
       }
 
       if(top > finTop && !this.colide(top - steps, left)) {
         super.setTop(top - steps)
-        this.update();
+        super.updateHTML();
         return;
       }
 
       if(left < finTLeft && !this.colide(top, left + steps)) {
         super.setLeft(left + steps)
-        this.update();
+        super.updateHTML();
         return;
       }
 
       if(left > finTLeft && !this.colide(top, left - steps)) {
         super.setLeft(left - steps)
-        this.update();
+        super.updateHTML();
         return;
       }
     }, 200)

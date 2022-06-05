@@ -12,15 +12,15 @@ export class Resource extends Entity {
   private name: ResourceType; // Espece de poisson
 
   constructor(name: ResourceType, top: number, left: number, ) {
-    super(`ressource-${ressourceCounter++}`, top, left, box - 6, box - 6);
+    super(`ressource-${ressourceCounter++}`, name, box - 6, box - 6, top, left);
     this.name = name;
 
-    this.create();
-    this.update();
+    this.createHTML();
+    this.updateHTML();
   }
 
-  create(): void {
-    super.create();
+  createHTML(): void {
+    super.createHTML();
     document.getElementById(this.getId()).classList.add(this.name);
   }
 
@@ -28,7 +28,7 @@ export class Resource extends Entity {
     hero.setCanInteract(false);
     hero.setCanMove(false);
     
-    super.remove();
+    super.removeHTML();
 
     dialog.update(`Vous ramassez un ${this.name} !`);
     dialog.show();

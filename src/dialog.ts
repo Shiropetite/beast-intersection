@@ -1,34 +1,35 @@
 import { cameraHTML } from '.';
-import { PNJ } from './pnj';
 
 export class Dialog {
-  private readonly htmlElement: HTMLElement;
   private choice: string | null;
 
+  //#region Constructor
   constructor() { 
     this.create();
-
-    this.htmlElement = document.getElementById("dialog");
-    this.htmlElement.style.display = 'none';
     this.choice = null;
   }
+  //#endregion
 
+  //#region Method
   create() {
     const element = document.createElement("div");
     element.id = "dialog"
     element.classList.add('dialog');
+    element.style.display = 'none';
     cameraHTML.appendChild(element);
   }
 
   update(text: string) {
-    this.htmlElement.innerHTML = text;
+    const element = document.getElementById('dialog');
+    element.innerHTML = text;
     this.choice = null;
   }
 
   addChoice() {
-    this.htmlElement.innerHTML += "<div id='oui'>- Oui</div>"
-    this.htmlElement.innerHTML += "<div id='non'>Non</div>"
-    this.choice = 'yes'
+    const element = document.getElementById('dialog');
+    element.innerHTML += "<div id='oui'>- Oui</div>";
+    element.innerHTML += "<div id='non'>Non</div>";
+    this.choice = 'yes';
   }
 
   updateChoice(key: string) {
@@ -52,15 +53,19 @@ export class Dialog {
   haveChoice() { return this.choice !== null }
 
   show() {
-    this.htmlElement.style.display = 'block';
+    const element = document.getElementById('dialog');
+    element.style.display = 'block';
   }
 
   hide() {
-    this.htmlElement.style.display = 'none';
-    this.htmlElement.innerHTML = "";
+    const element = document.getElementById('dialog');
+    element.style.display = 'none';
+    element.innerHTML = "";
   }
 
   isVisible() { 
-    return this.htmlElement.style.display === 'block';
+    const element = document.getElementById('dialog');
+    return element.style.display === 'block';
   }
+  //#endregion
 }
