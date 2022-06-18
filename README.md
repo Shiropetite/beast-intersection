@@ -7,6 +7,7 @@ Pour le moment, on peut :
 - Ouvrir et fermer son inventaire (avec la touche "I")
 - Interagir des PNJ et des objets (avec la touche "E")
 - Mettre en pause et reprendre le timer (avec la touche "P")
+- Pecher des poissons !
 
 Vous pouvez y jouer sur ce site : https://shiropetite.github.io/js-game/
 
