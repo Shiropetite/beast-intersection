@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import './style.css';
 
 // Game
-import { Hero } from './hero';
+import { PlayerEntity, PlayerState } from './entities/PlayerEntity';
 import { PNJ } from './pnj';
 import { Chrono } from './chrono';
 import { Dialog } from './dialog';
@@ -45,45 +45,45 @@ let chrono: Chrono = null;
 export let dialog: Dialog = null;
 export let inventory: Inventory = null;
 
-export let hero: Hero = null;
+export let player: PlayerEntity = null;
 let nook: PNJ = null;
 const pnjs: PNJ[] = [];
 let entities: Entity[] = []
-export const colisions: any[] = [
+export const collisions: any[] = [
   // mur de gauche
   {
-    top: 0,
-    left: 0,
-    width: box - 6,
-    height: box * 10
+    solidTop: 0,
+    solidLeft: 0,
+    solidWidth: box - 6,
+    solidHeight: box * 10
   },
   // mur du haut
   {
-    top: 0,
-    left: box,
-    width: box * 14 - 6,
-    height: box 
+    solidTop: 0,
+    solidLeft: box,
+    solidWidth: box * 14 - 6,
+    solidHeight: box 
   } ,
   // mur de droite
   {
-    top: 0,
-    left: box * 15,
-    width: box,
-    height: box * 10
+    solidTop: 0,
+    solidLeft: box * 15,
+    solidWidth: box,
+    solidHeight: box * 10
   },
   // mur du bas
   {
-    top: box * 9,
-    left: box,
-    width: box * 14 - 6,
-    height: box 
+    solidTop: box * 9,
+    solidLeft: box,
+    solidWidth: box * 14 - 6,
+    solidHeight: box 
   },
   // riviere
   {
-    top: 0,
-    left: box * 9,
-    width: box * 2,
-    height: box * 10
+    solidTop: 0,
+    solidLeft: box * 9,
+    solidWidth: box * 2,
+    solidHeight: box * 10
   },
 ];
 
@@ -92,7 +92,7 @@ let dialogOpen: any = null
 export const interact = async () => {
   let isAction = false;
   pnjs.forEach((pnj) => {
-    const collide = isColliding(hero.getTop(), hero.getLeft(), hero.getWidth(), hero.getHeight(),
+    const collide = isColliding(player.getTop(), player.getLeft(), player.getTriggerWidth(), player.getTriggerHeight(),
                                 pnj.getTop() - (box), pnj.getLeft() - (box), pnj.getWidth() + (box * 2), pnj.getHeight() + (box * 2));
     if(collide && !!pnj.getAction().dialog) {
       pnj.interact(dialog);
@@ -106,7 +106,7 @@ export const interact = async () => {
 
   let toRemove = -1;
   for(let i = 0; i < entities.length; i++) {
-    const collide = entities[i].colide(hero.getTop(), hero.getLeft(), hero.getWidth(), hero.getHeight())
+    const collide = entities[i].colide(player.getTop(), player.getLeft(), player.getTriggerWidth(), player.getTriggerHeight())
     
     if(collide) {
       const remove = await entities[i].interact();
@@ -151,12 +151,12 @@ const onLoad = () => {
   dialog = new Dialog();
   inventory = new Inventory();
 
-  hero = new Hero(box * 2, box * 4);
+  player = new PlayerEntity(box * 2, box * 4);
   nook = new PNJ('Tom Nook', box * 3, box * 2, nookRoutine);
   pnjs.push(nook);
   
-  colisions.push(hero);
-  colisions.push(nook);
+  collisions.push(player);
+  collisions.push(nook);
 
 
   entities.push(new Resource(ResourceType.PIERRE, (box * 7), (box * 4)));
@@ -170,7 +170,7 @@ const keyListener = async (event: any) => {
   if(wait) return;
   wait = true;
   setTimeout(() => { wait = false }, 150)
-  if(hero.getCanInteract() && event.key === Key.PAUSE) {
+  if (player.getState() === PlayerState.IDLE && event.key === Key.PAUSE) {
     if(chrono.isRunning()) {
       chrono.stop();
     }
@@ -179,7 +179,7 @@ const keyListener = async (event: any) => {
     }
     return;
   }
-  if(hero.getCanInteract() && event.key === Key.INTERACT) {
+  if(player.getState() === PlayerState.IDLE && event.key === Key.INTERACT) {
     if(!dialog.isVisible() && chrono.isRunning()) {
       await interact();
     }
@@ -204,8 +204,8 @@ const keyListener = async (event: any) => {
     inventory.moveCursor(event.key);
     return;
   }
-  if(hero.getCanMove() && chrono.isRunning() && !dialog.isVisible() && Object.values(Direction).includes(event.key)) {
-    hero.move(event.key);
+  if(player.getState() === PlayerState.IDLE && chrono.isRunning() && !dialog.isVisible() && Object.values(Direction).includes(event.key)) {
+    player.move(event.key);
     return;
   }
   if(!chrono.isRunning() && dialog.haveChoice() && ['z', 's'].includes(event.key)) {

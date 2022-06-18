@@ -1,5 +1,6 @@
 import { Entity } from './entity';
-import { box, hero, mapHTML, sleep, inventory, dialog } from './index';
+import { box, player, mapHTML, sleep, inventory, dialog } from './index';
+import { PlayerState } from './entities/PlayerEntity';
 
 let fishCounter = 0;
 
@@ -70,8 +71,7 @@ export class Fish extends Entity {
     life.style.display = 'none';
     mapHTML.appendChild(life);
 
-    hero.setCanInteract(false);
-    hero.setCanMove(false);
+    player.setState(PlayerState.ACTING)
     isCatching = true;
 
     dialog.update(`Le poisson a mordu à l'hameçon !`);
@@ -81,7 +81,6 @@ export class Fish extends Entity {
 
     dialog.hide();
     this.showLife();
-    hero.setCanInteract(true);
 
     lifeInterval = setInterval(() => { 
       if(this.life < this.MAX_LIFE) {
@@ -96,7 +95,7 @@ export class Fish extends Entity {
     clearInterval(lifeInterval);
     clearInterval(angryInterval);
 
-    hero.setCanInteract(false);
+    
     this.removeHTML();
 
     dialog.update(`Vous avez attapé un ${this.name} !!! :)`);
@@ -106,10 +105,9 @@ export class Fish extends Entity {
 
     dialog.hide();
 
+    player.setState(PlayerState.IDLE)
     inventory.addObject(this.name);
 
-    hero.setCanInteract(true);
-    hero.setCanMove(true);
     isCatching = false;
   }
 

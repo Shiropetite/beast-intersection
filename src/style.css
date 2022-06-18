@@ -33,7 +33,7 @@ body {
   transition: all linear 0.1s;
 }
 
-#hero {
+.player {
   position: absolute;
   background-color: white;
   border: solid 3px black;

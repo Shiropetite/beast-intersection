@@ -1,4 +1,4 @@
-import { box, colisions, isColliding } from ".";
+import { box, collisions, isColliding } from ".";
 import { DisplayedElement } from './displayedElement';
 
 export class Character extends DisplayedElement {
@@ -16,7 +16,7 @@ export class Character extends DisplayedElement {
   colide(top: number, left: number): boolean {
     let isColision = false;
 
-    colisions.forEach((colision) => {
+    collisions.forEach((colision) => {
       if(isColision === true) return;
 
       const width = colision?.width ?? colision?.size;
