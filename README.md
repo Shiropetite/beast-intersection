@@ -1,6 +1,6 @@
 # js-game
 
-Voici un petit jeu que je développe en javascript.
+Voici un petit jeu que je développe en typescript.
 
 Pour le moment, on peut :
 - Se déplacer (avec les touches Z, Q, S et D)
