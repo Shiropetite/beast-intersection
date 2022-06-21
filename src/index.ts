@@ -179,7 +179,7 @@ const keyListener = async (event: any) => {
     }
     return;
   }
-  if(player.getState() === PlayerState.IDLE && event.key === Key.INTERACT) {
+  if(player.getState() !== PlayerState.MOVING && event.key === Key.INTERACT) {
     if(!dialog.isVisible() && chrono.isRunning()) {
       await interact();
     }

@@ -1,0 +1,15 @@
+export class DialogElement {
+  private static htmlElement: HTMLElement;
+
+  createHtmlElement(): void {
+
+  }
+
+  show(): void {
+
+  }
+
+  hide(): void {
+
+  }
+}

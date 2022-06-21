@@ -1,7 +1,22 @@
-import { box, Direction} from '..';
+import { box} from '..';
 import { SolidEntity } from './SolidEntity';
-import { ResourceObject } from '../refactoooo/objects/ResourceObject';
-import { Tool } from '../refactoooo/objects/Tool';
+import { ResourceObject } from '../objects/ResourceObject';
+import { Tool } from '../objects/Tool';
+
+export type Key = ActionKeys | DirectionKeys;
+
+export enum ActionKeys {
+  PAUSE='p',
+  ACT='e',
+  INVENTORY='i',
+}
+
+export enum DirectionKeys {
+  UP='z',
+  LEFT='q',
+  RIGHT='d',
+  DOWN='s'
+}
 
 export enum PlayerState {
   IDLE,
@@ -27,7 +42,22 @@ export class PlayerEntity extends SolidEntity {
   //#endregion
 
   //#region Method
-  move(key: Direction) {
+  
+  // when player press 'E' 
+  act(): void {
+    
+  }
+  
+  talk(): void { 
+    
+  }
+
+  fish(): void {
+
+  }
+
+  // when player press 'Z,Q,S,D'
+  move(key: DirectionKeys): void {
     this.currentState = PlayerState.MOVING;
 
     // store current solid position
@@ -36,16 +66,16 @@ export class PlayerEntity extends SolidEntity {
     
     // move solid hitbox towards input direction
     switch(key) {
-      case Direction.UP:
+      case DirectionKeys.UP:
         super.setSolidTop(top - box);
         break;
-      case Direction.LEFT:
+      case DirectionKeys.LEFT:
         super.setSolidLeft(left - box);
         break;
-      case Direction.RIGHT:
+      case DirectionKeys.RIGHT:
         super.setSolidLeft(left + box);
         break;
-      case Direction.DOWN:
+      case DirectionKeys.DOWN:
         super.setSolidTop(top + box);
         break;
     }

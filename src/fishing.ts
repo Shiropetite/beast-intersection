@@ -95,7 +95,6 @@ export class Fish extends Entity {
     clearInterval(lifeInterval);
     clearInterval(angryInterval);
 
-    
     this.removeHTML();
 
     dialog.update(`Vous avez attapé un ${this.name} !!! :)`);

@@ -3,7 +3,8 @@
     "text": "Se réveille",
     "dialog": [
       {
-        "text": "J'ai besoin d'un café..."
+        "text": "J'ai besoin d'un café...",
+        "isChoice": false
       }
     ]
   },
@@ -15,7 +16,8 @@
     },
     "dialog": [
       {
-        "text": "café..."
+        "text": "café...",
+        "isChoice": false
       }
     ]
   },
@@ -23,7 +25,8 @@
     "text": "Boit son café",
     "dialog": [
       {
-        "text": "café :)"
+        "text": "café :)",
+        "isChoice": false
       }
     ]
   },
@@ -35,7 +38,8 @@
     },
     "dialog": [
       {
-        "text": "C'est parti pour le boulot !"
+        "text": "C'est parti pour le boulot !",
+        "isChoice": false
       }
     ]
   },
@@ -43,13 +47,22 @@
     "text": "Travaille",
     "dialog": [
       {
-        "text": "Salut villageois..."
+        "text": "Salut villageois...",
+        "isChoice": false
       },
       {
-        "choice": true,
         "text": "Tu as besoin de quelque chose ?",
-        "yes": "Moi aussi... tu me passes un café ? :)",
-        "no": "Ah ? Ok..."
+        "isChoice": true,
+        "choices": [
+          { 
+            "choice": "Oui, Avec plaisir !",
+            "response": "Moi aussi... tu me passes un café ? :)"
+          },
+          { 
+            "choice": "Beurk",
+            "response": "Ah..."
+          }
+        ]
       }
     ]
   },
@@ -57,7 +70,8 @@
     "text": "Va récolter des fruits",
     "dialog": [
       {
-        "text": "Mmmh quel bonne pomme... j'aimerai mangé une tarte au pomme..."
+        "text": "Mmmh quel bonne pomme... j'aimerai mangé une tarte au pomme...",
+        "isChoice": false
       }
     ]
   },
@@ -68,7 +82,8 @@
     "text": "Commence à manger",
     "dialog": [
       {
-        "text": "Num num num"
+        "text": "Num num num",
+        "isChoice": false
       }
     ]
   },
