@@ -1,4 +1,4 @@
-import { box} from '..';
+import { box, solidEntities, player } from '..';
 import { SolidEntity } from './SolidEntity';
 import { ResourceObject } from '../objects/ResourceObject';
 import { Tool } from '../objects/Tool';
@@ -18,14 +18,14 @@ export enum DirectionKeys {
   DOWN='s'
 }
 
-export enum PlayerState {
+export enum PersonState {
   IDLE,
   MOVING,
   ACTING
 }
 
 export class PlayerEntity extends SolidEntity {
-  private currentState: PlayerState;
+  private currentState: PersonState;
   private inventory: ResourceObject[];
   private tools: Tool[];
   private toolInHand?: Tool | ResourceObject;
@@ -33,7 +33,7 @@ export class PlayerEntity extends SolidEntity {
   //#region Constructor
   constructor(top: number, left: number) {
     super('player', 'player', box - 6, box - 6, top, left);
-    this.currentState = PlayerState.IDLE;
+    this.currentState = PersonState.IDLE;
     this.inventory = [];
     this.tools = [];
 
@@ -42,30 +42,44 @@ export class PlayerEntity extends SolidEntity {
   //#endregion
 
   //#region Method
-  
   // when player press 'E' 
+  listen(event: any): void {
+    switch(event.key) {
+      case ActionKeys.ACT:
+        player.act();
+        break;
+      case DirectionKeys.DOWN:
+      case DirectionKeys.LEFT:
+      case DirectionKeys.RIGHT:
+      case DirectionKeys.UP:
+        if(player.currentState !== PersonState.ACTING) {
+          player.move(event.key);
+        }
+        break;
+      default: break;
+    }
+  }
+
   act(): void {
-    
-  }
-  
-  talk(): void { 
-    
-  }
+    for (const entity of solidEntities) {
+      const isTriggering: boolean = this.isTrigger(entity);
 
-  fish(): void {
-
+      if (isTriggering) {
+        entity.act();
+      }
+    }
   }
 
   // when player press 'Z,Q,S,D'
   move(key: DirectionKeys): void {
-    this.currentState = PlayerState.MOVING;
+    this.currentState = PersonState.MOVING;
 
     // store current solid position
     const top = super.getSolidTop();
     const left = super.getSolidLeft();
     
     // move solid hitbox towards input direction
-    switch(key) {
+    switch (key) {
       case DirectionKeys.UP:
         super.setSolidTop(top - box);
         break;
@@ -103,16 +117,16 @@ export class PlayerEntity extends SolidEntity {
     }
     
     super.updateHtmlElement();
-    this.currentState = PlayerState.IDLE;
+    this.currentState = PersonState.IDLE;
   }
   //#endregion
 
   //#region Getters & Setters
-  getState(): PlayerState {
+  getState(): PersonState {
     return this.currentState;
   }
 
-  setState(state: PlayerState): void {
+  setState(state: PersonState): void {
     this.currentState = state;
   }
   //#endregion

@@ -1,6 +1,6 @@
 import { box, dialog, player, inventory, sleep } from ".";
 import { Entity } from "./entity";
-import { PlayerState } from "./entities/PlayerEntity";
+import { PersonState } from "./entities/PlayerEntity";
 
 let ressourceCounter = 0;
 
@@ -26,7 +26,7 @@ export class Resource extends Entity {
   }
 
   async interact(): Promise<boolean> {
-    player.setState(PlayerState.ACTING);
+    player.setState(PersonState.ACTING);
     
     super.removeHTML();
 
@@ -39,7 +39,7 @@ export class Resource extends Entity {
 
     dialog.hide();
 
-    player.setState(PlayerState.IDLE);
+    player.setState(PersonState.IDLE);
     return true;
   }
 

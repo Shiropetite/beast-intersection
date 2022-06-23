@@ -33,11 +33,11 @@ export class SolidEntity extends TriggerEntity {
       this.solidTop = parameters[12];
       this.solidLeft = parameters[13];
     }
-    else { // solid hitbox dimensions same as trigger hitbox dimensions
-      this.solidWidth = super.getTriggerWidth();
-      this.solidHeight = super.getTriggerHeight();
-      this.solidTop = super.getTriggerTop();
-      this.solidLeft = super.getTriggerLeft();
+    else { // solid hitbox dimensions same as sprite dimensions
+      this.solidWidth = super.getWidth();
+      this.solidHeight = super.getHeight();
+      this.solidTop = super.getTop();
+      this.solidLeft = super.getLeft();
     }
   }
   //#endregion
@@ -58,6 +58,8 @@ export class SolidEntity extends TriggerEntity {
 
     return false;
   }
+
+  act(): void { throw 'Method not yet implemented' }
   //#endregion
 
   getSolidTop(): number {

@@ -1,6 +1,6 @@
 import { Entity } from './entity';
 import { box, player, mapHTML, sleep, inventory, dialog } from './index';
-import { PlayerState } from './entities/PlayerEntity';
+import { PersonState } from './entities/PlayerEntity';
 
 let fishCounter = 0;
 
@@ -71,7 +71,7 @@ export class Fish extends Entity {
     life.style.display = 'none';
     mapHTML.appendChild(life);
 
-    player.setState(PlayerState.ACTING)
+    player.setState(PersonState.ACTING)
     isCatching = true;
 
     dialog.update(`Le poisson a mordu à l'hameçon !`);
@@ -104,7 +104,7 @@ export class Fish extends Entity {
 
     dialog.hide();
 
-    player.setState(PlayerState.IDLE)
+    player.setState(PersonState.IDLE)
     inventory.addObject(this.name);
 
     isCatching = false;

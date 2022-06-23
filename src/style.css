@@ -41,7 +41,7 @@ body {
   z-index: 1000;
 }
 
-#pnj {
+.npc {
   position: absolute;
   background-color: rgb(43, 255, 184);
   border: solid 3px black;
@@ -84,7 +84,17 @@ body {
   border: solid 5px brown;
   border-radius: 6px;
   font-size: 16px;
+  
+}
+
+.dialog-name {
+  font-size: 16px;
   font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialog-text {
+  font-size: 14px;
 }
 
 #inventory {

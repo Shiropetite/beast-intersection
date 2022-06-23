@@ -1,13 +1,7 @@
 import { box, player } from '..';
 import { Talking, Dialog } from '../actions/Talking';
-import { PlayerState } from './PlayerEntity';
+import { PersonState } from './PlayerEntity';
 import { SolidEntity } from './SolidEntity';
-
-enum NpcState {
-  IDLE,
-  MOVING,
-  ACTING
-}
 
 interface Routine {
   [time: string]: {
@@ -21,50 +15,56 @@ interface Routine {
 }
 
 export class NpcEntity extends SolidEntity {
-  private currentState: NpcState = NpcState.IDLE;
+  private currentState: PersonState = PersonState.IDLE;
   private routine: Routine;
   private name: string;
 
+  //#region Constructor
   constructor(name: string, routine: Routine, top: number, left: number) {
-    super('npc', 'npc', box - 6, box - 6, top, left);
+    super('npc', 'npc', box - 6, box - 6, top, left, (box - 6) * 3, (box - 6) * 3, top - box - 6, left - box - 6);
     this.name = name;
     this.routine = routine;
+
+    this.updateHtmlElement();
+  }
+  //#endregion
+
+  //#region Method
+  move(targetTop: number, targetLeft: number): void {
+    
   }
 
-  move(): void {
-
-  }
-
-  // Each time player talk
-  talk(time: string): void {
+  // when player talk to npc
+  act(): void {
     // routine contains a dialog for current time of day
-    if (!!this.routine[time]?.dialog) {
+    if (!!this.routine['06:00']?.dialog) {
       
       // dialog has not started
-      if (this.currentState !== NpcState.ACTING) {
-        this.setState(NpcState.ACTING);
-        player.setState(PlayerState.ACTING);
+      if (this.currentState !== PersonState.ACTING) {
+        this.setState(PersonState.ACTING);
+        player.setState(PersonState.ACTING);
 
-        Talking.startDialog(this.routine[time].dialog, this.name);
+        Talking.startDialog(this.routine['06:00'].dialog, this.name);
       }
       // dialog has started
       else {
-        const dialogEnd: boolean = Talking.displaySentence();
+        const dialogNext: boolean = Talking.displaySentence();
 
-        if (dialogEnd) {
-          this.setState(NpcState.IDLE);
-          player.setState(PlayerState.IDLE);
+        if (!dialogNext) {
+          this.setState(PersonState.IDLE);
+          player.setState(PersonState.IDLE);
         }
       }
     }
   }
+  //#endregion
 
   //#region Getters & Setters
-  getState(): NpcState {
+  getState(): PersonState {
     return this.currentState;
   }
 
-  setState(state: NpcState): void {
+  setState(state: PersonState): void {
     this.currentState = state;
   }
   //#endregion

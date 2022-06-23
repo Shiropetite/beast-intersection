@@ -16,16 +16,18 @@ export class DialogElement {
     const nameElement = document.createElement("div");
     nameElement.id = "dialog-name"
     nameElement.classList.add('dialog-name');
-    DialogElement.dialogHTML.appendChild(nameElement);
     
     // Create div for text in dialog
     const textElement = document.createElement("div");
     textElement.id = "dialog-text"
     textElement.classList.add('dialog-text');
-    DialogElement.dialogHTML.appendChild(textElement);
 
-    // Store html elements
+    // Store html
     DialogElement.dialogHTML = document.getElementById('dialog');
+
+    this.dialogHTML.appendChild(nameElement);
+    this.dialogHTML.appendChild(textElement);
+
     DialogElement.nameHTML = document.getElementById('dialog-name');
     DialogElement.textHTML = document.getElementById('dialog-text');
 

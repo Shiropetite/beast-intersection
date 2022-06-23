@@ -12,11 +12,9 @@ export interface Dialog {
 
 export class Talking {
   private static dialog: Dialog[]; 
-  private static speakerName: string;
 
   static startDialog(dialog: Dialog[], speakerName?: string): void {
-    this.dialog = dialog;
-    this.speakerName = speakerName;
+    this.dialog = [ ...dialog ];
 
     DialogElement.show();
     DialogElement.setName(speakerName);

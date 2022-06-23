@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import './style.css';
 
 // Game
-import { PlayerEntity, PlayerState } from './entities/PlayerEntity';
+import { PlayerEntity, PersonState } from './entities/PlayerEntity';
 import { PNJ } from './pnj';
 import { Chrono } from './chrono';
 import { Dialog } from './dialog';
@@ -10,6 +10,9 @@ import { Inventory } from './inventory';
 import { Resource, ResourceType } from './resource';
 import { Fish, FishSpecies } from './fishing';
 import { Entity } from './entity';
+import { NpcEntity } from './entities/NpcEntity';
+import { SolidEntity } from './entities/SolidEntity';
+import { DialogElement } from './ui/DialogElement';
 
 // routine
 const nookRoutine = require('./characters/nook/first-routine.json');
@@ -46,8 +49,9 @@ export let dialog: Dialog = null;
 export let inventory: Inventory = null;
 
 export let player: PlayerEntity = null;
-let nook: PNJ = null;
-const pnjs: PNJ[] = [];
+let nook: NpcEntity = null;
+export const pnjs: PNJ[] = [];
+export const solidEntities: SolidEntity[] = [];
 let entities: Entity[] = []
 export const collisions: any[] = [
   // mur de gauche
@@ -94,7 +98,7 @@ export const interact = async () => {
   pnjs.forEach((pnj) => {
     const collide = isColliding(player.getTop(), player.getLeft(), player.getTriggerWidth(), player.getTriggerHeight(),
                                 pnj.getTop() - (box), pnj.getLeft() - (box), pnj.getWidth() + (box * 2), pnj.getHeight() + (box * 2));
-    if(collide && !!pnj.getAction().dialog) {
+    if (collide && !!pnj.getAction().dialog) {
       pnj.interact(dialog);
       dialogOpen = pnj
       chrono.stop();
@@ -102,19 +106,19 @@ export const interact = async () => {
     }
   })
 
-  if(isAction) return;
+  if (isAction) return;
 
   let toRemove = -1;
-  for(let i = 0; i < entities.length; i++) {
+  for (let i = 0; i < entities.length; i++) {
     const collide = entities[i].colide(player.getTop(), player.getLeft(), player.getTriggerWidth(), player.getTriggerHeight())
     
-    if(collide) {
+    if (collide) {
       const remove = await entities[i].interact();
       if(remove) toRemove = i;
     }
   }
 
-  if(toRemove >= 0) {
+  if (toRemove >= 0) {
     entities = entities.filter((_, i) => i !== toRemove)
   }
 }
@@ -148,21 +152,23 @@ const onLoad = () => {
   cameraHTML = document.getElementById('camera');
   mapHTML = document.getElementById('map');
   chrono = new Chrono(6,0);
-  dialog = new Dialog();
   inventory = new Inventory();
 
+  DialogElement.createHtmlElement();
+
   player = new PlayerEntity(box * 2, box * 4);
-  nook = new PNJ('Tom Nook', box * 3, box * 2, nookRoutine);
-  pnjs.push(nook);
+  nook = new NpcEntity('Nook', nookRoutine, box * 3, box * 2);
+  solidEntities.push(nook);
   
   collisions.push(player);
   collisions.push(nook);
-
 
   entities.push(new Resource(ResourceType.PIERRE, (box * 7), (box * 4)));
   entities.push(new Resource(ResourceType.BRANCHE, (box * 2), (box * 7)));
   entities.push(new Fish(FishSpecies.BAR_COMMUN, 100, (box * 4), (box * 9), 0, -box));
   entities.push(new Fish(FishSpecies.SAUMON, 300, (box * 7), (box * 9), 0, -box));
+
+  window.addEventListener('keypress', player.listen);
 } 
 
 export let wait: boolean = false;
@@ -170,7 +176,7 @@ const keyListener = async (event: any) => {
   if(wait) return;
   wait = true;
   setTimeout(() => { wait = false }, 150)
-  if (player.getState() === PlayerState.IDLE && event.key === Key.PAUSE) {
+  if (player.getState() === PersonState.IDLE && event.key === Key.PAUSE) {
     if(chrono.isRunning()) {
       chrono.stop();
     }
@@ -179,7 +185,7 @@ const keyListener = async (event: any) => {
     }
     return;
   }
-  if(player.getState() !== PlayerState.MOVING && event.key === Key.INTERACT) {
+  if(player.getState() !== PersonState.MOVING && event.key === Key.INTERACT) {
     if(!dialog.isVisible() && chrono.isRunning()) {
       await interact();
     }
@@ -204,7 +210,7 @@ const keyListener = async (event: any) => {
     inventory.moveCursor(event.key);
     return;
   }
-  if(player.getState() === PlayerState.IDLE && chrono.isRunning() && !dialog.isVisible() && Object.values(Direction).includes(event.key)) {
+  if(player.getState() === PersonState.IDLE && chrono.isRunning() && !dialog.isVisible() && Object.values(Direction).includes(event.key)) {
     player.move(event.key);
     return;
   }
@@ -215,4 +221,3 @@ const keyListener = async (event: any) => {
 }
 
 window.addEventListener('load', onLoad);
-window.addEventListener('keypress', keyListener);

@@ -84,6 +84,10 @@ export class TriggerEntity {
     return this.htmlElement;
   }
 
+  getWidth(): number { return this.width; }
+
+  getHeight(): number { return this.height; }
+
   getTop(): number {
     return this.top;
   }
