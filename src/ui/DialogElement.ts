@@ -5,7 +5,8 @@ export class DialogElement {
   private static nameHTML: HTMLElement;
   private static textHTML: HTMLElement;
 
-  static createHtmlElement(): void {
+  //#region Methods
+  public static createHtmlElement(): void {
     // Create div for dialog
     const dialogElement = document.createElement("div");
     dialogElement.id = "dialog"
@@ -34,22 +35,23 @@ export class DialogElement {
     DialogElement.hide();
   }
 
-  static show(): void {
+  public static show(): void {
     DialogElement.dialogHTML.style.display = 'block';
   }
 
-  static setName(name: string): void {
+  public static setName(name: string): void {
     DialogElement.nameHTML.innerHTML = name;
   }
 
-  static setText(text: string): void {
+  public static setText(text: string): void {
     DialogElement.textHTML.innerHTML = text;
   }
 
   // todo set avatar
 
-  static hide(): void {
+  public static hide(): void {
     DialogElement.dialogHTML.style.display = 'none';
   }
+  //#endregion
 
 }

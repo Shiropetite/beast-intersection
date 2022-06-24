@@ -2,6 +2,7 @@ import { box, player } from '..';
 import { Talking, Dialog } from '../actions/Talking';
 import { PersonState } from './PlayerEntity';
 import { SolidEntity } from './SolidEntity';
+import { TimeManager } from './../management/TimeManager';
 
 interface Routine {
   [time: string]: {
@@ -20,7 +21,7 @@ export class NpcEntity extends SolidEntity {
   private name: string;
 
   //#region Constructor
-  constructor(name: string, routine: Routine, top: number, left: number) {
+  public constructor(name: string, routine: Routine, top: number, left: number) {
     super('npc', 'npc', box - 6, box - 6, top, left, (box - 6) * 3, (box - 6) * 3, top - box - 6, left - box - 6);
     this.name = name;
     this.routine = routine;
@@ -30,21 +31,88 @@ export class NpcEntity extends SolidEntity {
   //#endregion
 
   //#region Method
-  move(targetTop: number, targetLeft: number): void {
-    
+  public onSignalRaisedTime(): void {
+    const time = TimeManager.getTime();
+
+    if (Object.keys(this.routine).includes(time)) {
+      console.log(this.name + ": " + this.routine[time].text)
+
+      if (this.routine[time].position) {
+        this.move(this.routine[time].position.top, this.routine[time].position.left)
+      }
+    }
+  }
+
+  private move(targetTop: number, targetLeft: number): void {
+    // time interval between each step
+    const moveInterval = setInterval(() => {
+      // store current solid position
+      const top = super.getSolidTop();
+      const left = super.getSolidLeft();
+
+      // npc is at destination
+      if (this.getSolidTop() === targetTop * box && this.getSolidLeft() === targetLeft * box) {
+        clearInterval(moveInterval)
+      }
+
+      // npc is below destination
+      if (this.getSolidTop() < (targetTop * box)) {
+        super.setSolidTop(super.getSolidTop() + box);
+        super.updateHtmlElement();
+      }
+      else 
+      // npc is above destination
+      if (this.getSolidTop() > (targetTop * box)) {
+        super.setSolidTop(super.getSolidTop() - box);
+        super.updateHtmlElement();
+      } 
+      else 
+      // npc is right of destination
+      if (this.getSolidLeft() < (targetLeft * box)) {
+        super.setSolidLeft(super.getSolidLeft() + box);
+        super.updateHtmlElement();
+      }
+      else 
+      // npc is left of destination
+      if (this.getSolidLeft() > (targetLeft * box)) {
+        super.setSolidLeft(super.getSolidLeft() - box);
+        super.updateHtmlElement();
+      }
+
+      if (this.nextMoveCollide()) {
+        // abort movement
+        this.setSolidTop(top);
+        this.setSolidLeft(left);
+      }
+      else {
+        const stepTop = this.getSolidTop() - top;
+        const stepLeft = this.getSolidLeft() - left;
+
+        // move sprite
+        this.setTop(this.getTop() + stepTop);
+        this.setLeft(this.getLeft() + stepLeft);
+        // move trigger hitbox
+        this.setTriggerTop(this.getTriggerTop() + stepTop);
+        this.setTriggerLeft(this.getTriggerLeft() + stepLeft);
+
+        super.updateHtmlElement();
+      }
+    }, 500) // repeat
   }
 
   // when player talk to npc
-  act(): void {
+  public act(): void {
+    const time = TimeManager.getTime();
+
     // routine contains a dialog for current time of day
-    if (!!this.routine['06:00']?.dialog) {
+    if (!!this.routine[time]?.dialog) {
       
       // dialog has not started
       if (this.currentState !== PersonState.ACTING) {
         this.setState(PersonState.ACTING);
         player.setState(PersonState.ACTING);
 
-        Talking.startDialog(this.routine['06:00'].dialog, this.name);
+        Talking.startDialog(this.routine[time].dialog, this.name);
       }
       // dialog has started
       else {
@@ -60,11 +128,11 @@ export class NpcEntity extends SolidEntity {
   //#endregion
 
   //#region Getters & Setters
-  getState(): PersonState {
+  public getState(): PersonState {
     return this.currentState;
   }
 
-  setState(state: PersonState): void {
+  public setState(state: PersonState): void {
     this.currentState = state;
   }
   //#endregion

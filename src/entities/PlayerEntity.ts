@@ -31,7 +31,7 @@ export class PlayerEntity extends SolidEntity {
   private toolInHand?: Tool | ResourceObject;
 
   //#region Constructor
-  constructor(top: number, left: number) {
+  public constructor(top: number, left: number) {
     super('player', 'player', box - 6, box - 6, top, left);
     this.currentState = PersonState.IDLE;
     this.inventory = [];
@@ -42,8 +42,7 @@ export class PlayerEntity extends SolidEntity {
   //#endregion
 
   //#region Method
-  // when player press 'E' 
-  listen(event: any): void {
+  public listenInput(event: any): void {
     switch(event.key) {
       case ActionKeys.ACT:
         player.act();
@@ -52,15 +51,13 @@ export class PlayerEntity extends SolidEntity {
       case DirectionKeys.LEFT:
       case DirectionKeys.RIGHT:
       case DirectionKeys.UP:
-        if(player.currentState !== PersonState.ACTING) {
-          player.move(event.key);
-        }
+        if(player.currentState !== PersonState.ACTING) player.move(event.key);
         break;
       default: break;
     }
   }
 
-  act(): void {
+  public act(): void {
     for (const entity of solidEntities) {
       const isTriggering: boolean = this.isTrigger(entity);
 
@@ -71,7 +68,7 @@ export class PlayerEntity extends SolidEntity {
   }
 
   // when player press 'Z,Q,S,D'
-  move(key: DirectionKeys): void {
+  private move(key: DirectionKeys): void {
     this.currentState = PersonState.MOVING;
 
     // store current solid position
@@ -122,11 +119,11 @@ export class PlayerEntity extends SolidEntity {
   //#endregion
 
   //#region Getters & Setters
-  getState(): PersonState {
+  public getState(): PersonState {
     return this.currentState;
   }
 
-  setState(state: PersonState): void {
+  public setState(state: PersonState): void {
     this.currentState = state;
   }
   //#endregion

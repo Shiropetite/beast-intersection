@@ -10,16 +10,16 @@ export class SolidEntity extends TriggerEntity {
 
   //#region Constructor
   // solid hitbox dimensions same as trigger hitbox same as sprite
-  constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number); 
+  public constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number); 
   // solid hitbox dimensions same as trigger hitbox dimensions
-  constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number, 
+  public constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number, 
     triggerWidth: number, triggerHeight: number, triggerTop: number, triggerLeft: number);
   // solid hitbox has its own dimensions
-  constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number, 
+  public constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number, 
     triggerWidth: number, triggerHeight: number, triggerTop: number, triggerLeft: number,
     solidWidth: number, solidHeight: number, solidTop: number, solidLeft: number);
 
-  constructor(...parameters: any[]) {
+  public constructor(...parameters: any[]) {
     if (parameters.length === 6) {
       super(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4], parameters[5]);
     }
@@ -27,7 +27,7 @@ export class SolidEntity extends TriggerEntity {
       super(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4], parameters[5], parameters[6], parameters[7], parameters[8], parameters[9]);
     }
     
-    if(parameters.length > 10) { // solid hitbox has its own dimensions
+    if (parameters.length > 10) { // solid hitbox has its own dimensions
       this.solidWidth = parameters[10];
       this.solidHeight = parameters[11];
       this.solidTop = parameters[12];
@@ -43,12 +43,12 @@ export class SolidEntity extends TriggerEntity {
   //#endregion
 
   //#region Method
-  isCollide(other: SolidEntity): boolean {
+  public isCollide(other: SolidEntity): boolean {
     return (this.solidLeft + this.solidWidth) > other.solidLeft && this.solidLeft < (other.solidLeft + other.solidWidth)
       && (this.solidTop + this.solidHeight) > other.solidTop && this.solidTop < (other.solidTop + other.solidHeight);
   }
 
-  nextMoveCollide(): boolean {
+  public nextMoveCollide(): boolean {
     for (let collision of collisions) {
       // check it is colliding but not with himself
       if (this.isCollide(collision) && collision.htmlElement?.id !== super.getHTMLElement().id) {
@@ -59,22 +59,24 @@ export class SolidEntity extends TriggerEntity {
     return false;
   }
 
-  act(): void { throw 'Method not yet implemented' }
+  public act(): void { throw 'Method not yet implemented' }
+
+  public onSignalRaisedTime(): void { throw 'Method not yet implemented' }
   //#endregion
 
-  getSolidTop(): number {
+  public getSolidTop(): number {
     return this.solidTop;
   }
 
-  setSolidTop(solidTop: number): void {
+  public setSolidTop(solidTop: number): void {
     this.solidTop = solidTop;
   }
 
-  getSolidLeft(): number {
+  public getSolidLeft(): number {
     return this.solidLeft;
   }
 
-  setSolidLeft(solidLeft: number): void {
+  public setSolidLeft(solidLeft: number): void {
     this.solidLeft = solidLeft;
   }
 }

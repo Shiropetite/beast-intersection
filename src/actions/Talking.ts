@@ -1,4 +1,5 @@
 import { DialogElement } from '../ui/DialogElement';
+
 export interface Dialog { 
   text: string, 
   isChoice: boolean, 
@@ -13,7 +14,8 @@ export interface Dialog {
 export class Talking {
   private static dialog: Dialog[]; 
 
-  static startDialog(dialog: Dialog[], speakerName?: string): void {
+  //#region Methods
+  public static startDialog(dialog: Dialog[], speakerName?: string): void {
     this.dialog = [ ...dialog ];
 
     DialogElement.show();
@@ -21,7 +23,7 @@ export class Talking {
     this.displaySentence();
   }
 
-  static displaySentence(): boolean {
+  public static displaySentence(): boolean {
     if (this.dialog.length === 0) {
       this.endDialog();
       return false;
@@ -36,7 +38,7 @@ export class Talking {
     return true;
   }
 
-  static choice(): void {
+  private static choice(): void {
     // todo
   }
 
@@ -45,5 +47,6 @@ export class Talking {
     DialogElement.setText("");
     DialogElement.hide();
   }
+  //#endregion
 
 }

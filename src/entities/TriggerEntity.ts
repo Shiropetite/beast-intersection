@@ -19,11 +19,11 @@ export class TriggerEntity {
 
   //#region Constructor
   // trigger hitbox dimensions same as sprite
-  constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number);
+  public constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number);
   // trigger hitbox has its own dimensions
-  constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number, triggerWidth: number, triggerHeight: number, triggerTop: number, triggerLeft: number);
+  public constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number, triggerWidth: number, triggerHeight: number, triggerTop: number, triggerLeft: number);
   
-  constructor(...parameters: any[]) {
+  public constructor(...parameters: any[]) {
     this.width = parameters[2];
     this.height = parameters[3];
     this.top = parameters[4];
@@ -48,7 +48,7 @@ export class TriggerEntity {
   //#endregion
 
   //#region Method
-  createHtmlElement(htmlId: string, cssClass: string): void {
+  public createHtmlElement(htmlId: string, cssClass: string): void {
     // html
     const entity = document.createElement('div');
     entity.id = htmlId;
@@ -61,71 +61,49 @@ export class TriggerEntity {
     mapHTML.appendChild(entity);
   }
 
-  updateHtmlElement(): void {
+  public updateHtmlElement(): void {
     this.htmlElement.style.transform = `translate3d(${this.left}px, ${this.top}px, 0)`;
   }
 
-  destroyHtmlElement(): void {
+  public destroyHtmlElement(): void {
     mapHTML.removeChild(this.htmlElement);
   }
 
-  isTrigger(other: TriggerEntity): boolean {
+  public isTrigger(other: TriggerEntity): boolean {
     return (this.triggerLeft + this.triggerWidth) > other.triggerLeft && this.triggerLeft < (other.triggerLeft + other.triggerWidth)
       && (this.triggerTop + this.triggerHeight) > other.triggerTop && this.triggerTop < (other.triggerTop + other.triggerHeight);
   }
 
-  onTrigger(): void {
+  public onTrigger(): void {
     throw new Error('Method not yet implemented.');
   }
   //#endregion
 
   //#region Getters & Setters
-  getHTMLElement(): HTMLElement {
-    return this.htmlElement;
-  }
+  public getHTMLElement(): HTMLElement { return this.htmlElement; }
 
-  getWidth(): number { return this.width; }
+  public getWidth(): number { return this.width; }
 
-  getHeight(): number { return this.height; }
+  public getHeight(): number { return this.height; }
 
-  getTop(): number {
-    return this.top;
-  }
+  public getTop(): number { return this.top; }
 
-  setTop(top: number): void {
-    this.top = top;
-  }
+  public setTop(top: number): void { this.top = top; }
 
-  getLeft(): number {
-    return this.left;
-  }
+  public getLeft(): number { return this.left; }
 
-  setLeft(left: number): void {
-    this.left = left;
-  }
+  public setLeft(left: number): void { this.left = left; }
 
-  getTriggerWidth(): number {
-    return this.triggerWidth;
-  }
+  public getTriggerWidth(): number { return this.triggerWidth; }
 
-  getTriggerHeight(): number {
-    return this.triggerHeight;
-  }
+  public getTriggerHeight(): number { return this.triggerHeight; }
 
-  getTriggerTop(): number {
-    return this.triggerTop;
-  }
+  public getTriggerTop(): number { return this.triggerTop; }
 
-  getTriggerLeft(): number {
-    return this.triggerLeft;
-  }
+  public getTriggerLeft(): number { return this.triggerLeft; }
 
-  setTriggerTop(triggerTop: number): void {
-    this.triggerTop = triggerTop
-  }
+  public setTriggerTop(triggerTop: number): void { this.triggerTop = triggerTop }
 
-  setTriggerLeft(triggerLeft: number): void {
-    this.triggerLeft = triggerLeft
-  }
+  public setTriggerLeft(triggerLeft: number): void { this.triggerLeft = triggerLeft }
   //#endregion
 }
