@@ -2,21 +2,21 @@ import * as _ from 'lodash';
 import './style.css';
 
 // Game
-import { PlayerEntity, PersonState } from './entities/PlayerEntity';
-import { Chrono } from './chrono';
+import { PlayerEntity } from './entities/PlayerEntity';
 import { Dialog } from './dialog';
 import { Inventory } from './inventory';
 import { Resource, ResourceType } from './resource';
 import { Fish, FishSpecies } from './fishing';
 import { Entity } from './entity';
 import { NpcEntity } from './entities/NpcEntity';
-import { SolidEntity } from './entities/SolidEntity';
 import { DialogElement } from './ui/DialogElement';
 import { TimeManager } from './management/TimeManager';
 import { TimeElement } from './ui/TimeElement';
+import { TriggerEntity } from './entities/TriggerEntity';
+import { ResourceEntity } from './entities/ResourceEntity';
 
 // routine
-const nookRoutine = require('./characters/nook/first-routine.json');
+const nookRoutine = require('./routines/nook/first-routine.json');
 
 export const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -50,7 +50,7 @@ export let inventory: Inventory = null;
 
 export let player: PlayerEntity = null;
 let nook: NpcEntity = null;
-export const solidEntities: SolidEntity[] = [];
+export const triggerEntities: TriggerEntity[] = [];
 let entities: Entity[] = []
 export const collisions: any[] = [
   // mur de gauche
@@ -152,12 +152,12 @@ const onLoad = () => {
 
   player = new PlayerEntity(box * 2, box * 4);
   nook = new NpcEntity('Nook', nookRoutine, box * 3, box * 2);
-  solidEntities.push(nook);
+  triggerEntities.push(nook);
+  triggerEntities.push(new ResourceEntity('pierre', (box * 7), (box * 4)))
   
   collisions.push(player);
   collisions.push(nook);
 
-  entities.push(new Resource(ResourceType.PIERRE, (box * 7), (box * 4)));
   entities.push(new Resource(ResourceType.BRANCHE, (box * 2), (box * 7)));
   entities.push(new Fish(FishSpecies.BAR_COMMUN, 100, (box * 4), (box * 9), 0, -box));
   entities.push(new Fish(FishSpecies.SAUMON, 300, (box * 7), (box * 9), 0, -box));

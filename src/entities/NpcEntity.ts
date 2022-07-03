@@ -32,7 +32,7 @@ export class NpcEntity extends SolidEntity {
 
   //#region Method
   public onSignalRaisedTime(): void {
-    const time = TimeManager.getTime();
+    const time = TimeManager.getCurrentTime();
 
     if (Object.keys(this.routine).includes(time)) {
       console.log(this.name + ": " + this.routine[time].text)
@@ -46,6 +46,9 @@ export class NpcEntity extends SolidEntity {
   private move(targetTop: number, targetLeft: number): void {
     // time interval between each step
     const moveInterval = setInterval(() => {
+      // cannot move unless idle
+      if (this.getState() !== PersonState.IDLE) return;
+
       // store current solid position
       const top = super.getSolidTop();
       const left = super.getSolidLeft();
@@ -102,28 +105,30 @@ export class NpcEntity extends SolidEntity {
 
   // when player talk to npc
   public act(): void {
-    const time = TimeManager.getTime();
+    let time = TimeManager.getCurrentTime();
+    
+    // routine does not contain a dialog for current time of day
+    while (this.routine[time]?.dialog === undefined) {
+      time = TimeManager.getPreviousTime(time);
+    }
+    
+    // dialog has not started
+    if (this.currentState !== PersonState.ACTING) {
+      this.setState(PersonState.ACTING);
+      player.setState(PersonState.ACTING);
 
-    // routine contains a dialog for current time of day
-    if (!!this.routine[time]?.dialog) {
-      
-      // dialog has not started
-      if (this.currentState !== PersonState.ACTING) {
-        this.setState(PersonState.ACTING);
-        player.setState(PersonState.ACTING);
+      Talking.startDialog(this.routine[time].dialog, this.name);
+    }
+    // dialog has started
+    else {
+      const dialogNext: boolean = Talking.displaySentence();
 
-        Talking.startDialog(this.routine[time].dialog, this.name);
-      }
-      // dialog has started
-      else {
-        const dialogNext: boolean = Talking.displaySentence();
-
-        if (!dialogNext) {
-          this.setState(PersonState.IDLE);
-          player.setState(PersonState.IDLE);
-        }
+      if (!dialogNext) {
+        this.setState(PersonState.IDLE);
+        player.setState(PersonState.IDLE);
       }
     }
+    
   }
   //#endregion
 

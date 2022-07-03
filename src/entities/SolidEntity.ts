@@ -59,9 +59,6 @@ export class SolidEntity extends TriggerEntity {
     return false;
   }
 
-  public act(): void { throw 'Method not yet implemented' }
-
-  public onSignalRaisedTime(): void { throw 'Method not yet implemented' }
   //#endregion
 
   public getSolidTop(): number {

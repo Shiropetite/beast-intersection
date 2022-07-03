@@ -1,4 +1,4 @@
-import { box, solidEntities, player } from '..';
+import { box, triggerEntities, player } from '..';
 import { SolidEntity } from './SolidEntity';
 import { ResourceObject } from '../objects/ResourceObject';
 import { Tool } from '../objects/Tool';
@@ -58,7 +58,7 @@ export class PlayerEntity extends SolidEntity {
   }
 
   public act(): void {
-    for (const entity of solidEntities) {
+    for (const entity of triggerEntities) {
       const isTriggering: boolean = this.isTrigger(entity);
 
       if (isTriggering) {

@@ -35,11 +35,32 @@ export class TimeManager {
 
   public static isActive(): boolean { return TimeManager.interval !== null; }
 
-  public static getTime(): string {
+  public static getCurrentTime(): string {
     const hour = `${TimeManager.hour < 10 ? '0' : ''}${TimeManager.hour}`;
     const minute = `${TimeManager.minute < 10 ? '0' : ''}${TimeManager.minute}`;
     return `${hour}:${minute}`;
   }
+
+  public static getPreviousTime(currentTime: string): string {
+    let hour = Number.parseInt(currentTime.split(":")[0]);
+    let minute = Number.parseInt(currentTime.split(":")[1]);
+    
+    if (minute === 0) {
+      if (hour === 0) {
+        hour = 23;
+      }
+      else {
+        hour--;
+      }
+      minute = 50;
+    }
+    else {
+      minute -= 10;
+    }
+    
+    return `${hour < 10 ? '0' : ''}${hour}:${minute < 10 ? '0' : ''}${minute}`;
+  }
+
   //#endregion
   
 }

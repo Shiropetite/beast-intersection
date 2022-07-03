@@ -77,6 +77,10 @@ export class TriggerEntity {
   public onTrigger(): void {
     throw new Error('Method not yet implemented.');
   }
+
+  public act(): void { throw 'Method not yet implemented' };
+
+  public onSignalRaisedTime(): void { }
   //#endregion
 
   //#region Getters & Setters

@@ -19,7 +19,7 @@ export class Talking {
     this.dialog = [ ...dialog ];
 
     DialogElement.show();
-    DialogElement.setName(speakerName);
+    if (speakerName) { DialogElement.setName(speakerName); }
     this.displaySentence();
   }
 

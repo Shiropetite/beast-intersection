@@ -1,4 +1,4 @@
-import { solidEntities } from "..";
+import { triggerEntities } from "..";
 import { TimeElement } from './../ui/TimeElement';
 
 export class SignalManager {
@@ -6,7 +6,7 @@ export class SignalManager {
   //#region Methods
   public static raiseSignalTime(): void {
     // notify entities affected by time
-    for (const entity of solidEntities) {
+    for (const entity of triggerEntities) {
       entity.onSignalRaisedTime();
     }
 

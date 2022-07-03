@@ -16,7 +16,7 @@ export class TimeElement {
   }
 
   public static update(): void {
-    TimeElement.timeHTML.innerText = TimeManager.getTime();
+    TimeElement.timeHTML.innerText = TimeManager.getCurrentTime();
   }
   //#endregion
 }
