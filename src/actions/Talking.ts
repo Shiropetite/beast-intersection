@@ -5,18 +5,22 @@ export interface Dialog {
   isChoice: boolean, 
   choices?: [
     {
-      choice: string,
-      response: string
+      playerResponse: string,
+      npcResponse: string
     }
   ]
 }
 
 export class Talking {
   private static dialog: Dialog[]; 
+  private static playerChoice: number;
+  private static sentence: Dialog;
 
   //#region Methods
   public static startDialog(dialog: Dialog[], speakerName?: string): void {
     this.dialog = [ ...dialog ];
+    this.playerChoice = -1;
+    this.sentence = null;
 
     DialogElement.show();
     if (speakerName) { DialogElement.setName(speakerName); }
@@ -24,22 +28,45 @@ export class Talking {
   }
 
   public static displaySentence(): boolean {
+    // player has chosen
+    if (this.playerChoice >= 0) {
+      DialogElement.setText(this.sentence.choices[this.playerChoice].npcResponse);
+      this.playerChoice = -1;
+      return true;
+    }
+
     if (this.dialog.length === 0) {
       this.endDialog();
       return false;
     }
 
-    const sentence = this.dialog.shift();
-    if (sentence.isChoice) {
-      this.choice();
+    this.sentence = this.dialog.shift();
+    DialogElement.setText(this.sentence.text);
+
+    // player is choosing
+    if (this.sentence.isChoice) {
+      this.choice(this.sentence.choices);
     }
     
-    DialogElement.setText(sentence.text);
     return true;
   }
 
-  private static choice(): void {
-    // todo
+  private static choice(choices: any[]): void {
+    // display all choices
+    for (let i = 0; i < choices.length; i++) {
+      DialogElement.addChoice(choices[i].playerResponse, i);
+    }
+
+    // set indicator on first choice
+    Talking.playerChoice = 0;
+    DialogElement.addIndicator(Talking.playerChoice);
+  }
+
+  public static selectChoice(goUp: boolean) {
+    DialogElement.removeIndicator(Talking.playerChoice);
+    if (goUp && Talking.playerChoice > 0) Talking.playerChoice--;
+    else if (!goUp && Talking.playerChoice < this.sentence.choices.length - 1) Talking.playerChoice++;
+    DialogElement.addIndicator(Talking.playerChoice);
   }
 
   private static endDialog(): void {

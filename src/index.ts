@@ -147,7 +147,7 @@ const onLoad = () => {
 
   DialogElement.createHtmlElement();
   
-  TimeManager.init(6,0);
+  TimeManager.init(7,0);
   TimeElement.createHTMLElement();
 
   player = new PlayerEntity(box * 2, box * 4);

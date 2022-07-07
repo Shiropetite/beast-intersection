@@ -2,6 +2,7 @@ import { box, triggerEntities, player } from '..';
 import { SolidEntity } from './SolidEntity';
 import { ResourceObject } from '../objects/ResourceObject';
 import { Tool } from '../objects/Tool';
+import { Talking } from '../actions/Talking';
 
 export type Key = ActionKeys | DirectionKeys;
 
@@ -47,11 +48,12 @@ export class PlayerEntity extends SolidEntity {
       case ActionKeys.ACT:
         player.act();
         break;
+      case DirectionKeys.UP:
       case DirectionKeys.DOWN:
+        if (player.currentState === PersonState.ACTING) Talking.selectChoice(event.key === DirectionKeys.UP);
       case DirectionKeys.LEFT:
       case DirectionKeys.RIGHT:
-      case DirectionKeys.UP:
-        if(player.currentState !== PersonState.ACTING) player.move(event.key);
+        if (player.currentState !== PersonState.ACTING) player.move(event.key);
         break;
       default: break;
     }

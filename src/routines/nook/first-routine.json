@@ -55,14 +55,22 @@
         "isChoice": true,
         "choices": [
           { 
-            "choice": "Oui, Avec plaisir !",
-            "response": "Moi aussi... tu me passes un café ? :)"
+            "playerResponse": "Oui, Avec plaisir !",
+            "npcResponse": "Moi aussi... tu me passes un café ? :)"
           },
           { 
-            "choice": "Beurk",
-            "response": "Ah..."
+            "playerResponse": "Beurk",
+            "npcResponse": "Ah..."
+          },
+          { 
+            "playerResponse": "T ki ?",
+            "npcResponse": "... 😥"
           }
         ]
+      },
+      {
+        "text": "Bon bah au revoir",
+        "isChoice": false
       }
     ]
   },

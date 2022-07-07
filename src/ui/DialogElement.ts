@@ -47,6 +47,20 @@ export class DialogElement {
     DialogElement.textHTML.innerHTML = text;
   }
 
+  public static addChoice(text: string, index: number): void {
+    DialogElement.textHTML.innerHTML += `<div id="choice-${ index }">${text}</div>`;
+  }
+
+  public static removeIndicator(choice: number): void {
+    const choiceHTML = document.getElementById(`choice-${ choice }`)
+    choiceHTML.innerHTML = choiceHTML.innerHTML.substring(2);
+  }
+
+  public static addIndicator(choice: number): void {
+    const choiceHTML = document.getElementById(`choice-${ choice }`);
+    choiceHTML.innerHTML = "- " + choiceHTML.innerHTML;
+  }
+
   // todo set avatar
 
   public static hide(): void {
