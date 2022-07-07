@@ -25,7 +25,7 @@ body {
 
 .map {
   image-rendering: pixelated;
-  background-image: url(./assets/map.png);
+  background-image: url(./@assets/map.png);
   background-size: 100%;
   width: calc(16 * var(--grid-cell)); 
   height: calc(10 * var(--grid-cell));

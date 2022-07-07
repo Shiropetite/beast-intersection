@@ -1,5 +1,5 @@
 import { cameraHTML } from "..";
-import { TimeManager } from './../management/TimeManager';
+import { TimeController } from './../controllers/TimeController';
 
 export class TimeElement {
   private static timeHTML: HTMLElement;
@@ -16,7 +16,7 @@ export class TimeElement {
   }
 
   public static update(): void {
-    TimeElement.timeHTML.innerText = TimeManager.getCurrentTime();
+    TimeElement.timeHTML.innerText = TimeController.getCurrentTime();
   }
   //#endregion
 }

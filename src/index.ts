@@ -5,12 +5,11 @@ import './style.css';
 import { PlayerEntity } from './entities/PlayerEntity';
 import { Dialog } from './dialog';
 import { Inventory } from './inventory';
-import { Resource, ResourceType } from './resource';
 import { Fish, FishSpecies } from './fishing';
 import { Entity } from './entity';
 import { NpcEntity } from './entities/NpcEntity';
 import { DialogElement } from './ui/DialogElement';
-import { TimeManager } from './management/TimeManager';
+import { TimeController } from './controllers/TimeController';
 import { TimeElement } from './ui/TimeElement';
 import { TriggerEntity } from './entities/TriggerEntity';
 import { ResourceEntity } from './entities/ResourceEntity';
@@ -147,18 +146,18 @@ const onLoad = () => {
 
   DialogElement.createHtmlElement();
   
-  TimeManager.init(7,0);
+  TimeController.init(7,0);
   TimeElement.createHTMLElement();
 
   player = new PlayerEntity(box * 2, box * 4);
   nook = new NpcEntity('Nook', nookRoutine, box * 3, box * 2);
   triggerEntities.push(nook);
   triggerEntities.push(new ResourceEntity('pierre', (box * 7), (box * 4)))
+  triggerEntities.push(new ResourceEntity('branche', (box * 2), (box * 7)))
   
   collisions.push(player);
   collisions.push(nook);
 
-  entities.push(new Resource(ResourceType.BRANCHE, (box * 2), (box * 7)));
   entities.push(new Fish(FishSpecies.BAR_COMMUN, 100, (box * 4), (box * 9), 0, -box));
   entities.push(new Fish(FishSpecies.SAUMON, 300, (box * 7), (box * 9), 0, -box));
 

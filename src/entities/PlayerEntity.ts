@@ -22,7 +22,8 @@ export enum DirectionKeys {
 export enum PersonState {
   IDLE,
   MOVING,
-  ACTING
+  ACTING,
+  MENUING
 }
 
 export class PlayerEntity extends SolidEntity {

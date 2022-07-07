@@ -1,7 +1,7 @@
 import { triggerEntities } from "..";
-import { TimeElement } from './../ui/TimeElement';
+import { TimeElement } from '../ui/TimeElement';
 
-export class SignalManager {
+export class SignalController {
 
   //#region Methods
   public static raiseSignalTime(): void {

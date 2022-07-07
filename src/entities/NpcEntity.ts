@@ -2,7 +2,7 @@ import { box, player } from '..';
 import { Talking, Dialog } from '../actions/Talking';
 import { PersonState } from './PlayerEntity';
 import { SolidEntity } from './SolidEntity';
-import { TimeManager } from './../management/TimeManager';
+import { TimeController } from './../controllers/TimeController';
 
 interface Routine {
   [time: string]: {
@@ -32,7 +32,7 @@ export class NpcEntity extends SolidEntity {
 
   //#region Method
   public onSignalRaisedTime(): void {
-    const time = TimeManager.getCurrentTime();
+    const time = TimeController.getCurrentTime();
 
     if (Object.keys(this.routine).includes(time)) {
       console.log(this.name + ": " + this.routine[time].text)
@@ -105,11 +105,11 @@ export class NpcEntity extends SolidEntity {
 
   // when player talk to npc
   public act(): void {
-    let time = TimeManager.getCurrentTime();
+    let time = TimeController.getCurrentTime();
     
     // routine does not contain a dialog for current time of day
     while (this.routine[time]?.dialog === undefined) {
-      time = TimeManager.getPreviousTime(time);
+      time = TimeController.getPreviousTime(time);
     }
     
     // dialog has not started

@@ -1,43 +1,43 @@
-import { SignalManager } from './SignalManager';
+import { SignalController } from './SignalController';
 
-export class TimeManager {
+export class TimeController {
   private static interval: NodeJS.Timer;
   private static hour: number;
   private static minute: number;
 
   //#region Methods
   public static init(hour: number, minute: number): void {
-    TimeManager.hour = hour;
-    TimeManager.minute = minute;
+    TimeController.hour = hour;
+    TimeController.minute = minute;
 
-    TimeManager.start();
+    TimeController.start();
   }
 
   public static start(): void {
-    TimeManager.interval = setInterval(() => {
-      if (TimeManager.minute === 50) {
-        if (TimeManager.hour === 23) TimeManager.hour = 0;
-        else TimeManager.hour++;
+    TimeController.interval = setInterval(() => {
+      if (TimeController.minute === 50) {
+        if (TimeController.hour === 23) TimeController.hour = 0;
+        else TimeController.hour++;
         
-        TimeManager.minute = 0;
+        TimeController.minute = 0;
       }
-      else TimeManager.minute += 10;
+      else TimeController.minute += 10;
 
       // send a signal
-      SignalManager.raiseSignalTime();
+      SignalController.raiseSignalTime();
     }, 5000); // repeat
   }
 
   public static stop(): void {
-    clearInterval(TimeManager.interval);
-    TimeManager.interval = null;
+    clearInterval(TimeController.interval);
+    TimeController.interval = null;
   }
 
-  public static isActive(): boolean { return TimeManager.interval !== null; }
+  public static isActive(): boolean { return TimeController.interval !== null; }
 
   public static getCurrentTime(): string {
-    const hour = `${TimeManager.hour < 10 ? '0' : ''}${TimeManager.hour}`;
-    const minute = `${TimeManager.minute < 10 ? '0' : ''}${TimeManager.minute}`;
+    const hour = `${TimeController.hour < 10 ? '0' : ''}${TimeController.hour}`;
+    const minute = `${TimeController.minute < 10 ? '0' : ''}${TimeController.minute}`;
     return `${hour}:${minute}`;
   }
 

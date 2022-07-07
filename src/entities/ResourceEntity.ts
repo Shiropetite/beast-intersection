@@ -22,6 +22,7 @@ export class ResourceEntity extends TriggerEntity {
 
       // destroy on pickup
       super.destroyHtmlElement();
+
       // TODO: Ajouter dans l'inventaire
       
       // trigger pickup dialog
