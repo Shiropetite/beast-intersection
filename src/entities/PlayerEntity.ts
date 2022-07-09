@@ -1,8 +1,9 @@
 import { box, triggerEntities, player } from '..';
 import { SolidEntity } from './SolidEntity';
-import { ResourceObject } from '../objects/ResourceObject';
-import { Tool } from '../objects/Tool';
+import { Tool } from '../items/Tool';
 import { Talking } from '../actions/Talking';
+import { ResourceItem } from './../items/ResourceItem';
+import { InventoryElement } from './../ui/InventoryElement';
 
 export type Key = ActionKeys | DirectionKeys;
 
@@ -28,15 +29,13 @@ export enum PersonState {
 
 export class PlayerEntity extends SolidEntity {
   private currentState: PersonState;
-  private inventory: ResourceObject[];
   private tools: Tool[];
-  private toolInHand?: Tool | ResourceObject;
+  private toolInHand?: Tool | ResourceItem;
 
   //#region Constructor
   public constructor(top: number, left: number) {
     super('player', 'player', box - 6, box - 6, top, left);
     this.currentState = PersonState.IDLE;
-    this.inventory = [];
     this.tools = [];
 
     super.updateHtmlElement();
@@ -48,6 +47,10 @@ export class PlayerEntity extends SolidEntity {
     switch(event.key) {
       case ActionKeys.ACT:
         player.act();
+        break;
+      case ActionKeys.INVENTORY:
+        if (InventoryElement.isVisible()) InventoryElement.hide();
+        else InventoryElement.show();
         break;
       case DirectionKeys.UP:
       case DirectionKeys.DOWN:

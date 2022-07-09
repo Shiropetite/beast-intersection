@@ -48,9 +48,9 @@ body {
   transition: all linear 0.1s;
 }
 
-.branche {
+.arbre {
   position: absolute;
-  background-color: brown;
+  background-color: green;
   border: solid 3px black;
 }
 
@@ -97,7 +97,7 @@ body {
   font-size: 14px;
 }
 
-#inventory {
+.inventory {
   z-index: 9999;
   position: absolute;
   background-color: rgb(208, 110, 75);

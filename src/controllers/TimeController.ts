@@ -58,9 +58,8 @@ export class TimeController {
       minute -= 10;
     }
     
-    return `${hour < 10 ? '0' : ''}${hour}:${minute < 10 ? '0' : ''}${minute}`;
+    return `${ hour < 10 ? '0' : '' }${ hour }:${ minute < 10 ? '0' : '' }${ minute }`;
   }
-
   //#endregion
-  
+
 }

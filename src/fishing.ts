@@ -1,5 +1,5 @@
 import { Entity } from './entity';
-import { box, player, mapHTML, sleep, inventory, dialog } from './index';
+import { box, player, mapHTML, sleep, dialog } from './index';
 import { PersonState } from './entities/PlayerEntity';
 
 let fishCounter = 0;
@@ -105,7 +105,7 @@ export class Fish extends Entity {
     dialog.hide();
 
     player.setState(PersonState.IDLE)
-    inventory.addObject(this.name);
+    //inventory.addObject(this.name);
 
     isCatching = false;
   }
