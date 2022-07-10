@@ -24,9 +24,13 @@ export let player: PlayerEntity = null;
 export let nook: NpcEntity = null;
 export const nookRoutine = require('./@shared/routines/nook/first-routine.json');
 
-export const triggers: TriggerEntity[] = [];
+export let triggers: TriggerEntity[] = [];
 
 export let colliders: ColliderEntity[] = [];
+
+export const removeFromTrigger = (trigger: TriggerEntity) => {
+  triggers = triggers.filter(e => e.getSprite() !== trigger.getSprite()) 
+}
 
 const init = () => {
   // create camera HTML
@@ -83,7 +87,7 @@ const onload = () => {
   colliders.push(nook);
 
   triggers.push(new TriggerResourceEntity('stone', (box * 7), (box * 4), new Item("pierre")));
-  triggers.push(new TriggerResourceEntity('fish', (box * 4), (box * 9), new FishItem("bar commun", 100, 100, 1, 500, 2, 1), ResourceEntityBehaviour.FISHING));
+  triggers.push(new TriggerResourceEntity('fish', (box * 4), (box * 9), new FishItem("bar commun", 100, 100, 1, 500, 2000, 6000, 0.2, 1), ResourceEntityBehaviour.FISHING));
   
   let tree = new ColliderResourceEntity('tree', (box * 2), (box * 7), [{ item: new Item("feuille"), rate: 0.2 }, { item: new Item("branche"), rate: 1 }])
   triggers.push(tree);

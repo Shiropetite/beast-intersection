@@ -2,7 +2,7 @@ import { player, triggers, map } from '../..';
 import { PersonEntity, PersonState } from './PersonEntity';
 import { InventoryUI } from './../../ui/InventoryUI';
 import { Talking } from '../../actions/Talking';
-import { box } from '../../utils';
+import { box, sleep } from '../../utils';
 
 export type Key = ActionKeys | DirectionKeys;
 
@@ -20,13 +20,19 @@ export enum DirectionKeys {
 }
 
 export class PlayerEntity extends PersonEntity {
+  private keyPressed: boolean;
+  private previousKeyPressed: string;
 
   public constructor(name: string, spriteTop: number, spriteLeft: number) {
     super(name, spriteTop, spriteLeft, false);
+    this.keyPressed = false;
   }
 
   //#region Methods
-  public listenInput(event: any): void {
+  public async listenInput(event: any): Promise<void> {
+    if (this.keyPressed && event.key === this.previousKeyPressed) return;
+    this.keyPressed = true;
+
     switch(event.key) {
       case ActionKeys.ACT:
         if ([PersonState.IDLE, PersonState.ACTING, PersonState.TALKING].includes(player.getState())) { player.act(); }
@@ -44,6 +50,11 @@ export class PlayerEntity extends PersonEntity {
         break;
       default: break;
     }
+    
+    await sleep(150);
+
+    this.previousKeyPressed = event.key;
+    this.keyPressed = false;
   }
 
   private move(key: DirectionKeys): void {

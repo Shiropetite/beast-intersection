@@ -3,7 +3,7 @@ import { TriggerEntity } from '../TriggerEntity';
 import { Fishing } from '../../actions/Fishing';
 import { Item } from '../../items/Item';
 import { box } from '../../utils';
-import { player } from '../..';
+import { player, removeFromTrigger } from '../..';
 import { PersonState } from '../persons/PersonEntity';
 import { InventoryService } from './../../services/InventoryService';
 
@@ -70,6 +70,8 @@ export class TriggerResourceEntity extends TriggerEntity {
     else {
       Talking.talk();
       player.setState(PersonState.IDLE);
+
+      removeFromTrigger(this);
     }
   }
 

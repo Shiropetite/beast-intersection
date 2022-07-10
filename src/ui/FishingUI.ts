@@ -47,4 +47,12 @@ export class FishingUI {
     element.style.width = `${ 128 * life / maxLife }px`;
   }
 
+  public static startFrenzy(fishSprite: HTMLElement) {
+    fishSprite.style.backgroundColor = 'red';
+  }
+
+  public static stopFrenzy(fishSprite: HTMLElement) {
+    fishSprite.style.backgroundColor = 'blue';
+  }
+
 }
