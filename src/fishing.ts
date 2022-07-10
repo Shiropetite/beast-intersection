@@ -1,5 +1,5 @@
 import { Entity } from './entity';
-import { box, player, mapHTML, sleep, dialog } from './index';
+import { box, player, mapHTML, sleep } from './index';
 import { PersonState } from './entities/PlayerEntity';
 
 let fishCounter = 0;
@@ -74,12 +74,12 @@ export class Fish extends Entity {
     player.setState(PersonState.ACTING)
     isCatching = true;
 
-    dialog.update(`Le poisson a mordu à l'hameçon !`);
-    dialog.show();
+    // dialog.update(`Le poisson a mordu à l'hameçon !`);
+    // dialog.show();
     
     await sleep(1000);
 
-    dialog.hide();
+    // dialog.hide();
     this.showLife();
 
     lifeInterval = setInterval(() => { 
@@ -97,12 +97,12 @@ export class Fish extends Entity {
 
     this.removeHTML();
 
-    dialog.update(`Vous avez attapé un ${this.name} !!! :)`);
-    dialog.show();
+    // dialog.update(`Vous avez attapé un ${this.name} !!! :)`);
+    // dialog.show();
 
     await sleep(2000);
 
-    dialog.hide();
+    // dialog.hide();
 
     player.setState(PersonState.IDLE)
     //inventory.addObject(this.name);

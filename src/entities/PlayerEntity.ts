@@ -2,8 +2,8 @@ import { box, triggerEntities, player } from '..';
 import { SolidEntity } from './SolidEntity';
 import { Tool } from '../items/Tool';
 import { Talking } from '../actions/Talking';
-import { ResourceItem } from './../items/ResourceItem';
 import { InventoryElement } from './../ui/InventoryElement';
+import { Item } from './../items/Item';
 
 export type Key = ActionKeys | DirectionKeys;
 
@@ -30,7 +30,7 @@ export enum PersonState {
 export class PlayerEntity extends SolidEntity {
   private currentState: PersonState;
   private tools: Tool[];
-  private toolInHand?: Tool | ResourceItem;
+  private toolInHand?: Tool | Item;
 
   //#region Constructor
   public constructor(top: number, left: number) {

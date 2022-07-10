@@ -3,7 +3,6 @@ import './style.css';
 
 // Game
 import { PlayerEntity } from './entities/PlayerEntity';
-import { Dialog } from './dialog';
 import { Fish, FishSpecies } from './fishing';
 import { Entity } from './entity';
 import { NpcEntity } from './entities/NpcEntity';
@@ -11,10 +10,11 @@ import { DialogElement } from './ui/DialogElement';
 import { TimeController } from './controllers/TimeController';
 import { TimeElement } from './ui/TimeElement';
 import { TriggerEntity } from './entities/TriggerEntity';
-import { TriggerResourceEntity } from './entities/TriggerResourceEntity';
+import { ResourceEntityBehaviour, TriggerResourceEntity } from './entities/TriggerResourceEntity';
 import { SolidResourceEntity } from './entities/SolidResourceEntity';
-import { ResourceItem } from './items/ResourceItem';
 import { InventoryElement } from './ui/InventoryElement';
+import { Item } from './items/Item';
+import { FishItem } from './items/FishItem';
 
 // routine
 const nookRoutine = require('./@routines/nook/first-routine.json');
@@ -46,12 +46,10 @@ export const box = 64 * 2;
 
 export let cameraHTML: HTMLElement = null;
 export let mapHTML: HTMLElement = null;
-export let dialog: Dialog = null;
 
 export let player: PlayerEntity = null;
 let nook: NpcEntity = null;
 export const triggerEntities: TriggerEntity[] = [];
-let entities: Entity[] = []
 export const collisions: any[] = [
   // mur de gauche
   {
@@ -124,17 +122,18 @@ const onLoad = () => {
   InventoryElement.createHTMLElement();
 
   nook = new NpcEntity('Nook', nookRoutine, box * 3, box * 2);
-  let arbre = new SolidResourceEntity('arbre', (box * 2), (box * 7), [{ item: new ResourceItem("feuille"), rate: 0.2 }, { item: new ResourceItem("branche"), rate: 1 }])
+  let arbre = new SolidResourceEntity('arbre', (box * 2), (box * 7), [{ item: new Item("feuille"), rate: 0.2 }, { item: new Item("branche"), rate: 1 }])
   triggerEntities.push(nook);
-  triggerEntities.push(new TriggerResourceEntity('pierre', (box * 7), (box * 4), new ResourceItem("pierre")))
+  triggerEntities.push(new TriggerResourceEntity('pierre', (box * 7), (box * 4), new Item("pierre")))
+  triggerEntities.push(new TriggerResourceEntity('fish', (box * 4), (box * 9), new FishItem("bar commun", 100, 100, 1, 500, 2, 1), ResourceEntityBehaviour.FISHING))
   triggerEntities.push(arbre)
   
   collisions.push(player);
   collisions.push(nook);
   collisions.push(arbre);
 
-  entities.push(new Fish(FishSpecies.BAR_COMMUN, 100, (box * 4), (box * 9), 0, -box));
-  entities.push(new Fish(FishSpecies.SAUMON, 300, (box * 7), (box * 9), 0, -box));
+  // entities.push(new Fish(FishSpecies.BAR_COMMUN, 100, (box * 4), (box * 9), 0, -box));
+  // entities.push(new Fish(FishSpecies.SAUMON, 300, (box * 7), (box * 9), 0, -box));
 
   window.addEventListener('keypress', player.listenInput);
 } 
