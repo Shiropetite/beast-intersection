@@ -114,12 +114,15 @@ const onLoad = () => {
   mapHTML = document.getElementById('map');
 
   DialogElement.createHtmlElement();
-  InventoryElement.createHTMLElement();
+ 
   
   TimeController.init(7,0);
   TimeElement.createHTMLElement();
 
   player = new PlayerEntity(box * 2, box * 4);
+
+  InventoryElement.createHTMLElement();
+
   nook = new NpcEntity('Nook', nookRoutine, box * 3, box * 2);
   let arbre = new SolidResourceEntity('arbre', (box * 2), (box * 7), [{ item: new ResourceItem("feuille"), rate: 0.2 }, { item: new ResourceItem("branche"), rate: 1 }])
   triggerEntities.push(nook);

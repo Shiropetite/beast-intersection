@@ -50,14 +50,14 @@ export class PlayerEntity extends SolidEntity {
         break;
       case ActionKeys.INVENTORY:
         if (InventoryElement.isVisible()) InventoryElement.hide();
-        else InventoryElement.show();
+        else if (player.currentState === PersonState.IDLE) InventoryElement.show();
         break;
       case DirectionKeys.UP:
       case DirectionKeys.DOWN:
         if (player.currentState === PersonState.ACTING) Talking.selectChoice(event.key === DirectionKeys.UP);
       case DirectionKeys.LEFT:
       case DirectionKeys.RIGHT:
-        if (player.currentState !== PersonState.ACTING) player.move(event.key);
+        if (![PersonState.ACTING, PersonState.MENUING].includes(player.currentState)) player.move(event.key);
         break;
       default: break;
     }

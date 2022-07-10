@@ -1,5 +1,7 @@
 import { cameraHTML } from '..';
 import { InventoryController } from './../controllers/InventoryController';
+import { player } from '..';
+import { PersonState } from '../entities/PlayerEntity';
 
 export class InventoryElement {
   private static inventoryHTML: HTMLElement;
@@ -31,15 +33,18 @@ export class InventoryElement {
   public static update(index: number): void {
     const line = Math.floor(index / 10);
     const column = index % 10;
-    const cell = document.getElementById(`${ line }-${ column }`)
-    cell.innerHTML = InventoryController.getInventory()[index].getName();
+    const cell = document.getElementById(`${ line }-${ column }`);
+    const stack = InventoryController.getInventory()[index]
+    cell.innerHTML = `${ stack.unit } ${ stack.item.getName() }`;
   }
 
   public static show(): void {
+    player.setState(PersonState.MENUING);
     InventoryElement.inventoryHTML.style.display = 'block';
   }
 
   public static hide(): void {
+    player.setState(PersonState.IDLE);
     InventoryElement.inventoryHTML.style.display = 'none';
   }
 
