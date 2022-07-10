@@ -1,78 +1,98 @@
-import { DialogElement } from '../ui/DialogElement';
+import { TalkingUI } from "../ui/TalkingUI";
 
-export interface Dialog { 
-  text: string, 
-  isChoice: boolean, 
-  choices?: [
+export interface DialogElement {
+  sentence: string, 
+  isQuestion: boolean, 
+  answers?: [
     {
-      playerResponse: string,
-      npcResponse: string
+      playerAnswer: string, // player answer to the question
+      npcAnswer: string // npc answer to the player
     }
   ]
 }
 
 export class Talking {
-  private static dialog: Dialog[]; 
-  private static playerChoice: number;
-  private static sentence: Dialog;
+  private static dialog: DialogElement[]; 
+  private static currentDialogElement: DialogElement;
+  private static playerAnswerIndex: number;
 
   //#region Methods
-  public static startDialog(dialog: Dialog[], speakerName?: string): void {
+  public static start(dialog: DialogElement[], speakerName?: string): void {
     this.dialog = [ ...dialog ];
-    this.playerChoice = -1;
-    this.sentence = null;
+    this.currentDialogElement = null;
+    this.playerAnswerIndex = -1;
 
-    DialogElement.show();
-    if (speakerName) { DialogElement.setName(speakerName); }
-    this.displaySentence();
+    TalkingUI.show();
+    
+    if (speakerName) { 
+      TalkingUI.setSpeakerName(speakerName); 
+    }
+
+    this.talk();
   }
 
-  public static displaySentence(): boolean {
-    // player has chosen
-    if (this.playerChoice >= 0) {
-      DialogElement.setText(this.sentence.choices[this.playerChoice].npcResponse);
-      this.playerChoice = -1;
+  private static end(): void {
+    TalkingUI.setSpeakerName('');
+    TalkingUI.setText('');
+    TalkingUI.hide();
+  }
+
+  // returns true if dialog is not over
+  public static talk(): boolean {
+    // player answer
+    if (this.playerAnswerIndex >= 0) {
+      // npc answer
+      TalkingUI.setText(this.currentDialogElement.answers[this.playerAnswerIndex].npcAnswer);
+      
+      this.playerAnswerIndex = -1;
       return true;
     }
 
+    // dialog end
     if (this.dialog.length === 0) {
-      this.endDialog();
+      this.end();
       return false;
     }
 
-    this.sentence = this.dialog.shift();
-    DialogElement.setText(this.sentence.text);
+    // next dialog element
+    this.currentDialogElement = this.dialog.shift();
+    TalkingUI.setText(this.currentDialogElement.sentence);
 
-    // player is choosing
-    if (this.sentence.isChoice) {
-      this.choice(this.sentence.choices);
+    // player need to answer
+    if (this.currentDialogElement.isQuestion) {
+      this.answer(this.currentDialogElement.answers);
     }
     
+    // end dialog element but not end dialog
     return true;
   }
 
-  private static choice(choices: any[]): void {
-    // display all choices
-    for (let i = 0; i < choices.length; i++) {
-      DialogElement.addChoice(choices[i].playerResponse, i);
+  private static answer(answers: any[]): void {
+    // display all answers
+    for (let i = 0; i < answers.length; i++) {
+      TalkingUI.showAnswer(answers[i].playerAnswer, i);
     }
 
-    // set indicator on first choice
-    Talking.playerChoice = 0;
-    DialogElement.addIndicator(Talking.playerChoice);
+    // set indicator on first answer by default
+    Talking.playerAnswerIndex = 0;
+    TalkingUI.showAnswerIndicator(Talking.playerAnswerIndex);
   }
 
-  public static selectChoice(goUp: boolean) {
-    DialogElement.removeIndicator(Talking.playerChoice);
-    if (goUp && Talking.playerChoice > 0) Talking.playerChoice--;
-    else if (!goUp && Talking.playerChoice < this.sentence.choices.length - 1) Talking.playerChoice++;
-    DialogElement.addIndicator(Talking.playerChoice);
-  }
+  // select answer depending on player input
+  public static selectAnswer(goToNext: boolean) {
+    // remove indicator from previous answer
+    TalkingUI.hideAnswerIndicator(Talking.playerAnswerIndex);
 
-  private static endDialog(): void {
-    DialogElement.setName("");
-    DialogElement.setText("");
-    DialogElement.hide();
+    // select next answer
+    if (goToNext && Talking.playerAnswerIndex < this.currentDialogElement.answers.length - 1) {
+      Talking.playerAnswerIndex++;
+    }
+    // select previous answer
+    else if (!goToNext && Talking.playerAnswerIndex > 0) {
+      Talking.playerAnswerIndex--;
+    }
+
+    TalkingUI.showAnswerIndicator(Talking.playerAnswerIndex);
   }
   //#endregion
 

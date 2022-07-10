@@ -3,8 +3,8 @@
     "text": "Se réveille",
     "dialog": [
       {
-        "text": "J'ai besoin d'un café...",
-        "isChoice": false
+        "sentence": "J'ai besoin d'un café...",
+        "isQuestion": false
       }
     ]
   },
@@ -16,8 +16,8 @@
     },
     "dialog": [
       {
-        "text": "café...",
-        "isChoice": false
+        "sentence": "café...",
+        "isQuestion": false
       }
     ]
   },
@@ -25,8 +25,8 @@
     "text": "Boit son café",
     "dialog": [
       {
-        "text": "café :)",
-        "isChoice": false
+        "sentence": "café :)",
+        "isQuestion": false
       }
     ]
   },
@@ -38,8 +38,8 @@
     },
     "dialog": [
       {
-        "text": "C'est parti pour le boulot !",
-        "isChoice": false
+        "sentence": "C'est parti pour le boulot !",
+        "isQuestion": false
       }
     ]
   },
@@ -47,30 +47,30 @@
     "text": "Travaille",
     "dialog": [
       {
-        "text": "Salut villageois...",
-        "isChoice": false
+        "sentence": "Salut villageois...",
+        "isQuestion": false
       },
       {
-        "text": "Tu as besoin de quelque chose ?",
-        "isChoice": true,
-        "choices": [
+        "sentence": "Tu as besoin de quelque chose ?",
+        "isQuestion": true,
+        "answers": [
           { 
-            "playerResponse": "Oui, Avec plaisir !",
-            "npcResponse": "Moi aussi... tu me passes un café ? :)"
+            "playerAnswer": "Oui, Avec plaisir !",
+            "npcAnswer": "Moi aussi... tu me passes un café ? :)"
           },
           { 
-            "playerResponse": "Beurk",
-            "npcResponse": "Ah..."
+            "playerAnswer": "Beurk",
+            "npcAnswer": "Ah..."
           },
           { 
-            "playerResponse": "T ki ?",
-            "npcResponse": "... 😥"
+            "playerAnswer": "T ki ?",
+            "npcAnswer": "... 😥"
           }
         ]
       },
       {
-        "text": "Bon bah au revoir",
-        "isChoice": false
+        "sentence": "Bon bah au revoir",
+        "isQuestion": false
       }
     ]
   },
@@ -78,8 +78,8 @@
     "text": "Va récolter des fruits",
     "dialog": [
       {
-        "text": "Mmmh quel bonne pomme... j'aimerai mangé une tarte au pomme...",
-        "isChoice": false
+        "sentence": "Mmmh quel bonne pomme... j'aimerai mangé une tarte au pomme...",
+        "isQuestion": false
       }
     ]
   },
@@ -90,8 +90,8 @@
     "text": "Commence à manger",
     "dialog": [
       {
-        "text": "Num num num",
-        "isChoice": false
+        "sentence": "Num num num",
+        "isQuestion": false
       }
     ]
   },

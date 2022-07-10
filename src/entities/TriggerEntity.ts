@@ -1,113 +1,134 @@
-import { mapHTML } from "..";
+import { map } from "..";
 
-// Displayed element with trigger hitbox
 export class TriggerEntity {
-  // Html
-  private htmlElement: HTMLElement;
+  private sprite: HTMLElement;
   
-  // Sprite dimensions
-  private readonly width: number;
-  private readonly height: number;
-  private top: number;
-  private left: number;
+  // sprite dimensions
+  private readonly spriteWidth: number;
+  private readonly spriteHeight: number;
+  private spriteTop: number;
+  private spriteLeft: number;
 
-  // Trigger hitbox dimensions
-  private readonly triggerWidth: number;
-  private readonly triggerHeight: number;
+  // trigger hitbox dimensions
+  private triggerWidth: number;
+  private triggerHeight: number;
   private triggerTop: number;
   private triggerLeft: number;
 
-  //#region Constructor
-  // trigger hitbox dimensions same as sprite
-  public constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number);
+  //#region Constructors
+  // trigger hitbox dimensions same as sprite dimensions
+  public constructor(
+    htmlId: string,
+    cssClass: string,
+    spriteWidth: number,
+    spriteHeight: number,
+    spriteTop: number,
+    spriteLeft: number
+  );
+
   // trigger hitbox has its own dimensions
-  public constructor(htmlId: string, cssClass: string, width: number, height: number, top: number, left: number, triggerWidth: number, triggerHeight: number, triggerTop: number, triggerLeft: number);
+  public constructor(
+    htmlId: string,
+    cssClass: string,
+    spriteWidth: number,
+    spriteHeight: number,
+    spriteTop: number,
+    spriteLeft: number,
+    triggerWidth: number,
+    triggerHeight: number,
+    triggerTop: number,
+    triggerLeft: number
+  );
   
   public constructor(...parameters: any[]) {
-    this.width = parameters[2];
-    this.height = parameters[3];
-    this.top = parameters[4];
-    this.left = parameters[5];
+    this.spriteWidth = parameters[2];
+    this.spriteHeight = parameters[3];
+    this.spriteTop = parameters[4];
+    this.spriteLeft = parameters[5];
 
+    // trigger hitbox has its own dimensions
     if (parameters.length > 6) {
       this.triggerWidth = parameters[6];
       this.triggerHeight = parameters[7];
       this.triggerTop = parameters[8];
       this.triggerLeft = parameters[9];
     }
+    // trigger hitbox dimensions same as sprite dimensions
     else {
-      this.triggerWidth = this.width;
-      this.triggerHeight = this.height;
-      this.triggerTop = this.top;
-      this.triggerLeft = this.left;
+      this.triggerWidth = this.spriteWidth;
+      this.triggerHeight = this.spriteHeight;
+      this.triggerTop = this.spriteTop;
+      this.triggerLeft = this.spriteLeft;
     }
 
-    this.createHtmlElement(parameters[0], parameters[1]);
-    this.htmlElement = document.getElementById(parameters[0]);
+    this.create(parameters[0], parameters[1]);
   }
   //#endregion
 
-  //#region Method
-  public createHtmlElement(htmlId: string, cssClass: string): void {
-    // html
-    const entity = document.createElement('div');
-    entity.id = htmlId;
-    
-    // css
-    entity.classList.add(cssClass);
-    entity.style.width = `${this.width}px`;
-    entity.style.height = `${this.height}px`;
-    
-    mapHTML.appendChild(entity);
+  //#region Methods
+  public create(htmlId: string, cssClass: string): void {
+    // create sprite HTML
+    const spriteHTML = document.createElement('div');
+    spriteHTML.id = htmlId;
+    spriteHTML.classList.add(cssClass);
+    spriteHTML.style.width = `${ this.spriteWidth }px`;
+    spriteHTML.style.height = `${ this.spriteHeight }px`;
+    map.appendChild(spriteHTML);
+
+    // store HTML
+    this.sprite = document.getElementById(htmlId);
   }
 
-  public updateHtmlElement(): void {
-    this.htmlElement.style.transform = `translate3d(${this.left}px, ${this.top}px, 0)`;
+  public update(): void {
+    this.sprite.style.transform = `translate3d(${ this.spriteLeft }px, ${ this.spriteTop }px, 0)`;
   }
 
-  public destroyHtmlElement(): void {
-    mapHTML.removeChild(this.htmlElement);
+  public destroy(): void {
+    map.removeChild(this.sprite);
   }
 
-  public isTrigger(other: TriggerEntity): boolean {
+  public isTriggeredBy(other: TriggerEntity): boolean {
     return (this.triggerLeft + this.triggerWidth) > other.triggerLeft && this.triggerLeft < (other.triggerLeft + other.triggerWidth)
       && (this.triggerTop + this.triggerHeight) > other.triggerTop && this.triggerTop < (other.triggerTop + other.triggerHeight);
   }
 
-  public onTrigger(): void {
-    throw new Error('Method not yet implemented.');
-  }
+  public onTrigger(): void { }
 
-  public act(): void { throw 'Method not yet implemented' };
+  public act(): void { }
 
-  public onSignalRaisedTime(): void { }
+  public onTimeTick(): void { }
   //#endregion
 
   //#region Getters & Setters
-  public getHTMLElement(): HTMLElement { return this.htmlElement; }
+  public getSprite(): HTMLElement { return this.sprite; }
 
-  public getWidth(): number { return this.width; }
+  public getSpriteWidth(): number { return this.spriteWidth; }
 
-  public getHeight(): number { return this.height; }
+  public getSpriteHeight(): number { return this.spriteHeight; }
 
-  public getTop(): number { return this.top; }
+  public getSpriteTop(): number { return this.spriteTop; }
 
-  public setTop(top: number): void { this.top = top; }
+  public setSpriteTop(top: number): void { this.spriteTop = top; }
 
-  public getLeft(): number { return this.left; }
+  public getSpriteLeft(): number { return this.spriteLeft; }
 
-  public setLeft(left: number): void { this.left = left; }
+  public setSpriteLeft(left: number): void { this.spriteLeft = left; }
 
   public getTriggerWidth(): number { return this.triggerWidth; }
 
+  public setTriggerWidth(triggerWidth: number) { this.triggerWidth = triggerWidth }
+
   public getTriggerHeight(): number { return this.triggerHeight; }
+
+  public setTriggerHeight(triggerHeight: number) { this.triggerHeight = triggerHeight }
 
   public getTriggerTop(): number { return this.triggerTop; }
 
-  public getTriggerLeft(): number { return this.triggerLeft; }
-
   public setTriggerTop(triggerTop: number): void { this.triggerTop = triggerTop }
+
+  public getTriggerLeft(): number { return this.triggerLeft; }
 
   public setTriggerLeft(triggerLeft: number): void { this.triggerLeft = triggerLeft }
   //#endregion
+
 }

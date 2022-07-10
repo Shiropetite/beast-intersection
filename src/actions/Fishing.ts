@@ -1,28 +1,28 @@
 import { FishingUI } from './../ui/FishingUI';
-import { TriggerResourceEntity } from '../entities/TriggerResourceEntity';
+import { TriggerResourceEntity } from '../entities/resources/TriggerResourceEntity';
 import { FishItem } from './../items/FishItem';
 
 export class Fishing {
-  private static fish: FishItem;
+  private static fishItem: FishItem;
 
   public static start(fishEntity: TriggerResourceEntity): void {
-    this.fish = fishEntity.getDrop() as FishItem;
-    FishingUI.createHTML(fishEntity.getTop(), fishEntity.getLeft());
+    this.fishItem = fishEntity.getDrop() as FishItem;
+    FishingUI.create(fishEntity.getSpriteTop(), fishEntity.getSpriteLeft());
   }
 
-  public static fishing(): boolean {
-    if (this.fish.getHealthPoints() <= 0) {
+  public static end(): void {
+    FishingUI.hide();
+  }
+
+  public static fish(): boolean {
+    if (this.fishItem.getHealthPoints() <= 0) {
       this.end();
       return true;
     }
     
-    this.fish.setHealthPoints(this.fish.getHealthPoints() - 5);
-    FishingUI.updateLife(this.fish.getHealthPoints(), this.fish.getMaxHealthPoints());
+    this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() - 5);
+    FishingUI.updateLife(this.fishItem.getHealthPoints(), this.fishItem.getMaxHealthPoints());
     return false;
-  }
-
-  public static end(): void {
-    FishingUI.removeHTML();
   }
 
 }

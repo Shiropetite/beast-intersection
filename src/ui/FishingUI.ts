@@ -1,25 +1,42 @@
-import { mapHTML } from "..";
+import { map } from "..";
 
 export class FishingUI {
+  private static lifebarContainer: HTMLElement;
+  private static lifebar: HTMLElement;
 
-  public static createHTML(fishTop: number, fishLeft: number): void {
-    const lifeContainer = document.createElement('div');
-    lifeContainer.id = `life-container`;
-    lifeContainer.classList.add('life-container')
-    lifeContainer.style.top = `${fishTop - 30}px`;
-    lifeContainer.style.left = `${fishLeft}px`;
-    mapHTML.appendChild(lifeContainer);
+  public static create(fishTop: number, fishLeft: number): void {
+    // create lifebar container HTML
+    const lifebarContainerHTML = document.createElement('div');
+    lifebarContainerHTML.id = `lifebar-container`;
+    lifebarContainerHTML.classList.add('lifebar-container');
+    lifebarContainerHTML.style.top = `${ fishTop - 30 }px`;
+    lifebarContainerHTML.style.left = `${ fishLeft }px`;
+    map.appendChild(lifebarContainerHTML);
 
-    const life = document.createElement('div');
-    life.id = `life`;
-    life.classList.add('life');
-    life.style.top = `${fishTop - 30}px`;
-    life.style.left = `${fishLeft}px`;
-    mapHTML.appendChild(life);
+    // create lifebar HTML
+    const lifebar = document.createElement('div');
+    lifebar.id = `lifebar`;
+    lifebar.classList.add('lifebar');
+    lifebar.style.top = `${ fishTop - 30 }px`;
+    lifebar.style.left = `${ fishLeft }px`;
+    map.appendChild(lifebar);
+
+    // store HTML
+    FishingUI.lifebarContainer = document.getElementById('lifebar-container');
+    FishingUI.lifebar = document.getElementById('lifebar');
+  }
+
+  public static show(): void {
+    // not yet implemented
+  }
+
+  public static hide(): void {
+    map.removeChild(document.getElementById(`lifebar-container`));
+    map.removeChild(document.getElementById(`lifebar`));
   }
 
   public static updateLife(life: number, MAX_LIFE: number): void {
-    const element = document.getElementById(`life`);
+    const element = document.getElementById(`lifebar`);
     
     if (life < 66 / 100 * MAX_LIFE) {
       element.style.backgroundColor = 'yellow';
@@ -32,11 +49,6 @@ export class FishingUI {
     }
 
     element.style.width = `${ 128 * life / MAX_LIFE }px`;
-  }
-
-  public static removeHTML(): void {
-    mapHTML.removeChild(document.getElementById(`life-container`))
-    mapHTML.removeChild(document.getElementById(`life`))
   }
 
 }
