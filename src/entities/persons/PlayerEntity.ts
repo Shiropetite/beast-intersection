@@ -29,7 +29,7 @@ export class PlayerEntity extends PersonEntity {
   public listenInput(event: any): void {
     switch(event.key) {
       case ActionKeys.ACT:
-        if ([PersonState.IDLE, PersonState.ACTING].includes(player.getState())) { player.act(); }
+        if ([PersonState.IDLE, PersonState.ACTING, PersonState.TALKING].includes(player.getState())) { player.act(); }
         break;
       case ActionKeys.INVENTORY:
         if (player.getState() === PersonState.MENUING) { InventoryUI.hide(); }
@@ -46,7 +46,7 @@ export class PlayerEntity extends PersonEntity {
     }
   }
 
-  public move(key: DirectionKeys): void {
+  private move(key: DirectionKeys): void {
     this.setState(PersonState.MOVING);
 
     // store current collider hitbox position

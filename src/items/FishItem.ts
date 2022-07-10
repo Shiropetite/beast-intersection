@@ -2,16 +2,16 @@ import { Item } from "./Item";
 
 export class FishItem extends Item {
   private healthPoints: number;
-  private MAX_HEALTH_POINTS: number;
-  private regenPoints: number; // regen per second
-  private frenzyDuration: number;
-  private frenzyFrequency: number;
-  private pressureMultiplier: number; // pressure applied to fishing rod
+  private readonly maxHealthPoints: number;
+  private readonly regenPoints: number; // regen per second
+  private readonly frenzyDuration: number;
+  private readonly frenzyFrequency: number;
+  private readonly pressureMultiplier: number; // pressure applied to fishing rod
 
-  constructor(name: string, healthPoints: number, MAX_HEALTH_POINTS: number, regenPoints: number, frenzyDuration: number, frenzyFrequency: number, pressureMultiplier: number ) {
+  constructor(name: string, healthPoints: number, maxHealthPoints: number, regenPoints: number, frenzyDuration: number, frenzyFrequency: number, pressureMultiplier: number ) {
     super(name);
     this.healthPoints = healthPoints;
-    this.MAX_HEALTH_POINTS = MAX_HEALTH_POINTS;
+    this.maxHealthPoints = maxHealthPoints;
     this.regenPoints = regenPoints;
     this.frenzyDuration = frenzyDuration;
     this.frenzyFrequency = frenzyFrequency;
@@ -27,7 +27,7 @@ export class FishItem extends Item {
   }
 
   public getMaxHealthPoints(): number {
-    return this.MAX_HEALTH_POINTS;
+    return this.maxHealthPoints;
   }
 
   public getRegenPoints(): number {

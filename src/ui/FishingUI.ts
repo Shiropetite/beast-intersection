@@ -26,29 +26,25 @@ export class FishingUI {
     FishingUI.lifebar = document.getElementById('lifebar');
   }
 
-  public static show(): void {
-    // not yet implemented
-  }
-
-  public static hide(): void {
+  public static destroy(): void {
     map.removeChild(document.getElementById(`lifebar-container`));
     map.removeChild(document.getElementById(`lifebar`));
   }
 
-  public static updateLife(life: number, MAX_LIFE: number): void {
+  public static updateLife(life: number, maxLife: number): void {
     const element = document.getElementById(`lifebar`);
     
-    if (life < 66 / 100 * MAX_LIFE) {
+    if (life < 66 / 100 * maxLife) {
       element.style.backgroundColor = 'yellow';
     }
-    else if (life < 20 / 100 * MAX_LIFE) {
+    else if (life < 20 / 100 * maxLife) {
       element.style.backgroundColor = 'red';
     }
     else {
       element.style.backgroundColor = 'green';
     }
 
-    element.style.width = `${ 128 * life / MAX_LIFE }px`;
+    element.style.width = `${ 128 * life / maxLife }px`;
   }
 
 }

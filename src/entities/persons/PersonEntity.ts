@@ -10,7 +10,7 @@ export enum PersonState {
 }
 
 export abstract class PersonEntity extends ColliderEntity {
-  private name: string;
+  private readonly name: string;
   private state: PersonState = PersonState.IDLE;
 
   public constructor(name: string, spriteTop: number, spriteLeft: number, npc: boolean) {

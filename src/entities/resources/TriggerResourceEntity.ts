@@ -15,7 +15,7 @@ export enum ResourceEntityBehaviour {
 
 export class TriggerResourceEntity extends TriggerEntity {
   private static CURRENT_ID: number = 1;
-  private drop: Item;
+  private readonly drop: Item;
   private behaviour: ResourceEntityBehaviour;
 
   constructor(name: string, spriteTop: number, spriteLeft: number, drop: Item, behaviour: ResourceEntityBehaviour = ResourceEntityBehaviour.PICKUP) {

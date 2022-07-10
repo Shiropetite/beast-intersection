@@ -16,7 +16,7 @@ interface Routine {
 }
 
 export class NpcEntity extends PersonEntity {
-  private routine: Routine;
+  private readonly routine: Routine;
 
   public constructor(name: string, spriteTop: number, spriteLeft: number, routine: Routine) {
     super(name, spriteTop, spriteLeft, true);

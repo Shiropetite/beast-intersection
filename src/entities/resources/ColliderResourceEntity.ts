@@ -8,7 +8,7 @@ import { InventoryService } from './../../services/InventoryService';
 
 export class ColliderResourceEntity extends ColliderEntity {
   private static CURRENT_ID: number = 1;
-  private drops: { item: Item, rate: number }[];
+  private readonly drops: { item: Item, rate: number }[];
 
   constructor(name: string, spriteTop: number, spriteLeft: number, drops: { item: Item, rate: number }[]) {
     super(`${ name }-${ ColliderResourceEntity.CURRENT_ID++ }`, name, box - 6, box - 6, spriteTop, spriteLeft, (box - 6) * 3, (box - 6) * 3, spriteTop - box - 6, spriteLeft - box - 6);
@@ -37,7 +37,7 @@ export class ColliderResourceEntity extends ColliderEntity {
     }
   }
 
-  public rollDrop(): Item {
+  private rollDrop(): Item {
     let r = Math.random();
     for (let drop of this.drops) {
       if (r < drop.rate) return drop.item;

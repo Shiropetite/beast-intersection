@@ -3,8 +3,8 @@ import { TriggerEntity } from "./TriggerEntity";
 
 export class ColliderEntity extends TriggerEntity {
   // collider hitbox dimensions
-  private readonly colliderWidth: number;
-  private readonly colliderHeight: number;
+  private colliderWidth: number;
+  private colliderHeight: number;
   private colliderTop: number;
   private colliderLeft: number;
 
@@ -99,6 +99,14 @@ export class ColliderEntity extends TriggerEntity {
   //#endregion
 
   //#region Getters & Setters
+  public getColliderWidth(): number { return this.colliderWidth; }
+
+  public setColliderWidth(colliderWidth: number): void { this.colliderWidth = colliderWidth; }
+
+  public getColliderHeight(): number { return this.colliderHeight; }
+
+  public setColliderHeight(colliderHeight: number): void { this.colliderHeight = colliderHeight; }
+
   public getColliderTop(): number { return this.colliderTop; }
 
   public setColliderTop(colliderTop: number): void { this.colliderTop = colliderTop; }

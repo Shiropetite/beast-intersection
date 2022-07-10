@@ -4,8 +4,8 @@ export class TriggerEntity {
   private sprite: HTMLElement;
   
   // sprite dimensions
-  private readonly spriteWidth: number;
-  private readonly spriteHeight: number;
+  private spriteWidth: number;
+  private spriteHeight: number;
   private spriteTop: number;
   private spriteLeft: number;
 
@@ -104,7 +104,11 @@ export class TriggerEntity {
 
   public getSpriteWidth(): number { return this.spriteWidth; }
 
+  public setSpriteWidth(spriteWidth: number): void { this.spriteWidth = spriteWidth }
+
   public getSpriteHeight(): number { return this.spriteHeight; }
+
+  public setSpriteHeight(spriteHeight: number): void { this.spriteHeight = spriteHeight }
 
   public getSpriteTop(): number { return this.spriteTop; }
 

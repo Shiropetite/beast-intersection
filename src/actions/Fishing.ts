@@ -11,7 +11,7 @@ export class Fishing {
   }
 
   public static end(): void {
-    FishingUI.hide();
+    FishingUI.destroy();
   }
 
   public static fish(): boolean {
