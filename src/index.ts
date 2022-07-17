@@ -74,7 +74,7 @@ const onload = () => {
   colliders.push(player);
 
   // services
-  TimeService.init(7,0);
+  TimeService.init(6,0);
   InventoryService.init(40, []);
 
   // UI

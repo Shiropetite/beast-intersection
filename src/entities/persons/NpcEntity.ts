@@ -1,8 +1,8 @@
 import { player } from '../..';
-import { PersonEntity, PersonState } from './PersonEntity';
+import { Direction, PersonEntity, PersonState } from './PersonEntity';
 import { DialogElement, Talking } from './../../actions/Talking';
 import { TimeService } from './../../services/TimeService';
-import { box } from '../../utils';
+import { box, lookAt } from '../../utils';
 
 interface Routine {
   [time: string]: {
@@ -51,26 +51,30 @@ export class NpcEntity extends PersonEntity {
         clearInterval(moveInterval)
       }
 
-      // npc is below target position
+      // npc is above target position
       if (this.getColliderTop() < (targetTop * box)) {
+        super.setDirection(Direction.DOWN);
         super.setColliderTop(super.getColliderTop() + box);
         super.update();
       }
       else 
-      // npc is above target position
+      // npc is below target position
       if (this.getColliderTop() > (targetTop * box)) {
+        super.setDirection(Direction.UP);
         super.setColliderTop(super.getColliderTop() - box);
         super.update();
       } 
       else 
-      // npc is right of target position
+      // npc is left of target position
       if (this.getColliderLeft() < (targetLeft * box)) {
+        super.setDirection(Direction.RIGHT);
         super.setColliderLeft(super.getColliderLeft() + box);
         super.update();
       }
       else 
-      // npc is left of target position
+      // npc is right of target position
       if (this.getColliderLeft() > (targetLeft * box)) {
+        super.setDirection(Direction.LEFT);
         super.setColliderLeft(super.getColliderLeft() - box);
         super.update();
       }
@@ -112,6 +116,8 @@ export class NpcEntity extends PersonEntity {
     if (this.getState() !== PersonState.TALKING) {
       this.setState(PersonState.TALKING);
       player.setState(PersonState.TALKING);
+
+      lookAt(this, player);
 
       Talking.start(this.routine[time].dialog, this.getName());
     }

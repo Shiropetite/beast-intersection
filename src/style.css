@@ -60,11 +60,26 @@ body {
 
 .npc {
   position: absolute;
-  background-image: url(./@shared/assets/sprites/pnj.png);
   background-size: cover;
   image-rendering: pixelated;
   background-repeat: no-repeat;
   transition: transform linear 0.1s;
+}
+
+.npc-down {
+  background-image: url(./@shared/assets/sprites/npc-down.png);
+}
+
+.npc-up {
+  background-image: url(./@shared/assets/sprites/npc-up.png);
+}
+
+.npc-right {
+  background-image: url(./@shared/assets/sprites/npc-right.png);
+}
+
+.npc-left {
+  background-image: url(./@shared/assets/sprites/npc-left.png);
 }
 
 .tree {

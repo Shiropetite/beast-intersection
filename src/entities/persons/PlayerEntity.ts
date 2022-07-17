@@ -89,9 +89,10 @@ export class PlayerEntity extends PersonEntity {
         break;
     }
 
+    this.setDirection(direction);
+
     // collider hitbox is not colliding
     if (!super.isColliding()) {
-      this.setDirection(direction);
       const stepTop = this.getColliderTop() - currentColliderTop;
       const stepLeft = this.getColliderLeft() - currentColliderLeft;
 
