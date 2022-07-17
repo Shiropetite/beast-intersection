@@ -232,6 +232,10 @@ td {
   background-image: url(./@shared/assets/items/bar-commun.png);
 }
 
+.inventory .love-u {
+  background-image: url(./@shared/assets/items/heart.png);
+}
+
 td .qty {
   position: absolute;
   bottom: 0px;

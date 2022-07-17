@@ -3,120 +3,200 @@
     "text": "Se réveille",
     "dialog": [
       {
-        "sentence": "J'ai besoin d'un café...",
+        "sentence": "J'ai mal dormi... 😴",
         "isQuestion": false
-      }
-    ]
-  },
-  "06:10": {
-    "text": "Se dirige vers la plage",
-    "position": {
-      "top": 7,
-      "left": 2
-    },
-    "dialog": [
+      },
       {
-        "sentence": "café...",
+        "sentence": "Pourtant on dit que dormir au sol, c'est bon pour le dos 🥱",
         "isQuestion": false
-      }
-    ]
-  },
-  "06:20": {
-    "text": "Boit son café",
-    "dialog": [
+      },
       {
-        "sentence": "café :)",
+        "sentence": "Il me faut un café... 😫",
         "isQuestion": false
       }
     ]
   },
   "06:50": {
-    "text": "Se dirige vers la place",
-    "position": {
-      "top": 4,
-      "left": 2
-    },
+    "text": "Se dirige vers la plage",
     "dialog": [
       {
-        "sentence": "C'est parti pour le boulot !",
-        "isQuestion": false
-      }
-    ]
-  },
-  "07:00": {
-    "text": "Travaille",
-    "dialog": [
-      {
-        "sentence": "Salut villageois...",
+        "sentence": "J'ai vraiment besoin d'un café... 😵",
         "isQuestion": false
       },
       {
-        "sentence": "Tu as besoin de quelque chose ?",
+        "sentence": "J'en ai rêvé cette nuit tu sais ? 🤩",
+        "isQuestion": false
+      }
+    ],
+    "position": {
+      "top": 8,
+      "left": 2
+    }
+  },
+  "07:30": {
+    "text": "Veut un café",
+    "dialog": [
+      {
+        "sentence": "Ah te voila ! 😁",
+        "isQuestion": false
+      },
+      {
+        "sentence": "Tu préfères le café ou le thé ? ",
         "isQuestion": true,
         "answers": [
           { 
-            "playerAnswer": "Oui, Avec plaisir !",
-            "npcAnswer": "Moi aussi... tu me passes un café ? :)"
+            "playerAnswer": "Le thé ! C'est zen...",
+            "npcAnswer": "Beurk ! C'est du pisse mémé 🤢"
           },
           { 
-            "playerAnswer": "Beurk",
-            "npcAnswer": "Ah..."
+            "playerAnswer": "Le café pour se réveiller !",
+            "npcAnswer": "Moi aussi... tu me passes un café ? ☕"
           },
           { 
-            "playerAnswer": "T ki ?",
-            "npcAnswer": "... 😥"
+            "playerAnswer": "Aucun des deux...",
+            "npcAnswer": "Ah ? Tu es le genre de personne à n'aimer que l'eau... 😒"
           }
         ]
       },
       {
-        "sentence": "Bon bah au revoir",
+        "sentence": "J'ai mal au dos... 😖",
         "isQuestion": false
       }
     ]
   },
-  "10:00": {
-    "text": "Va récolter des fruits",
+  "08:30": {
+    "text": "Veut une pomme",
     "dialog": [
       {
-        "sentence": "Mmmh quel bonne pomme... j'aimerai mangé une tarte au pomme...",
+        "sentence": "Je mangerais bien une pomme 🍎",
+        "isQuestion": false
+      },
+      {
+        "sentence": "Ça va très bien avec le café 😋",
         "isQuestion": false
       }
-    ]
+    ],
+    "position": {
+      "top": 2,
+      "left": 4
+    }
   },
   "10:30": {
-    "text": "Travaille"
-  },
-  "13:00": {
-    "text": "Commence à manger",
+    "text": "Travaille",
     "dialog": [
       {
-        "sentence": "Num num num",
+        "sentence": "Je ne peux pas te parler, je suis très occupé... 🤓",
         "isQuestion": false
+      }
+    ],
+    "position": {
+      "top": 3,
+      "left": 2
+    }
+  },
+  "13:30": {
+    "text": "Va bronzer",
+    "dialog": [
+      {
+        "sentence": "Ah ! J'adore ce soleil ! 😎",
+        "isQuestion": false
+      },
+      {
+        "sentence": "Rien de meilleur contre mes rhumatismes 👴",
+        "isQuestion": true,
+        "answers": [
+          { 
+            "playerAnswer": "Tu as mis de la crème solaire ?",
+            "npcAnswer": "De la quoi ? 😕"
+          },
+          { 
+            "playerAnswer": "Mon papi aussi à des rhumatismes",
+            "npcAnswer": "Hé bah qu'il bronze tient ! 😛"
+          }
+        ]
+      }
+    ],
+    "position": {
+      "top": 8,
+      "left": 6
+    }
+  },
+  "17:00": {
+    "text": "Va à la pêche",
+    "dialog": [
+      {
+        "sentence": "*sifflote sifflote 🎵*",
+        "isQuestion": false
+      }
+    ],
+    "position": {
+      "top": 6,
+      "left": 8
+    }
+  },
+  "18:00": {
+    "text": "Fier de son poisson",
+    "dialog": [
+      {
+        "sentence": "Je viens de pêcher un sacré bestiau ! 🐟",
+        "isQuestion": false
+      },
+      {
+        "sentence": "Je parie que t'as jamais ferré un truc pareil 😎",
+        "isQuestion": true,
+        "answers": [
+          { 
+            "playerAnswer": "J'ai déjà péché plus gros ! 😎",
+            "npcAnswer": "Quoi ??? 🤯"
+          },
+          { 
+            "playerAnswer": "Non...",
+            "npcAnswer": "Je me disais 😎"
+          },
+          { 
+            "playerAnswer": "Je suis vegan",
+            "npcAnswer": "Les jeunes de nos jours... ils ne savent plus ce qui est bon 😒"
+          }
+        ]
       }
     ]
   },
-  "14:00": {
-    "text": "Travaille"
-  },
-  "15:00": {
-    "text": "Va récolter des fruits"
-  },
-  "15:30": {
-    "text": "Travaille"
-  },
-  "17:00": {
-    "text": "Va à la pèche"
-  },
-  "19:00": {
-    "text": "Prépare le feu"
-  },
   "20:00": {
-    "text": "Commence à manger"
+    "text": "Va diner",
+    "dialog": [
+      {
+        "sentence": "J'ai faim 🤤",
+        "isQuestion": false
+      },
+      {
+        "sentence": "Allez un dernier café avant d'aller dormir 😁",
+        "isQuestion": false
+      }
+    ],
+    "position": {
+      "top": 3,
+      "left": 2
+    }
   },
-  "20:30": {
-    "text": "Lit un livre"
-  },
-  "23:00": {
-    "text": "S'endors"
+  "23:30": {
+    "text": "Dort",
+    "dialog": [
+      {
+        "sentence": ". 😴",
+        "isQuestion": false
+      },
+      {
+        "sentence": ".. 😴",
+        "isQuestion": false
+      },
+      {
+        "sentence": "... 😴",
+        "isQuestion": false
+      },
+      {
+        "sentence": "Café...",
+        "isQuestion": false
+      }
+    ]
   }
 }

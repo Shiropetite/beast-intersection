@@ -20,9 +20,9 @@ export class InventoryService {
     }
 
     // search existing stack of item to add
-    const stack = this.content.find((cell => cell.item.getName() === item.getName()));
+    const stack = this.content.filter(s => s.amount < 99).find((cell => cell.item.getName() === item.getName()));
     // increase amount of existing stack
-    if (stack && stack.amount < 99) {
+    if (stack) {
       stack.amount++;
       InventoryUI.setContent(this.content.indexOf(stack));
     }
