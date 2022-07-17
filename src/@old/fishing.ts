@@ -24,7 +24,7 @@
 //   private tensionMultiplier: number; // Multiplicateur de tension infligé à la canne à peche
 
 //   constructor(name: FishSpecies, life: number, top: number, left: number, hitTop: number, hitLeft: number) {
-//     super(`fish-${fishCounter++}`, 'fish', box - 6, box - 6, top, left, hitTop, hitLeft, box, box);
+//     super(`fish-${fishCounter++}`, 'fish', box, box, top, left, hitTop, hitLeft, box, box);
 //     this.MAX_LIFE = life;
 //     this.life = life;
 //     this.name = name;

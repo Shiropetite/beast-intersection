@@ -6,6 +6,8 @@ import { box } from '../../utils';
 import { player, removeFromTrigger } from '../..';
 import { PersonState } from '../persons/PersonEntity';
 import { InventoryService } from './../../services/InventoryService';
+import { FishingToolItem } from './../../items/FishingToolItem';
+import { ToolType } from '../../items/ToolItem';
 
 export enum ResourceEntityBehaviour {
   PICKUP,
@@ -20,10 +22,10 @@ export class TriggerResourceEntity extends TriggerEntity {
 
   constructor(name: string, spriteTop: number, spriteLeft: number, drop: Item, behaviour: ResourceEntityBehaviour = ResourceEntityBehaviour.PICKUP) {
     if (behaviour === ResourceEntityBehaviour.FISHING) {
-      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, box - 6, box - 6, spriteTop, spriteLeft, (box - 6) * 3, (box - 6) * 3, spriteTop - box - 6, spriteLeft - box - 6);
+      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, box, box, spriteTop, spriteLeft, (box) * 3, (box) * 3, spriteTop - box, spriteLeft - box);
     }
     else {
-      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, box - 6, box - 6, spriteTop, spriteLeft);
+      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, box, box, spriteTop, spriteLeft);
     }
 
     this.drop = drop;
@@ -35,15 +37,18 @@ export class TriggerResourceEntity extends TriggerEntity {
   public act(): void {
     // resource is a fish
     if (this.behaviour === ResourceEntityBehaviour.FISHING) {
+      // fishing rod not equipped
+      if (player.getToolEquiped().getToolType() !== ToolType.FISHING) return;
+      
       // fishing has not started
       if (player.getState() === PersonState.IDLE) {
         player.setState(PersonState.ACTING);
-        Fishing.start(this);
+        Fishing.start(this, player.getToolEquiped() as FishingToolItem);
         return;
       }
       // fishing has started
       else {
-        const fishingIsOver = Fishing.fish();
+        const fishingIsOver = Fishing.fish(player.getToolEquiped() as FishingToolItem);
 
         // pick up fish
         if (fishingIsOver) {

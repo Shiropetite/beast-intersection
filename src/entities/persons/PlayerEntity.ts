@@ -1,8 +1,10 @@
 import { player, triggers, map } from '../..';
-import { PersonEntity, PersonState } from './PersonEntity';
+import { Direction, PersonEntity, PersonState } from './PersonEntity';
 import { InventoryUI } from './../../ui/InventoryUI';
 import { Talking } from '../../actions/Talking';
 import { box, sleep } from '../../utils';
+import { ToolItem } from './../../items/ToolItem';
+import { FishingToolItem } from '../../items/FishingToolItem';
 
 export type Key = ActionKeys | DirectionKeys;
 
@@ -22,10 +24,12 @@ export enum DirectionKeys {
 export class PlayerEntity extends PersonEntity {
   private keyPressed: boolean;
   private previousKeyPressed: string;
+  private toolEquiped: ToolItem | null;
 
   public constructor(name: string, spriteTop: number, spriteLeft: number) {
     super(name, spriteTop, spriteLeft, false);
     this.keyPressed = false;
+    this.toolEquiped = new FishingToolItem('canne à peche en bois', 10, 100, 1);
   }
 
   //#region Methods
@@ -63,25 +67,31 @@ export class PlayerEntity extends PersonEntity {
     // store current collider hitbox position
     const currentColliderTop = super.getColliderTop();
     const currentColliderLeft = super.getColliderLeft();
+    let direction = null
     
     // move collider hitbox towards input direction
     switch (key) {
       case DirectionKeys.UP:
+        direction = Direction.UP;
         super.setColliderTop(currentColliderTop - box);
         break;
       case DirectionKeys.DOWN:
+        direction = Direction.DOWN;
         super.setColliderTop(currentColliderTop + box);
         break;
       case DirectionKeys.LEFT:
+        direction = Direction.LEFT;
         super.setColliderLeft(currentColliderLeft - box);
         break;
       case DirectionKeys.RIGHT:
+        direction = Direction.RIGHT;
         super.setColliderLeft(currentColliderLeft + box);
         break;
     }
 
     // collider hitbox is not colliding
     if (!super.isColliding()) {
+      this.setDirection(direction);
       const stepTop = this.getColliderTop() - currentColliderTop;
       const stepLeft = this.getColliderLeft() - currentColliderLeft;
 
@@ -94,6 +104,7 @@ export class PlayerEntity extends PersonEntity {
       this.setTriggerLeft(this.getTriggerLeft() + stepLeft);
       
       // move map opposite way of player
+
       map.style.transform = `translate3d(${ -this.getSpriteLeft() + box * 4 }px, ${ -this.getSpriteTop() + box * 2 }px, 0)`
     }
     // collider hitbox collide
@@ -118,5 +129,9 @@ export class PlayerEntity extends PersonEntity {
     }
   }
   //#endregion
+
+  public getToolEquiped(): ToolItem {
+    return this.toolEquiped;
+  }
 
 }

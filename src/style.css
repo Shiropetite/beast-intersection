@@ -35,29 +35,50 @@ body {
 
 .player {
   position: absolute;
-  background-color: white;
-  border: solid 3px black;
+  background-size: cover;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
   transition: all linear 0.1s;
   z-index: 1000;
 }
 
+.player-down {
+  background-image: url(./@shared/assets/player-down.png);
+}
+
+.player-up {
+  background-image: url(./@shared/assets/player-up.png);
+}
+
+.player-right {
+  background-image: url(./@shared/assets/player-right.png);
+}
+
+.player-left {
+  background-image: url(./@shared/assets/player-left.png);
+}
+
 .npc {
   position: absolute;
-  background-color: rgb(43, 255, 184);
-  border: solid 3px black;
+  background-image: url(./@shared/assets/pnj.png);
+  background-size: cover;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
   transition: all linear 0.1s;
 }
 
 .tree {
   position: absolute;
-  background-color: green;
-  border: solid 3px black;
+  background-image: url(./@shared/assets/tree.png);
+  background-size: cover;
+  image-rendering: pixelated;
 }
 
 .stone {
   position: absolute;
-  background-color: grey;
-  border: solid 3px black;
+  background-image: url(./@shared/assets/stone.png);
+  background-size: cover;
+  image-rendering: pixelated;
 }
 
 .time {
@@ -127,8 +148,9 @@ td {
 
 .fish {
   position: absolute;
-  background-color: rgb(0, 0, 255);
-  border: solid 3px black;
+  background-image: url(./@shared/assets/fish.png);
+  background-size: cover;
+  image-rendering: pixelated;
   transition: all linear 0.1s;
 }
 
@@ -145,6 +167,24 @@ td {
   width: 128px;
   height: 10px;
   background-color: green;
+  z-index: 11;
+  transition: width linear 0.2s;
+}
+
+
+.fishingrod-container {
+  position: absolute;
+  width: 128px;
+  height: 6px;
+  background-color: rgb(0, 0, 0);
+  z-index: 10;
+}
+
+.fishingrod {
+  position: absolute;
+  width: 0px;
+  height: 6px;
+  background-color: rgb(154, 220, 255);
   z-index: 11;
   transition: width linear 0.2s;
 }

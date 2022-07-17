@@ -63,7 +63,7 @@ const onload = () => {
     // main island bottom wall
     new ColliderEntity('wall-2', 'wall', box * 14 - 6, box, box * 9, box),
     // main island left wall
-    new ColliderEntity('wall-3', 'wall', box - 6, box * 10, 0, 0),
+    new ColliderEntity('wall-3', 'wall', box, box * 10, 0, 0),
     // main island right wall
     new ColliderEntity('wall-4', 'wall', box, box * 10, 0, box * 15),
     // river

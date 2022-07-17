@@ -11,7 +11,7 @@ export class ColliderResourceEntity extends ColliderEntity {
   private readonly drops: { item: Item, rate: number }[];
 
   constructor(name: string, spriteTop: number, spriteLeft: number, drops: { item: Item, rate: number }[]) {
-    super(`${ name }-${ ColliderResourceEntity.CURRENT_ID++ }`, name, box - 6, box - 6, spriteTop, spriteLeft, (box - 6) * 3, (box - 6) * 3, spriteTop - box - 6, spriteLeft - box - 6);
+    super(`${ name }-${ ColliderResourceEntity.CURRENT_ID++ }`, name, box, box, spriteTop, spriteLeft, box * 3, box * 3, spriteTop - box, spriteLeft - box);
     
     this.drops = drops;
 
