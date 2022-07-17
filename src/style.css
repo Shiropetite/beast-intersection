@@ -25,7 +25,7 @@ body {
 
 .map {
   image-rendering: pixelated;
-  background-image: url(./@shared/assets/map.png);
+  background-image: url(./@shared/assets/sprites/map.png);
   background-size: 100%;
   width: calc(16 * var(--grid-cell)); 
   height: calc(10 * var(--grid-cell));
@@ -38,45 +38,45 @@ body {
   background-size: cover;
   image-rendering: pixelated;
   background-repeat: no-repeat;
-  transition: all linear 0.1s;
+  transition: transform linear 0.1s;
   z-index: 1000;
 }
 
 .player-down {
-  background-image: url(./@shared/assets/player-down.png);
+  background-image: url(./@shared/assets/sprites/player-down.png);
 }
 
 .player-up {
-  background-image: url(./@shared/assets/player-up.png);
+  background-image: url(./@shared/assets/sprites/player-up.png);
 }
 
 .player-right {
-  background-image: url(./@shared/assets/player-right.png);
+  background-image: url(./@shared/assets/sprites/player-right.png);
 }
 
 .player-left {
-  background-image: url(./@shared/assets/player-left.png);
+  background-image: url(./@shared/assets/sprites/player-left.png);
 }
 
 .npc {
   position: absolute;
-  background-image: url(./@shared/assets/pnj.png);
+  background-image: url(./@shared/assets/sprites/pnj.png);
   background-size: cover;
   image-rendering: pixelated;
   background-repeat: no-repeat;
-  transition: all linear 0.1s;
+  transition: transform linear 0.1s;
 }
 
 .tree {
   position: absolute;
-  background-image: url(./@shared/assets/tree.png);
+  background-image: url(./@shared/assets/sprites/tree.png);
   background-size: cover;
   image-rendering: pixelated;
 }
 
 .stone {
   position: absolute;
-  background-image: url(./@shared/assets/stone.png);
+  background-image: url(./@shared/assets/sprites/stone.png);
   background-size: cover;
   image-rendering: pixelated;
 }
@@ -92,6 +92,11 @@ body {
   border-radius: 6px;
   font-size: 16px;
   font-weight: 600;
+}
+
+.pause {
+  background-color: rgb(169, 169, 169);
+  border: solid 5px rgb(83, 83, 83);
 }
 
 .textbox {
@@ -135,6 +140,9 @@ td {
   width: 40px;
   height: 40px;
   text-align: center;
+  position: relative;
+  background-size: cover;
+  image-rendering: pixelated;
 }
 
 .selected {
@@ -148,10 +156,14 @@ td {
 
 .fish {
   position: absolute;
-  background-image: url(./@shared/assets/fish.png);
+  background-image: url(./@shared/assets/sprites/fish.png);
   background-size: cover;
   image-rendering: pixelated;
-  transition: all linear 0.1s;
+  transition: transform linear 0.1s;
+}
+
+.frenzy {
+  background-image: url(./@shared/assets/sprites/fish-frenzy.png);
 }
 
 .lifebar-container {
@@ -187,4 +199,26 @@ td {
   background-color: rgb(154, 220, 255);
   z-index: 11;
   transition: width linear 0.2s;
+}
+
+.inventory .pierre {
+  background-image: url(./@shared/assets/items/stone.png);
+}
+
+.inventory .branche {
+  background-image: url(./@shared/assets/items/branch.png);
+}
+
+.inventory .feuille {
+  background-image: url(./@shared/assets/items/leaf.png);
+}
+
+.inventory .bar-commun {
+  background-image: url(./@shared/assets/items/bar-commun.png);
+}
+
+td .qty {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 }

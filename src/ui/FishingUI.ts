@@ -75,11 +75,11 @@ export class FishingUI {
   }
 
   public static startFrenzy(fishSprite: HTMLElement) {
-    fishSprite.style.backgroundColor = 'red';
+    fishSprite.classList.add('frenzy');
   }
 
   public static stopFrenzy(fishSprite: HTMLElement) {
-    fishSprite.style.backgroundColor = 'blue';
+    fishSprite.classList.remove('frenzy');
   }
 
 }

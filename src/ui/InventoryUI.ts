@@ -55,7 +55,11 @@ export class InventoryUI {
 
     // update cell content
     const stack = InventoryService.getContent()[index]
-    cell.innerHTML = `${ stack.amount } ${ stack.item.getName() }`;
+    if(cell.classList.length > 0) {
+      cell.classList.remove(cell.classList.item(0))
+    }
+    cell.classList.add(stack.item.getName().split(" ").join("-"))
+    cell.innerHTML = `<div class="qty">${ stack.amount }</div>`;
   }
 
 }
