@@ -1,5 +1,6 @@
 import { Item } from "../items/Item";
 import { InventoryUI } from "../ui/InventoryUI";
+import { TimeService } from "./TimeService";
 
 export class InventoryService {
   private static capacity: number;
@@ -8,6 +9,8 @@ export class InventoryService {
   public static init(capacity: number, content: { item: Item, amount: number }[]) {
     this.capacity = capacity;
     this.content = content
+
+    InventoryUI.create();
   }
 
   public static addItem(item: Item): boolean {
@@ -42,6 +45,18 @@ export class InventoryService {
 
   public static getCapacity(): number {
     return this.capacity;
+  }
+
+  public static openInventory(): void {
+    InventoryUI.show();
+
+    TimeService.stop();
+  }
+
+  public static closeInventory(): void {
+    InventoryUI.hide();
+
+    TimeService.start();
   }
 
 }

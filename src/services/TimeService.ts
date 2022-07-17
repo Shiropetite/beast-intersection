@@ -12,10 +12,13 @@ export class TimeService {
     TimeService.hours = hours;
     TimeService.minutes = minutes;
 
+    TimeUI.create();
+
     TimeService.start();
   }
 
   public static start(): void {
+    TimeUI.resume();
     this.timeTicking = true;
 
     TimeService.interval = setInterval(() => {
@@ -41,6 +44,7 @@ export class TimeService {
     clearInterval(TimeService.interval);
 
     this.timeTicking = false;
+    TimeUI.pause();
   }
 
   public static tick(): void {

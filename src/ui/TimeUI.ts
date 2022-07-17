@@ -26,6 +26,16 @@ export class TimeUI {
     TimeUI.time.style.display = 'none';
   }
 
+  public static pause(): void {
+    TimeUI.time.classList.add('pause');
+  }
+
+  public static resume(): void {
+    if (TimeUI.time.classList.contains('pause')) {
+      TimeUI.time.classList.remove('pause');
+    }
+  }
+
   public static isVisible(): boolean {
     return TimeUI.time.style.display === 'block';
   }

@@ -78,10 +78,9 @@ const onload = () => {
   InventoryService.init(40, []);
 
   // UI
-  TimeUI.create();
   TalkingUI.create();
-  InventoryUI.create();
 
+  // nook npc
   nook = new NpcEntity('Nook', box * 3, box * 2, nookRoutine);
   triggers.push(nook);
   colliders.push(nook);

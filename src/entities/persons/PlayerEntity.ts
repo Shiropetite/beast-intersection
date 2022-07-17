@@ -1,10 +1,10 @@
 import { player, triggers, map } from '../..';
 import { Direction, PersonEntity, PersonState } from './PersonEntity';
-import { InventoryUI } from './../../ui/InventoryUI';
 import { Talking } from '../../actions/Talking';
 import { box, sleep } from '../../utils';
 import { ToolItem } from './../../items/ToolItem';
 import { FishingToolItem } from '../../items/FishingToolItem';
+import { InventoryService } from '../../services/InventoryService';
 
 export type Key = ActionKeys | DirectionKeys;
 
@@ -42,8 +42,8 @@ export class PlayerEntity extends PersonEntity {
         if ([PersonState.IDLE, PersonState.ACTING, PersonState.TALKING].includes(player.getState())) { player.act(); }
         break;
       case ActionKeys.INVENTORY:
-        if (player.getState() === PersonState.MENUING) { InventoryUI.hide(); }
-        else if (player.getState() === PersonState.IDLE) { InventoryUI.show(); }
+        if (player.getState() === PersonState.MENUING) { InventoryService.closeInventory(); }
+        else if (player.getState() === PersonState.IDLE) { InventoryService.openInventory(); }
         break;
       case DirectionKeys.UP:
       case DirectionKeys.DOWN:

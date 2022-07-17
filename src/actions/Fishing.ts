@@ -2,6 +2,7 @@ import { FishingUI } from './../ui/FishingUI';
 import { TriggerResourceEntity } from '../entities/resources/TriggerResourceEntity';
 import { FishItem } from './../items/FishItem';
 import { FishingToolItem } from './../items/FishingToolItem';
+import { TimeService } from '../services/TimeService';
 
 export class Fishing {
   private static fishItem: FishItem;
@@ -35,7 +36,9 @@ export class Fishing {
         this.isFrenzy = false;
         FishingUI.stopFrenzy(fishEntity.getSprite())
       }, this.fishItem.getFrenzyDuration())
-    }, this.fishItem.getFrenzyFrequency() + this.fishItem.getFrenzyDuration())
+    }, this.fishItem.getFrenzyFrequency() + this.fishItem.getFrenzyDuration());
+
+    TimeService.stop();
   }
 
   public static end(): void {
@@ -43,6 +46,8 @@ export class Fishing {
     clearInterval(Fishing.frenzyInterval);
 
     FishingUI.destroy();
+
+    TimeService.start();
   }
 
   public static fish(fishingRod: FishingToolItem): boolean {

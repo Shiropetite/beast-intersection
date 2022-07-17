@@ -1,3 +1,4 @@
+import { TimeService } from "../services/TimeService";
 import { TalkingUI } from "../ui/TalkingUI";
 
 export interface DialogElement {
@@ -29,12 +30,16 @@ export class Talking {
     }
 
     this.talk();
+
+    TimeService.stop();
   }
 
   private static end(): void {
     TalkingUI.setSpeakerName('');
     TalkingUI.setText('');
     TalkingUI.hide();
+
+    TimeService.start();
   }
 
   // returns true if dialog is not over
