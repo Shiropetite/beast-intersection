@@ -2,19 +2,18 @@ import * as _ from 'lodash';
 import './style.css';
 
 import { box } from './utils';
-import { TriggerEntity } from './entities/TriggerEntity';
-import { ColliderEntity } from './entities/ColliderEntity';
-import { NpcEntity } from './entities/persons/NpcEntity';
-import { PlayerEntity } from './entities/persons/PlayerEntity';
-import { ResourceEntityBehaviour, TriggerResourceEntity } from './entities/resources/TriggerResourceEntity';
-import { ColliderResourceEntity } from './entities/resources/ColliderResourceEntity';
-import { TimeService } from './services/TimeService';
-import { TimeUI } from './ui/TimeUI';
-import { TalkingUI } from './ui/TalkingUI';
-import { InventoryUI } from './ui/InventoryUI';
-import { Item } from './items/Item';
-import { FishItem } from './items/FishItem';
-import { InventoryService } from './services/InventoryService';
+import { 
+  TriggerEntity, 
+  ColliderEntity,
+  NpcEntity,
+  PlayerEntity,
+  ResourceEntityBehaviour,
+  TriggerResourceEntity,
+  ColliderResourceEntity
+} from './entities';
+import { TimeService, InventoryService } from './services';
+import { TalkingUI } from './ui';
+import { Item, FishItem } from './items';
 
 export let camera: HTMLElement = null;
 export let map: HTMLElement = null;

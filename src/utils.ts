@@ -1,6 +1,4 @@
-import { ColliderEntity } from "./entities/ColliderEntity";
-import { Direction, PersonEntity } from "./entities/persons/PersonEntity";
-import { TriggerEntity } from './entities/TriggerEntity';
+import { Direction, PersonEntity, ColliderEntity } from "./entities";
 
 export const box = 64 * 2;
 

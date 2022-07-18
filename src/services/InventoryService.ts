@@ -1,6 +1,6 @@
-import { Item } from "../items/Item";
-import { InventoryUI } from "../ui/InventoryUI";
-import { TimeService } from "./TimeService";
+import { Item } from "../items";
+import { InventoryUI } from "../ui";
+import { TimeService } from ".";
 
 export class InventoryService {
   private static capacity: number;

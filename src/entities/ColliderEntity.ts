@@ -1,5 +1,5 @@
 import { colliders } from "..";
-import { TriggerEntity } from "./TriggerEntity";
+import { TriggerEntity } from ".";
 
 export class ColliderEntity extends TriggerEntity {
   // collider hitbox dimensions

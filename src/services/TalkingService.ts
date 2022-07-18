@@ -1,5 +1,5 @@
-import { TimeService } from "../services/TimeService";
-import { TalkingUI } from "../ui/TalkingUI";
+import { TimeService } from ".";
+import { TalkingUI } from "../ui";
 
 export interface DialogElement {
   sentence: string, 

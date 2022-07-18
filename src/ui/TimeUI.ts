@@ -1,5 +1,5 @@
 import { camera } from "..";
-import { TimeService } from "../services/TimeService";
+import { TimeService } from "../services";
 
 export class TimeUI {
   private static time: HTMLElement;

@@ -1,5 +1,5 @@
 import { box } from '../../utils';
-import { ColliderEntity } from '../ColliderEntity';
+import { ColliderEntity } from '..';
 
 export enum PersonState {
   IDLE,

@@ -1,7 +1,6 @@
-import { camera } from '..';
-import { player } from '..';
-import { PersonState } from '../entities/persons/PersonEntity';
-import { InventoryService } from '../services/InventoryService';
+import { camera, player } from '..';
+import { PersonState } from '../entities';
+import { InventoryService } from '../services';
 
 export class InventoryUI {
   private static inventory: HTMLElement;

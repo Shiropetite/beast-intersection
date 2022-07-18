@@ -1,13 +1,8 @@
-import { TalkingService } from '../../services/TalkingService';
-import { TriggerEntity } from '../TriggerEntity';
-import { FishingService, FishingState } from '../../services/FishingService';
-import { Item } from '../../items/Item';
+import { TriggerEntity, PersonState } from '..';
+import { FishingService, FishingState, TalkingService, InventoryService } from '../../services';
+import { Item, FishingToolItem, ToolType } from '../../items';
 import { box } from '../../utils';
 import { player, removeFromTrigger } from '../..';
-import { PersonState } from '../persons/PersonEntity';
-import { InventoryService } from './../../services/InventoryService';
-import { FishingToolItem } from './../../items/FishingToolItem';
-import { ToolType } from '../../items/ToolItem';
 
 export enum ResourceEntityBehaviour {
   PICKUP,

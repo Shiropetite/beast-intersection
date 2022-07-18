@@ -1,5 +1,5 @@
 import { triggers } from '..';
-import { TimeUI } from '../ui/TimeUI';
+import { TimeUI } from '../ui';
 
 export class TimeService {
   private static interval: NodeJS.Timer;

@@ -1,10 +1,8 @@
 import { player, triggers, map } from '../..';
-import { Direction, PersonEntity, PersonState } from './PersonEntity';
-import { TalkingService } from '../../services/TalkingService';
+import { Direction, PersonEntity, PersonState } from '.';
+import { TalkingService, InventoryService } from '../../services';
 import { box, sleep } from '../../utils';
-import { ToolItem } from './../../items/ToolItem';
-import { FishingToolItem } from '../../items/FishingToolItem';
-import { InventoryService } from '../../services/InventoryService';
+import { ToolItem, FishingToolItem } from './../../items';
 
 export type Key = ActionKeys | DirectionKeys;
 

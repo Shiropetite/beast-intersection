@@ -1,10 +1,8 @@
-import { ColliderEntity } from "../ColliderEntity";
-import { TalkingService } from "../../services/TalkingService";
-import { Item } from '../../items/Item';
-import { PersonState } from "../persons/PersonEntity";
+import { ColliderEntity, PersonState } from "..";
+import { TalkingService, InventoryService } from "../../services";
+import { Item } from '../../items';
 import { box } from "../../utils";
 import { player } from "../..";
-import { InventoryService } from './../../services/InventoryService';
 
 export class ColliderResourceEntity extends ColliderEntity {
   private static CURRENT_ID: number = 1;

@@ -1,4 +1,4 @@
-import { Item } from "./Item";
+import { Item } from ".";
 
 export class FishItem extends Item {
   private healthPoints: number;

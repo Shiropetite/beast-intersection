@@ -1,8 +1,7 @@
-import { FishingUI } from './../ui/FishingUI';
-import { TriggerResourceEntity } from '../entities/resources/TriggerResourceEntity';
-import { FishItem } from './../items/FishItem';
-import { FishingToolItem } from './../items/FishingToolItem';
-import { TimeService } from '../services/TimeService';
+import { FishingUI } from './../ui';
+import { TriggerResourceEntity } from '../entities';
+import { FishItem, FishingToolItem } from './../items';
+import { TimeService } from '../services';
 
 export enum FishingState {
   FISHING,
