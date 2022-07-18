@@ -1,4 +1,4 @@
-import { Item } from ".";
+import { Item } from "./Item";
 
 export enum ToolType {
   FISHING,

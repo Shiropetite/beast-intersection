@@ -1,4 +1,4 @@
-import { ToolItem, ToolType } from '.';
+import { ToolItem, ToolType } from './ToolItem';
 
 export class FishingToolItem extends ToolItem {
   private power: number;

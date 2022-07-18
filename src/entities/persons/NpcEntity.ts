@@ -1,5 +1,5 @@
 import { player } from '../..';
-import { Direction, PersonEntity, PersonState } from '.';
+import { Direction, PersonEntity, PersonState } from './PersonEntity';
 import { DialogElement, TalkingService, TimeService } from './../../services';
 import { box, lookAt } from '../../utils';
 
