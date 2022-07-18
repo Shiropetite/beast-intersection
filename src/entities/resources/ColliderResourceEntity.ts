@@ -1,5 +1,5 @@
 import { ColliderEntity } from "../ColliderEntity";
-import { Talking } from "../../actions/Talking";
+import { TalkingService } from "../../services/TalkingService";
 import { Item } from '../../items/Item';
 import { PersonState } from "../persons/PersonEntity";
 import { box } from "../../utils";
@@ -28,11 +28,11 @@ export class ColliderResourceEntity extends ColliderEntity {
       // add drop in inventory
       if (drop) {
         InventoryService.addItem(drop);
-        Talking.start([{ sentence: `Vous ramassez 1 ${ drop.getName() } !`, isQuestion: false }]);
+        TalkingService.start([{ sentence: `Vous ramassez 1 ${ drop.getName() } !`, isQuestion: false }]);
       }
     }
     else {
-      Talking.talk();
+      TalkingService.talk();
       player.setState(PersonState.IDLE);
     }
   }

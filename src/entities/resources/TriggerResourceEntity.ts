@@ -1,6 +1,6 @@
-import { Talking } from '../../actions/Talking';
+import { TalkingService } from '../../services/TalkingService';
 import { TriggerEntity } from '../TriggerEntity';
-import { Fishing } from '../../actions/Fishing';
+import { FishingService, FishingState } from '../../services/FishingService';
 import { Item } from '../../items/Item';
 import { box } from '../../utils';
 import { player, removeFromTrigger } from '../..';
@@ -35,6 +35,13 @@ export class TriggerResourceEntity extends TriggerEntity {
   }
 
   public act(): void {
+
+    if(player.getState() === PersonState.TALKING) {
+      const isEnd = TalkingService.talk();
+      if(isEnd) player.setState(PersonState.IDLE);
+      return
+    }
+    
     // resource is a fish
     if (this.behaviour === ResourceEntityBehaviour.FISHING) {
       // fishing rod not equipped
@@ -43,17 +50,21 @@ export class TriggerResourceEntity extends TriggerEntity {
       // fishing has not started
       if (player.getState() === PersonState.IDLE) {
         player.setState(PersonState.ACTING);
-        Fishing.start(this, player.getToolEquiped() as FishingToolItem);
+        FishingService.start(this, player.getToolEquiped() as FishingToolItem);
         return;
       }
       // fishing has started
       else {
-        const fishingIsOver = Fishing.fish(player.getToolEquiped() as FishingToolItem);
+        const fishingstate = FishingService.fish(player.getToolEquiped() as FishingToolItem);
 
         // pick up fish
-        if (fishingIsOver) {
+        if (fishingstate === FishingState.PICK_UP) {
           player.setState(PersonState.IDLE);
           this.behaviour = ResourceEntityBehaviour.PICKUP
+        }
+        else if (fishingstate) {
+          TalkingService.start([{ sentence: `Le poisson s'est enfui...`, isQuestion: false }]);
+          player.setState(PersonState.TALKING)
         }
         // fishing is not over
         else {
@@ -62,22 +73,25 @@ export class TriggerResourceEntity extends TriggerEntity {
       }
     }
 
-    // pick up drop
-    if (player.getState() === PersonState.IDLE) {
-      player.setState(PersonState.ACTING);
+    if (this.behaviour === ResourceEntityBehaviour.PICKUP) {
+      // pick up drop
+      if (player.getState() === PersonState.IDLE) {
+        player.setState(PersonState.ACTING);
 
-      // destroy on pickup
-      super.destroy();
+        // destroy on pickup
+        super.destroy();
 
-      InventoryService.addItem(this.drop);
-      Talking.start([{ sentence: `Vous ramassez 1 ${ this.drop.getName() } !`, isQuestion: false }]);
+        InventoryService.addItem(this.drop);
+        TalkingService.start([{ sentence: `Vous ramassez 1 ${ this.drop.getName() } !`, isQuestion: false }]);
+      }
+      else {
+        TalkingService.talk();
+        player.setState(PersonState.IDLE);
+
+        removeFromTrigger(this);
+      }
     }
-    else {
-      Talking.talk();
-      player.setState(PersonState.IDLE);
-
-      removeFromTrigger(this);
-    }
+    
   }
 
   public getDrop(): Item {

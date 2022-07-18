@@ -1,6 +1,6 @@
 import { player } from '../..';
 import { Direction, PersonEntity, PersonState } from './PersonEntity';
-import { DialogElement, Talking } from './../../actions/Talking';
+import { DialogElement, TalkingService } from './../../services/TalkingService';
 import { TimeService } from './../../services/TimeService';
 import { box, lookAt } from '../../utils';
 
@@ -119,11 +119,11 @@ export class NpcEntity extends PersonEntity {
 
       lookAt(this, player);
 
-      Talking.start(this.routine[time].dialog, this.getName());
+      TalkingService.start(this.routine[time].dialog, this.getName());
     }
     // talk has started
     else {
-      const dialogNext: boolean = Talking.talk();
+      const dialogNext: boolean = TalkingService.talk();
 
       if (!dialogNext) {
         this.setState(PersonState.IDLE);

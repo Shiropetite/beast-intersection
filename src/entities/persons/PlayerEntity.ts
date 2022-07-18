@@ -1,6 +1,6 @@
 import { player, triggers, map } from '../..';
 import { Direction, PersonEntity, PersonState } from './PersonEntity';
-import { Talking } from '../../actions/Talking';
+import { TalkingService } from '../../services/TalkingService';
 import { box, sleep } from '../../utils';
 import { ToolItem } from './../../items/ToolItem';
 import { FishingToolItem } from '../../items/FishingToolItem';
@@ -29,7 +29,7 @@ export class PlayerEntity extends PersonEntity {
   public constructor(name: string, spriteTop: number, spriteLeft: number) {
     super(name, spriteTop, spriteLeft, false);
     this.keyPressed = false;
-    this.toolEquiped = new FishingToolItem('canne à peche en bois', 10, 100, 1);
+    this.toolEquiped = new FishingToolItem('canne à peche en bois', 10, 100, 10);
   }
 
   //#region Methods
@@ -47,7 +47,7 @@ export class PlayerEntity extends PersonEntity {
         break;
       case DirectionKeys.UP:
       case DirectionKeys.DOWN:
-        if (player.getState() === PersonState.TALKING) { Talking.selectAnswer(event.key === DirectionKeys.DOWN); }
+        if (player.getState() === PersonState.TALKING) { TalkingService.selectAnswer(event.key === DirectionKeys.DOWN); }
       case DirectionKeys.LEFT:
       case DirectionKeys.RIGHT:
         if (player.getState() === PersonState.IDLE) { player.move(event.key); }

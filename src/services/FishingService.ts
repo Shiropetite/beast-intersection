@@ -4,7 +4,13 @@ import { FishItem } from './../items/FishItem';
 import { FishingToolItem } from './../items/FishingToolItem';
 import { TimeService } from '../services/TimeService';
 
-export class Fishing {
+export enum FishingState {
+  FISHING,
+  PICK_UP,
+  FAILED
+}
+
+export class FishingService {
   private static fishItem: FishItem;
   private static isFrenzy: boolean;
   private static regenInterval: NodeJS.Timer;
@@ -16,7 +22,7 @@ export class Fishing {
     FishingUI.create(fishEntity.getSpriteTop(), fishEntity.getSpriteLeft());
   
     // create regen interval
-    Fishing.regenInterval = setInterval(() => { 
+    FishingService.regenInterval = setInterval(() => { 
       if (this.fishItem.getHealthPoints() < this.fishItem.getMaxHealthPoints()) {
         this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() + this.fishItem.getRegenPoints());
         if (fishingRod.getDurability() > 0) {
@@ -24,12 +30,12 @@ export class Fishing {
         }
         
         FishingUI.updateLife(this.fishItem.getHealthPoints(), this.fishItem.getMaxHealthPoints());
-        FishingUI.updatFishingRod(fishingRod.getDurability(), fishingRod.getMaxDurability())
+        FishingUI.updateFishingRod(fishingRod.getDurability(), fishingRod.getMaxDurability())
       }
     }, this.fishItem.getRegenSpeed())
 
     // create frenzy interval
-    Fishing.frenzyInterval = setInterval(() => {
+    FishingService.frenzyInterval = setInterval(() => {
       this.isFrenzy = true;
       FishingUI.startFrenzy(fishEntity.getSprite())
       setTimeout(() => { 
@@ -42,20 +48,27 @@ export class Fishing {
   }
 
   public static end(): void {
-    clearInterval(Fishing.regenInterval);
-    clearInterval(Fishing.frenzyInterval);
+    clearInterval(FishingService.regenInterval);
+    clearInterval(FishingService.frenzyInterval);
 
     FishingUI.destroy();
 
     TimeService.start();
   }
 
-  public static fish(fishingRod: FishingToolItem): boolean {
-    if (this.fishItem.getHealthPoints() <= 0) {
-      this.end();
-      return true;
-    }
+  public static fail(fishingRod: FishingToolItem): void {
+    clearInterval(FishingService.regenInterval);
+    clearInterval(FishingService.frenzyInterval);
+
+    fishingRod.setDurability(0);
+    this.fishItem.setHealthPoints(this.fishItem.getMaxHealthPoints())
     
+    FishingUI.destroy();
+
+    TimeService.start();
+  }
+
+  public static fish(fishingRod: FishingToolItem): FishingState {
     if (this.isFrenzy) {
       this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() - fishingRod.getPower() * this.fishItem.getFrenzyMultiplier());
       fishingRod.setDurability(fishingRod.getDurability() + fishingRod.getResistance() / this.fishItem.getFrenzyMultiplier());
@@ -64,9 +77,20 @@ export class Fishing {
       this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() - fishingRod.getPower());
       fishingRod.setDurability(fishingRod.getDurability() + fishingRod.getResistance());
     }
+
+    if (this.fishItem.getHealthPoints() <= 0) {
+      this.end();
+      return FishingState.PICK_UP;
+    }
+
+    if (fishingRod.getDurability() >= fishingRod.getMaxDurability()) {
+      this.fail(fishingRod);
+      return FishingState.FAILED;
+    }
+
     FishingUI.updateLife(this.fishItem.getHealthPoints(), this.fishItem.getMaxHealthPoints());
-    FishingUI.updatFishingRod(fishingRod.getDurability(), fishingRod.getMaxDurability());
-    return false;
+    FishingUI.updateFishingRod(fishingRod.getDurability(), fishingRod.getMaxDurability());
+    return FishingState.FISHING;
   }
 
 }

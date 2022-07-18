@@ -12,7 +12,7 @@ export interface DialogElement {
   ]
 }
 
-export class Talking {
+export class TalkingService {
   private static dialog: DialogElement[]; 
   private static currentDialogElement: DialogElement;
   private static playerAnswerIndex: number;
@@ -44,6 +44,8 @@ export class Talking {
 
   // returns true if dialog is not over
   public static talk(): boolean {
+    if(this.dialog === undefined) return
+
     // player answer
     if (this.playerAnswerIndex >= 0) {
       // npc answer
@@ -79,25 +81,25 @@ export class Talking {
     }
 
     // set indicator on first answer by default
-    Talking.playerAnswerIndex = 0;
-    TalkingUI.showAnswerIndicator(Talking.playerAnswerIndex);
+    TalkingService.playerAnswerIndex = 0;
+    TalkingUI.showAnswerIndicator(TalkingService.playerAnswerIndex);
   }
 
   // select answer depending on player input
   public static selectAnswer(goToNext: boolean) {
     // remove indicator from previous answer
-    TalkingUI.hideAnswerIndicator(Talking.playerAnswerIndex);
+    TalkingUI.hideAnswerIndicator(TalkingService.playerAnswerIndex);
 
     // select next answer
-    if (goToNext && Talking.playerAnswerIndex < this.currentDialogElement.answers.length - 1) {
-      Talking.playerAnswerIndex++;
+    if (goToNext && TalkingService.playerAnswerIndex < this.currentDialogElement.answers.length - 1) {
+      TalkingService.playerAnswerIndex++;
     }
     // select previous answer
-    else if (!goToNext && Talking.playerAnswerIndex > 0) {
-      Talking.playerAnswerIndex--;
+    else if (!goToNext && TalkingService.playerAnswerIndex > 0) {
+      TalkingService.playerAnswerIndex--;
     }
 
-    TalkingUI.showAnswerIndicator(Talking.playerAnswerIndex);
+    TalkingUI.showAnswerIndicator(TalkingService.playerAnswerIndex);
   }
   //#endregion
 

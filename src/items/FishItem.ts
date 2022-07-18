@@ -12,7 +12,6 @@ export class FishItem extends Item {
 
   constructor(
     name: string,
-    healthPoints: number,
     maxHealthPoints: number,
     regenPoints: number,
     regenSpeed: number,
@@ -22,7 +21,7 @@ export class FishItem extends Item {
     pressureMultiplier: number
   ) {
     super(name);
-    this.healthPoints = healthPoints;
+    this.healthPoints = maxHealthPoints;
     this.maxHealthPoints = maxHealthPoints;
     this.regenPoints = regenPoints;
     this.regenSpeed = regenSpeed;

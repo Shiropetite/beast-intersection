@@ -69,8 +69,22 @@ export class FishingUI {
     element.style.width = `${ 128 * life / maxLife }px`;
   }
 
-  public static updatFishingRod(resistance: number, maxResistance: number): void {
+  public static updateFishingRod(resistance: number, maxResistance: number): void {
     const element = document.getElementById(`fishingrod`);
+    const elementContainer = document.getElementById(`fishingrod-container`);
+
+    if (resistance > 50 / 100 * maxResistance) {
+      if(element.classList.contains('shake')) {
+        element.classList.remove('shake');
+        elementContainer.classList.remove('shake');
+      }
+      else {
+        element.classList.add('shake');
+        elementContainer.classList.add('shake');
+      }
+      
+    }
+
     element.style.width = `${ 128 * resistance / maxResistance }px`;
   }
 
