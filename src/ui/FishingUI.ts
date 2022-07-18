@@ -73,16 +73,15 @@ export class FishingUI {
     const element = document.getElementById(`fishingrod`);
     const elementContainer = document.getElementById(`fishingrod-container`);
 
-    if (resistance > 50 / 100 * maxResistance) {
-      if(element.classList.contains('shake')) {
-        element.classList.remove('shake');
-        elementContainer.classList.remove('shake');
+    if (resistance > 60 / 100 * maxResistance) {
+      if(!element.classList.contains('blink')) {
+        element.classList.add('blink');
+        elementContainer.classList.add('blink');
       }
-      else {
-        element.classList.add('shake');
-        elementContainer.classList.add('shake');
-      }
-      
+    }
+    else if(element.classList.contains('blink')) {
+      element.classList.remove('blink');
+      elementContainer.classList.remove('blink');
     }
 
     element.style.width = `${ 128 * resistance / maxResistance }px`;

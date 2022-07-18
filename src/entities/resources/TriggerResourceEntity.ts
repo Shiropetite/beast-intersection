@@ -30,11 +30,20 @@ export class TriggerResourceEntity extends TriggerEntity {
   }
 
   public act(): void {
+    // close dialog
+    if (player.getState() === PersonState.TALKING) {
+      const dialogNext  = TalkingService.talk();
 
-    if(player.getState() === PersonState.TALKING) {
-      const isEnd = TalkingService.talk();
-      if(isEnd) player.setState(PersonState.IDLE);
-      return
+      if (!dialogNext) { 
+        player.setState(PersonState.IDLE); 
+
+        // picked up resource
+        if (this.behaviour === ResourceEntityBehaviour.PICKUP) {
+          removeFromTrigger(this);
+        }
+      }
+
+      return;
     }
     
     // resource is a fish
@@ -42,7 +51,7 @@ export class TriggerResourceEntity extends TriggerEntity {
       // fishing rod not equipped
       if (player.getToolEquiped().getToolType() !== ToolType.FISHING) return;
       
-      // fishing has not started
+      // fishing not started
       if (player.getState() === PersonState.IDLE) {
         player.setState(PersonState.ACTING);
         FishingService.start(this, player.getToolEquiped() as FishingToolItem);
@@ -50,40 +59,35 @@ export class TriggerResourceEntity extends TriggerEntity {
       }
       // fishing has started
       else {
-        const fishingstate = FishingService.fish(player.getToolEquiped() as FishingToolItem);
+        const fishingState = FishingService.fish(player.getToolEquiped() as FishingToolItem);
 
         // pick up fish
-        if (fishingstate === FishingState.PICK_UP) {
+        if (fishingState === FishingState.PICK_UP) {
           player.setState(PersonState.IDLE);
-          this.behaviour = ResourceEntityBehaviour.PICKUP
+          this.behaviour = ResourceEntityBehaviour.PICKUP;
         }
-        else if (fishingstate) {
-          TalkingService.start([{ sentence: `Le poisson s'est enfui...`, isQuestion: false }]);
-          player.setState(PersonState.TALKING)
+        // fishing lost
+        else if (fishingState === FishingState.FAILED) {
+          player.setState(PersonState.TALKING);
+          TalkingService.start([{ sentence: `Le poisson s'est enfui...` }]);
         }
         // fishing is not over
-        else {
+        else if (fishingState === FishingState.FISHING) {
           return;
         }
       }
     }
 
     if (this.behaviour === ResourceEntityBehaviour.PICKUP) {
-      // pick up drop
+      // pick up resource
       if (player.getState() === PersonState.IDLE) {
-        player.setState(PersonState.ACTING);
+        player.setState(PersonState.TALKING);
 
         // destroy on pickup
         super.destroy();
 
         InventoryService.addItem(this.drop);
-        TalkingService.start([{ sentence: `Vous ramassez 1 ${ this.drop.getName() } !`, isQuestion: false }]);
-      }
-      else {
-        TalkingService.talk();
-        player.setState(PersonState.IDLE);
-
-        removeFromTrigger(this);
+        TalkingService.start([{ sentence: `Vous ramassez 1 ${ this.drop.getName() } !` }]);
       }
     }
     

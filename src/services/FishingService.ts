@@ -56,15 +56,8 @@ export class FishingService {
   }
 
   public static fail(fishingRod: FishingToolItem): void {
-    clearInterval(FishingService.regenInterval);
-    clearInterval(FishingService.frenzyInterval);
-
     fishingRod.setDurability(0);
     this.fishItem.setHealthPoints(this.fishItem.getMaxHealthPoints())
-    
-    FishingUI.destroy();
-
-    TimeService.start();
   }
 
   public static fish(fishingRod: FishingToolItem): FishingState {
@@ -84,6 +77,7 @@ export class FishingService {
 
     if (fishingRod.getDurability() >= fishingRod.getMaxDurability()) {
       this.fail(fishingRod);
+      this.end();
       return FishingState.FAILED;
     }
 

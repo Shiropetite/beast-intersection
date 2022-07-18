@@ -106,12 +106,12 @@ export class NpcEntity extends PersonEntity {
   public act(): void {
     let time = TimeService.getCurrentTime();
     
-    // routine does not contain a dialog for current time of day
+    // routine do not contain a dialog for current time
     while (this.routine[time]?.dialog === undefined) {
       time = TimeService.getPreviousTime(time);
     }
     
-    // talk has not started
+    // talk not started
     if (this.getState() !== PersonState.TALKING) {
       this.setState(PersonState.TALKING);
       player.setState(PersonState.TALKING);
@@ -120,13 +120,15 @@ export class NpcEntity extends PersonEntity {
 
       TalkingService.start(this.routine[time].dialog, this.getName());
     }
-    // talk has started
+    // talk started
     else {
-      const dialogNext: boolean = TalkingService.talk();
+      if (this.getState() === PersonState.TALKING) {
+        const dialogNext: boolean = TalkingService.talk();
 
-      if (!dialogNext) {
-        this.setState(PersonState.IDLE);
-        player.setState(PersonState.IDLE);
+        if (!dialogNext) {
+          this.setState(PersonState.IDLE);
+          player.setState(PersonState.IDLE);
+        }
       }
     }
   }

@@ -1,9 +1,11 @@
 import { TimeService } from ".";
+import { player } from "..";
+import { PersonState } from "../entities";
 import { TalkingUI } from "../ui";
 
 export interface DialogElement {
   sentence: string, 
-  isQuestion: boolean, 
+  isQuestion?: boolean, 
   answers?: [
     {
       playerAnswer: string, // player answer to the question
@@ -44,7 +46,7 @@ export class TalkingService {
 
   // returns true if dialog is not over
   public static talk(): boolean {
-    if(this.dialog === undefined) return
+    if (this.dialog === undefined) { return; }
 
     // player answer
     if (this.playerAnswerIndex >= 0) {
@@ -102,5 +104,5 @@ export class TalkingService {
     TalkingUI.showAnswerIndicator(TalkingService.playerAnswerIndex);
   }
   //#endregion
-
+  
 }
