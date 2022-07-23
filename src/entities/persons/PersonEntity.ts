@@ -4,9 +4,10 @@ import { ColliderEntity } from '../ColliderEntity';
 export enum PersonState {
   IDLE,
   MOVING,
-  TALKING,
   ACTING,
-  MENUING
+  TALKING,
+  MENUING,
+  LOCKED
 }
 
 export enum Direction {
@@ -18,7 +19,7 @@ export enum Direction {
 
 export abstract class PersonEntity extends ColliderEntity {
   private readonly name: string;
-  private state: PersonState = PersonState.IDLE;
+  private state: PersonState;
   private direction: Direction
 
   public constructor(name: string, spriteTop: number, spriteLeft: number, npc: boolean) {
@@ -33,9 +34,9 @@ export abstract class PersonEntity extends ColliderEntity {
     }
 
     this.name = name;
-    
     this.setState(PersonState.IDLE);
     this.direction = Direction.DOWN;
+    
     super.getSprite().classList.add(`${type}-${this.direction}`)
 
     this.update();

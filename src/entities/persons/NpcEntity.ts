@@ -111,23 +111,23 @@ export class NpcEntity extends PersonEntity {
       time = TimeService.getPreviousTime(time);
     }
     
-    // talk not started
+    // start of dialog
     if (this.getState() !== PersonState.TALKING) {
       this.setState(PersonState.TALKING);
-      player.setState(PersonState.TALKING);
 
       lookAt(this, player);
+      lookAt(player, this);
 
       TalkingService.start(this.routine[time].dialog, this.getName());
     }
-    // talk started
+    // dialog ongoing
     else {
       if (this.getState() === PersonState.TALKING) {
         const dialogNext: boolean = TalkingService.talk();
 
+        // end of dialog
         if (!dialogNext) {
           this.setState(PersonState.IDLE);
-          player.setState(PersonState.IDLE);
         }
       }
     }

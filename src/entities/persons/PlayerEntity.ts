@@ -20,20 +20,24 @@ export enum DirectionKeys {
 }
 
 export class PlayerEntity extends PersonEntity {
-  private keyPressed: boolean;
+  private keyIsPressed: boolean;
   private previousKeyPressed: string;
   private toolEquiped: ToolItem | null;
 
   public constructor(name: string, spriteTop: number, spriteLeft: number) {
     super(name, spriteTop, spriteLeft, false);
-    this.keyPressed = false;
+    this.keyIsPressed = false;
     this.toolEquiped = new FishingToolItem('canne à peche en bois', 10, 100, 10);
   }
 
   //#region Methods
   public async listenInput(event: any): Promise<void> {
-    if (this.keyPressed && event.key === this.previousKeyPressed) return;
-    this.keyPressed = true;
+    // cannot input
+    if (player.getState() === PersonState.LOCKED) { return; }
+
+    // limit spam same input
+    if (this.keyIsPressed && event.key === this.previousKeyPressed) return;
+    this.keyIsPressed = true;
 
     switch(event.key) {
       case ActionKeys.ACT:
@@ -52,11 +56,12 @@ export class PlayerEntity extends PersonEntity {
         break;
       default: break;
     }
-    
+
+    // input buffer time
     await sleep(150);
 
     this.previousKeyPressed = event.key;
-    this.keyPressed = false;
+    this.keyIsPressed = false;
   }
 
   private move(key: DirectionKeys): void {
@@ -124,6 +129,7 @@ export class PlayerEntity extends PersonEntity {
 
       if (triggered) {
         trigger.act();
+        return;
       }
     }
   }

@@ -7,13 +7,13 @@ import {
   ColliderEntity,
   NpcEntity,
   PlayerEntity,
-  ResourceEntityBehaviour,
   TriggerResourceEntity,
   ColliderResourceEntity
 } from './entities';
 import { TimeService, InventoryService } from './services';
 import { TalkingUI } from './ui';
 import { Item, FishItem } from './items';
+import { FishResourceEntity } from './entities/resources/FishResourceEntity';
 
 export let camera: HTMLElement = null;
 export let map: HTMLElement = null;
@@ -85,8 +85,8 @@ const onload = () => {
   colliders.push(nook);
 
   triggers.push(new TriggerResourceEntity('stone', (box * 7), (box * 4), new Item("pierre")));
-  triggers.push(new TriggerResourceEntity('fish', (box * 4), (box * 9), new FishItem("carpe", 300, 1, 500, 2000, 4000, 0.5, 1), ResourceEntityBehaviour.FISHING));
-  triggers.push(new TriggerResourceEntity('fish', (box * 0), (box * 4), new FishItem("bar commun", 100, 1, 500, 2000, 2000, 0.2, 1), ResourceEntityBehaviour.FISHING));
+  triggers.push(new FishResourceEntity('fish', (box * 4), (box * 9), new FishItem("carpe", 300, 3, 500, 2000, 3000, 0.5, 1)));
+  triggers.push(new FishResourceEntity('fish', (box * 0), (box * 4), new FishItem("bar commun", 200, 1, 500, 2000, 3000, 0.5, 1)));
   
   let tree = new ColliderResourceEntity('tree', (box * 2), (box * 7), [{ item: new Item("love u"), rate: 0.01 }, { item: new Item("feuille"), rate: 0.2 }, { item: new Item("branche"), rate: 1 }])
   triggers.push(tree);

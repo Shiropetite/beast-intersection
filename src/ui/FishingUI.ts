@@ -1,77 +1,77 @@
 import { map } from "..";
 
 export class FishingUI {
-  private static lifebarContainer: HTMLElement;
-  private static lifebar: HTMLElement;
-  private static fishingrodContainer: HTMLElement;
-  private static fishingrod: HTMLElement;
+  private static fishBarContainer: HTMLElement;
+  private static fishBar: HTMLElement;
+  private static fishingRodBarContainer: HTMLElement;
+  private static fishingRodBar: HTMLElement;
 
   public static create(fishTop: number, fishLeft: number): void {
-    // create lifebar container HTML
-    const lifebarContainerHTML = document.createElement('div');
-    lifebarContainerHTML.id = `lifebar-container`;
-    lifebarContainerHTML.classList.add('lifebar-container');
-    lifebarContainerHTML.style.top = `${ fishTop - 30 }px`;
-    lifebarContainerHTML.style.left = `${ fishLeft }px`;
-    map.appendChild(lifebarContainerHTML);
+    // create fishHP container HTML
+    const fishBarContainerHTML = document.createElement('div');
+    fishBarContainerHTML.id = `fish-bar-container`;
+    fishBarContainerHTML.classList.add('fish-bar-container');
+    fishBarContainerHTML.style.top = `${ fishTop - 30 }px`;
+    fishBarContainerHTML.style.left = `${ fishLeft }px`;
+    map.appendChild(fishBarContainerHTML);
 
-    // create lifebar HTML
-    const lifebar = document.createElement('div');
-    lifebar.id = `lifebar`;
-    lifebar.classList.add('lifebar');
-    lifebar.style.top = `${ fishTop - 30 }px`;
-    lifebar.style.left = `${ fishLeft }px`;
-    map.appendChild(lifebar);
+    // create fishHP HTML
+    const fishBarHTML = document.createElement('div');
+    fishBarHTML.id = `fish-bar`;
+    fishBarHTML.classList.add('fish-bar');
+    fishBarHTML.style.top = `${ fishTop - 30 }px`;
+    fishBarHTML.style.left = `${ fishLeft }px`;
+    map.appendChild(fishBarHTML);
 
-    // create fishingrod HTML
-    const fishingRodContainerHTML = document.createElement('div');
-    fishingRodContainerHTML.id = `fishingrod-container`;
-    fishingRodContainerHTML.classList.add('fishingrod-container');
-    fishingRodContainerHTML.style.top = `${ fishTop - 40 }px`;
-    fishingRodContainerHTML.style.left = `${ fishLeft }px`;
-    map.appendChild(fishingRodContainerHTML);
+    // create fishingRodHP HTML
+    const fishingRodBarContainerHTML = document.createElement('div');
+    fishingRodBarContainerHTML.id = `fishing-rod-bar-container`;
+    fishingRodBarContainerHTML.classList.add('fishing-rod-bar-container');
+    fishingRodBarContainerHTML.style.top = `${ fishTop - 40 }px`;
+    fishingRodBarContainerHTML.style.left = `${ fishLeft }px`;
+    map.appendChild(fishingRodBarContainerHTML);
 
-    // create fishingrod HTML
-    const fishingRodHTML = document.createElement('div');
-    fishingRodHTML.id = `fishingrod`;
-    fishingRodHTML.classList.add('fishingrod');
-    fishingRodHTML.style.top = `${ fishTop - 40 }px`;
-    fishingRodHTML.style.left = `${ fishLeft }px`;
-    map.appendChild(fishingRodHTML);
+    // create fishingRodHP HTML
+    const fishingRodBarHTML = document.createElement('div');
+    fishingRodBarHTML.id = `fishing-rod-bar`;
+    fishingRodBarHTML.classList.add('fishing-rod-bar');
+    fishingRodBarHTML.style.top = `${ fishTop - 40 }px`;
+    fishingRodBarHTML.style.left = `${ fishLeft }px`;
+    map.appendChild(fishingRodBarHTML);
 
     // store HTML
-    FishingUI.lifebarContainer = document.getElementById('lifebar-container');
-    FishingUI.lifebar = document.getElementById('lifebar');
-    FishingUI.fishingrodContainer = document.getElementById('fishingrod-container');
-    FishingUI.fishingrod = document.getElementById('fishingrod')
+    FishingUI.fishBarContainer = document.getElementById('fish-bar-container');
+    FishingUI.fishBar = document.getElementById('fish-bar');
+    FishingUI.fishingRodBarContainer = document.getElementById('fishing-rod-bar-container');
+    FishingUI.fishingRodBar = document.getElementById('fishing-rod-bar')
   }
 
   public static destroy(): void {
-    map.removeChild(document.getElementById(`lifebar-container`));
-    map.removeChild(document.getElementById(`lifebar`));
-    map.removeChild(document.getElementById(`fishingrod-container`));
-    map.removeChild(document.getElementById(`fishingrod`));
+    map.removeChild(document.getElementById(`fish-bar-container`));
+    map.removeChild(document.getElementById(`fish-bar`));
+    map.removeChild(document.getElementById(`fishing-rod-bar-container`));
+    map.removeChild(document.getElementById(`fishing-rod-bar`));
   }
 
-  public static updateLife(life: number, maxLife: number): void {
-    const element = document.getElementById(`lifebar`);
+  public static updateFishHP(hp: number, maxHP: number): void {
+    const element = document.getElementById(`fish-bar`);
     
-    if (life < 20 / 100 * maxLife) {
+    if (hp < 20 / 100 * maxHP) {
       element.style.backgroundColor = 'red';
     }
-    else if (life < 66 / 100 * maxLife) {
+    else if (hp < 66 / 100 * maxHP) {
       element.style.backgroundColor = 'yellow';
     }
     else {
       element.style.backgroundColor = 'green';
     }
 
-    element.style.width = `${ 128 * life / maxLife }px`;
+    element.style.width = `${ 128 * hp / maxHP }px`;
   }
 
-  public static updateFishingRod(resistance: number, maxResistance: number): void {
-    const element = document.getElementById(`fishingrod`);
-    const elementContainer = document.getElementById(`fishingrod-container`);
+  public static updateFishingRodHP(resistance: number, maxResistance: number): void {
+    const element = document.getElementById(`fishing-rod-bar`);
+    const elementContainer = document.getElementById(`fishing-rod-bar-container`);
 
     if (resistance > 60 / 100 * maxResistance) {
       if(!element.classList.contains('blink')) {

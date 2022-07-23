@@ -14,22 +14,22 @@ export class InventoryService {
   }
 
   public static addItem(item: Item): boolean {
-    // inventory is full
-    if (this.content.length === this.capacity) {
-      return false;
-    }
-
     // search existing stack of item to add
     const stack = this.content.filter(s => s.amount < 99).find((cell => cell.item.getName() === item.getName()));
+    
     // increase amount of existing stack
     if (stack) {
       stack.amount++;
       InventoryUI.setContent(this.content.indexOf(stack));
     }
-    // create stack
-    else {
+    // create stack if inventory not full
+    else if (this.content.length < this.capacity) {
       this.content.push({ item, amount: 1 });
       InventoryUI.setContent(this.content.length - 1);
+    }
+    // inventory full
+    else {
+      return false;
     }
     
     return true;

@@ -181,7 +181,7 @@ td {
   background-image: url(./@shared/assets/sprites/fish-frenzy.png);
 }
 
-.lifebar-container {
+.fish-bar-container {
   position: absolute;
   width: 128px;
   height: 10px;
@@ -189,7 +189,7 @@ td {
   z-index: 10;
 }
 
-.lifebar {
+.fish-bar {
   position: absolute;
   width: 128px;
   height: 10px;
@@ -199,7 +199,7 @@ td {
 }
 
 
-.fishingrod-container {
+.fishing-rod-bar-container {
   position: absolute;
   width: 128px;
   height: 6px;
@@ -207,7 +207,7 @@ td {
   z-index: 10;
 }
 
-.fishingrod {
+.fishing-rod-bar {
   position: absolute;
   width: 0px;
   height: 6px;

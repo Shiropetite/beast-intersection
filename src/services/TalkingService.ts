@@ -11,7 +11,8 @@ export interface DialogElement {
       playerAnswer: string, // player answer to the question
       npcAnswer: string // npc answer to the player
     }
-  ]
+  ],
+  notSkip?: boolean
 }
 
 export class TalkingService {
@@ -27,9 +28,12 @@ export class TalkingService {
 
     TalkingUI.show();
     
+    // talking to person
     if (speakerName) { 
       TalkingUI.setSpeakerName(speakerName); 
     }
+
+    player.setState(PersonState.TALKING);
 
     this.talk();
 
@@ -40,6 +44,8 @@ export class TalkingService {
     TalkingUI.setSpeakerName('');
     TalkingUI.setText('');
     TalkingUI.hide();
+
+    player.setState(PersonState.IDLE);
 
     TimeService.start();
   }
@@ -66,6 +72,15 @@ export class TalkingService {
     // next dialog element
     this.currentDialogElement = this.dialog.shift();
     TalkingUI.setText(this.currentDialogElement.sentence);
+
+    // dialog not skip
+    if (this.currentDialogElement.notSkip) {
+      player.setState(PersonState.LOCKED)
+      setTimeout(() => {
+        player.setState(PersonState.TALKING)
+        this.talk();
+      }, 3000); // wait for 3000
+    }
 
     // player need to answer
     if (this.currentDialogElement.isQuestion) {
