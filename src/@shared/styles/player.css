@@ -1,0 +1,24 @@
+.player {
+  position: absolute;
+  background-size: cover;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
+  transition: transform linear 0.1s;
+  z-index: 1000;
+}
+
+.player-down {
+  background-image: url(../assets/entities/player/player-down.png);
+}
+
+.player-up {
+  background-image: url(../assets/entities/player/player-up.png);
+}
+
+.player-right {
+  background-image: url(../assets/entities/player/player-right.png);
+}
+
+.player-left {
+  background-image: url(../assets/entities/player/player-left.png);
+}

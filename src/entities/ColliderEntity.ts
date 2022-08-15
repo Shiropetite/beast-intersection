@@ -1,5 +1,5 @@
 import { colliders } from "..";
-import { TriggerEntity } from "./TriggerEntity";
+import { Action, TriggerEntity } from "./TriggerEntity";
 
 export class ColliderEntity extends TriggerEntity {
   // collider hitbox dimensions
@@ -13,6 +13,7 @@ export class ColliderEntity extends TriggerEntity {
   public constructor(
     htmlId: string,
     cssClass: string,
+    action: Action,
     spriteWidth: number,
     spriteHeight: number,
     spriteTop: number,
@@ -23,6 +24,7 @@ export class ColliderEntity extends TriggerEntity {
   public constructor(
     htmlId: string,
     cssClass: string,
+    action: Action,
     spriteWidth: number,
     spriteHeight: number,
     spriteTop: number,
@@ -37,6 +39,7 @@ export class ColliderEntity extends TriggerEntity {
   public constructor(
     htmlId: string,
     cssClass: string,
+    action: Action,
     spriteWidth: number,
     spriteHeight: number,
     spriteTop: number,
@@ -53,21 +56,21 @@ export class ColliderEntity extends TriggerEntity {
 
   public constructor(...parameters: any[]) {
     // collider hitbox dimensions same as trigger hitbox same as sprite dimensions
-    if (parameters.length === 6) {
-      super(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4], parameters[5]);
+    if (parameters.length === 7) {
+      super(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4], parameters[5], parameters[6]);
     }
     // collider hitbox dimensions same as trigger hitbox dimensions
     else {
       super(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4], parameters[5], 
-        parameters[6], parameters[7], parameters[8], parameters[9]);
+        parameters[6], parameters[7], parameters[8], parameters[9], parameters[10]);
     }
     
     // collider hitbox has its own dimensions
-    if (parameters.length > 10) { 
-      this.colliderWidth = parameters[10];
-      this.colliderHeight = parameters[11];
-      this.colliderTop = parameters[12];
-      this.colliderLeft = parameters[13];
+    if (parameters.length > 11) { 
+      this.colliderWidth = parameters[11];
+      this.colliderHeight = parameters[12];
+      this.colliderTop = parameters[13];
+      this.colliderLeft = parameters[14];
     }
     // collider hitbox dimensions same as sprite dimensions
     else { 

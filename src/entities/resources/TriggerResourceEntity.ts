@@ -1,4 +1,4 @@
-import { TriggerEntity, PersonState } from '..';
+import { TriggerEntity, PersonState, Action } from '..';
 import { FishingService, FishingState, TalkingService, InventoryService } from '../../services';
 import { Item, FishingToolItem, ToolType } from '../../items';
 import { box } from '../../utils';
@@ -17,10 +17,10 @@ export class TriggerResourceEntity extends TriggerEntity {
   constructor(name: string, spriteTop: number, spriteLeft: number, item: Item, behaviour = ResourceEntityBehaviour.PICKUP) {
     // resource is a fish
     if (behaviour === ResourceEntityBehaviour.FISHING) {
-      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, box, box, spriteTop, spriteLeft, (box) * 3, (box) * 3, spriteTop - box, spriteLeft - box);
+      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, Action.FISH, box, box, spriteTop, spriteLeft, (box) * 3, (box) * 3, spriteTop - box, spriteLeft - box);
     }
     else {
-      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, box, box, spriteTop, spriteLeft);
+      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, Action.PICK_UP, box, box, spriteTop, spriteLeft);
     }
     
     this.item = item;

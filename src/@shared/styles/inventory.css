@@ -1,0 +1,57 @@
+.inventory {
+  z-index: 9999;
+  position: absolute;
+  background-color: rgb(208, 110, 75);
+  border: solid 5px brown;
+  border-radius: 6px;
+  left: 50%;
+  bottom: 30px;
+  bottom: calc(64 * 2)px;
+  transform: translate(-50%, 0);
+}
+
+td {
+  border: solid 1px brown;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  position: relative;
+  background-size: cover;
+  image-rendering: pixelated;
+}
+
+.selected {
+  background-color: rgb(255, 255, 150);
+  color: black
+}
+
+
+.inventory .pierre {
+  background-image: url(../assets/items/stone.png);
+}
+
+.inventory .branche {
+  background-image: url(../assets/items/branch.png);
+}
+
+.inventory .feuille {
+  background-image: url(../assets/items/leaf.png);
+}
+
+.inventory .bar-commun {
+  background-image: url(../assets/items/bar-commun.png);
+}
+
+.inventory .carpe {
+  background-image: url(../assets/items/carpe.png);
+}
+
+.inventory .love-u {
+  background-image: url(../assets/items/heart.png);
+}
+
+td .qty {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}

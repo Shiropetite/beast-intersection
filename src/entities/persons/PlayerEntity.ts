@@ -3,6 +3,8 @@ import { Direction, PersonEntity, PersonState } from '.';
 import { TalkingService, InventoryService } from '../../services';
 import { box, sleep } from '../../utils';
 import { ToolItem, FishingToolItem } from './../../items';
+import { ActionUI } from './../../ui/ActionUI';
+import { Action } from '../TriggerEntity';
 
 export type Key = ActionKeys | DirectionKeys;
 
@@ -110,6 +112,18 @@ export class PlayerEntity extends PersonEntity {
       // move map opposite way of player
 
       map.style.transform = `translate3d(${ -this.getSpriteLeft() + box * 4 }px, ${ -this.getSpriteTop() + box * 2 }px, 0)`
+
+      let haveBeenTriggered = false
+      for (const trigger of triggers) {
+        const triggered: boolean = this.isTriggeredBy(trigger);
+        if(triggered && !haveBeenTriggered) {
+          ActionUI.updateAction(trigger.getAction());
+          haveBeenTriggered = true;
+        } 
+      }
+      if(!haveBeenTriggered) {
+        ActionUI.updateAction(Action.NONE);
+      }
     }
     // collider hitbox collide
     else { 

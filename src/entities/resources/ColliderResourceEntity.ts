@@ -1,4 +1,4 @@
-import { ColliderEntity, PersonState } from "..";
+import { Action, ColliderEntity, PersonState } from "..";
 import { TalkingService, InventoryService } from "../../services";
 import { Item } from '../../items';
 import { box } from "../../utils";
@@ -9,7 +9,7 @@ export class ColliderResourceEntity extends ColliderEntity {
   private readonly drops: { item: Item, rate: number }[];
 
   constructor(name: string, spriteTop: number, spriteLeft: number, drops: { item: Item, rate: number }[]) {
-    super(`${ name }-${ ColliderResourceEntity.CURRENT_ID++ }`, name, box, box, spriteTop, spriteLeft, box * 3, box * 3, spriteTop - box, spriteLeft - box);
+    super(`${ name }-${ ColliderResourceEntity.CURRENT_ID++ }`, name, Action.PICK_UP, box, box, spriteTop, spriteLeft, box * 3, box * 3, spriteTop - box, spriteLeft - box);
     
     this.drops = drops;
 

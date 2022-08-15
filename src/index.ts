@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import './style.css';
+import './@shared/styles/index.css';
 
 import { box } from './utils';
 import { 
@@ -8,10 +8,11 @@ import {
   NpcEntity,
   PlayerEntity,
   TriggerResourceEntity,
-  ColliderResourceEntity
+  ColliderResourceEntity,
+  Action
 } from './entities';
 import { TimeService, InventoryService } from './services';
-import { TalkingUI } from './ui';
+import { ActionUI, TalkingUI } from './ui';
 import { Item, FishItem } from './items';
 import { FishResourceEntity } from './entities/resources/FishResourceEntity';
 
@@ -58,15 +59,15 @@ const onload = () => {
 
   colliders = [
     // main island top wall
-    new ColliderEntity('wall-1', 'wall', box * 14 - 6, box, 0, box),
+    new ColliderEntity('wall-1', 'wall', Action.NONE, box * 14 - 6, box, 0, box),
     // main island bottom wall
-    new ColliderEntity('wall-2', 'wall', box * 14 - 6, box, box * 9, box),
+    new ColliderEntity('wall-2', 'wall', Action.NONE, box * 14 - 6, box, box * 9, box),
     // main island left wall
-    new ColliderEntity('wall-3', 'wall', box, box * 10, 0, 0),
+    new ColliderEntity('wall-3', 'wall', Action.NONE, box, box * 10, 0, 0),
     // main island right wall
-    new ColliderEntity('wall-4', 'wall', box, box * 10, 0, box * 15),
+    new ColliderEntity('wall-4', 'wall', Action.NONE, box, box * 10, 0, box * 15),
     // river
-    new ColliderEntity('wall-5', 'wall', box * 2, box * 10, 0, box * 9)
+    new ColliderEntity('wall-5', 'wall', Action.NONE, box * 2, box * 10, 0, box * 9)
   ];
 
   player = new PlayerEntity('pipette', box * 2, box * 4);
@@ -78,6 +79,7 @@ const onload = () => {
 
   // UI
   TalkingUI.create();
+  ActionUI.create();
 
   // nook npc
   nook = new NpcEntity('Nook', box * 3, box * 2, nookRoutine);

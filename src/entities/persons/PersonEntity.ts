@@ -1,3 +1,4 @@
+import { Action } from '..';
 import { box } from '../../utils';
 import { ColliderEntity } from '../ColliderEntity';
 
@@ -24,7 +25,7 @@ export abstract class PersonEntity extends ColliderEntity {
 
   public constructor(name: string, spriteTop: number, spriteLeft: number, npc: boolean) {
     const type = npc ? 'npc' : 'player';
-    super(type, type, box, box, spriteTop, spriteLeft);
+    super(type, type, Action.TALK, box, box, spriteTop, spriteLeft);
 
     if (npc) {
       this.setTriggerWidth((box) * 3);
