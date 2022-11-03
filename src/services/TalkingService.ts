@@ -31,6 +31,7 @@ export class TalkingService {
     // talking to person
     if (speakerName) { 
       TalkingUI.setSpeakerName(speakerName); 
+      TalkingUI.setSpriteDialog();
     }
 
     player.setState(PersonState.TALKING);

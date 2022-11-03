@@ -82,7 +82,7 @@ const onload = () => {
   ActionUI.create();
 
   // nook npc
-  nook = new NpcEntity('Nook', box * 3, box * 2, nookRoutine);
+  nook = new NpcEntity('Monky', box * 3, box * 2, nookRoutine);
   triggers.push(nook);
   colliders.push(nook);
 

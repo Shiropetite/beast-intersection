@@ -29,13 +29,22 @@
   border: solid 5px brown;
   border-radius: 6px;
   font-size: 16px;
-  
+  display: flex;
 }
 
 .textbox-name {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 4px;
+}
+
+.textbox-sprite {
+  width: 130px;
+  height: 120px;
+  background-image: url(../assets/entities/npc/npc-dialog.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 28px;
 }
 
 .textbox-text {
