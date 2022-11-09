@@ -11,7 +11,7 @@ export class InventoryUI {
     inventoryHTML.id = "inventory"
     inventoryHTML.classList.add('inventory');
 
-    for (let i = 0; i < InventoryService.getCapacity() / 10; i++) {
+    for (let i = 0; i < InventoryService.getInstance().getCapacity() / 10; i++) {
       const inventoryLineHTML = document.createElement('tr');
       inventoryLineHTML.id = i.toString();
       
@@ -53,7 +53,7 @@ export class InventoryUI {
     const cell = document.getElementById(`${ line }-${ column }`);
 
     // update cell content
-    const stack = InventoryService.getContent()[index]
+    const stack = InventoryService.getInstance().getContent()[index]
     if(cell.classList.length > 0) {
       cell.classList.remove(cell.classList.item(0))
     }

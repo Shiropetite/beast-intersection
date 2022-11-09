@@ -1,19 +1,38 @@
 import { Item } from "../items";
 import { InventoryUI } from "../ui";
 import { TimeService } from ".";
+import { InputSignalListener } from "../signals/InputSignal";
 
-export class InventoryService {
-  private static capacity: number;
-  private static content: { item: Item, amount: number }[];
+export class InventoryService implements InputSignalListener {
+  private static instance: InventoryService;
 
-  public static init(capacity: number, content: { item: Item, amount: number }[]) {
+  private capacity: number;
+  private content: { item: Item, amount: number }[];
+
+  //#region Singleton
+  private constructor() { }
+
+  public static getInstance(): InventoryService {
+    if (!InventoryService.instance) {
+      InventoryService.instance = new InventoryService();
+    }
+
+    return InventoryService.instance;
+  }
+  //#endregion
+
+  onKeyPressed(keyPressed: string): void {
+    console.log(keyPressed);
+  }
+
+  public init(capacity: number, content: { item: Item, amount: number }[]) {
     this.capacity = capacity;
     this.content = content
 
     InventoryUI.create();
   }
 
-  public static addItem(item: Item): boolean {
+  public addItem(item: Item): boolean {
     // search existing stack of item to add
     const stack = this.content.filter(s => s.amount < 99).find((cell => cell.item.getName() === item.getName()));
     
@@ -35,28 +54,28 @@ export class InventoryService {
     return true;
   }
 
-  public static removeItem(itemIndex: number): void {
+  public removeItem(itemIndex: number): void {
     this.content = this.content.filter((_, index) => index !== itemIndex);
   }
 
-  public static getContent(): { item: Item, amount: number }[] {
+  public getContent(): { item: Item, amount: number }[] {
     return this.content;
   }
 
-  public static getCapacity(): number {
+  public getCapacity(): number {
     return this.capacity;
   }
 
-  public static openInventory(): void {
+  public openInventory(): void {
     InventoryUI.show();
 
-    TimeService.stop();
+    TimeService.getInstance().stop();
   }
 
-  public static closeInventory(): void {
+  public closeInventory(): void {
     InventoryUI.hide();
 
-    TimeService.start();
+    TimeService.getInstance().start();
   }
 
 }

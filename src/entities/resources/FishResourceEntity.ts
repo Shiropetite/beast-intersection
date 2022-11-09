@@ -19,11 +19,11 @@ export class FishResourceEntity extends TriggerResourceEntity {
 
     // minigame start
     if (player.getState() === PersonState.IDLE) {
-      FishingService.start(this, player.getToolEquiped() as FishingToolItem);
+      FishingService.getInstance().start(this, player.getToolEquiped() as FishingToolItem);
     }
     // minigame ongoing
     else {
-      const minigameState = FishingService.fish(player.getToolEquiped() as FishingToolItem);
+      const minigameState = FishingService.getInstance().fish(player.getToolEquiped() as FishingToolItem);
 
       // minigame won
       if (minigameState === FishingState.WIN) {
@@ -32,7 +32,7 @@ export class FishResourceEntity extends TriggerResourceEntity {
 
       // minigame lost
       else if (minigameState === FishingState.LOSE) {
-        TalkingService.start([{ sentence: `Le poisson s'est enfui...`, notSkip: true }]);
+        TalkingService.getInstance().start([{ sentence: `Le poisson s'est enfui...`, notSkip: true }]);
       }
     }
   }

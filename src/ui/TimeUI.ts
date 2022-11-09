@@ -41,7 +41,7 @@ export class TimeUI {
   }
 
   public static setTime(): void {
-    TimeUI.time.innerText = TimeService.getCurrentTime();
+    TimeUI.time.innerText = TimeService.getInstance().getCurrentTime();
   }
   //#endregion
 }

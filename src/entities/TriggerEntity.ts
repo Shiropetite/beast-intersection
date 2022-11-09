@@ -1,20 +1,34 @@
+import { box } from "../utils";
+
 export class TriggerEntity {
 
-  private triggerTop: number;
-  private triggerLeft: number;
-  private triggerHeight: number;
-  private triggerWidth: number;
+  private top: number;
+  private left: number;
+  private height: number;
+  private width: number;
 
-  public constructor(triggerTop: number, triggerLeft: number, triggerHeight: number, triggerWidth: number) {
-      this.triggerTop = triggerTop;
-      this.triggerLeft = triggerLeft;
-      this.triggerHeight = triggerHeight;
-      this.triggerWidth = triggerWidth;
+  public constructor(top: number, left: number, height: number, width: number) {
+    this.top = top;
+    this.left = left;
+    this.height = height;
+    this.width = width;
   }
 
   public isTriggeredBy(other: TriggerEntity): boolean {
-    return (this.triggerLeft + this.triggerWidth) > other.triggerLeft && this.triggerLeft < (other.triggerLeft + other.triggerWidth)
-      && (this.triggerTop + this.triggerHeight) > other.triggerTop && this.triggerTop < (other.triggerTop + other.triggerHeight);
+    return (this.left + this.width) > other.left && this.left < (other.left + other.width)
+      && (this.top + this.height) > other.top && this.top < (other.top + other.height);
   }
+
+  public getTop(): number { return this.top; }
+
+  public getLeft(): number { return this.left; }
+
+  public moveUp() { this.top -= box; }
+
+  public moveDown() { this.top += box; }
+
+  public moveLeft() { this.left -= box; }
+
+  public moveRight() { this.left += box; }
 
 }

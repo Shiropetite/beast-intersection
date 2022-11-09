@@ -1,0 +1,22 @@
+.bug {
+  position: absolute;
+  background-image: url(../assets/entities/fish/fish.png);
+  background-size: cover;
+  image-rendering: pixelated;
+  transition: transform linear 0.1s;
+}
+
+.catch-container {
+  position: absolute;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: rgb(208, 110, 75);
+  border: solid 5px brown;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 36px;
+  height: 20px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+}

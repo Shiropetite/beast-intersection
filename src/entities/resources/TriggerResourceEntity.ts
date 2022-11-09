@@ -19,6 +19,9 @@ export class TriggerResourceEntity extends TriggerEntity {
     if (behaviour === ResourceEntityBehaviour.FISHING) {
       super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, Action.FISH, box, box, spriteTop, spriteLeft, (box) * 3, (box) * 3, spriteTop - box, spriteLeft - box);
     }
+    if (behaviour === ResourceEntityBehaviour.CATCHING) {
+      super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, Action.CATCH, box, box, spriteTop, spriteLeft);
+    }
     else {
       super(`${ name }-${ TriggerResourceEntity.CURRENT_ID++ }`, name, Action.PICK_UP, box, box, spriteTop, spriteLeft);
     }
@@ -28,7 +31,7 @@ export class TriggerResourceEntity extends TriggerEntity {
   }
 
   public destroy(): void {
-    const dialogNext  = TalkingService.talk();
+    const dialogNext  = TalkingService.getInstance().talk();
 
     if (!dialogNext) { 
       // destroy entity
@@ -46,8 +49,8 @@ export class TriggerResourceEntity extends TriggerEntity {
     }
     // pick up resource
     else if (player.getState() === PersonState.IDLE) {
-      InventoryService.addItem(this.item);
-      TalkingService.start([{ sentence: `Vous ramassez 1 ${ this.item.getName() } !` }]);
+      InventoryService.getInstance().addItem(this.item);
+      TalkingService.getInstance().start([{ sentence: `Vous ramassez 1 ${ this.item.getName() } !` }]);
     }
   }
 

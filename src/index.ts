@@ -11,10 +11,13 @@ import {
   ColliderResourceEntity,
   Action
 } from './entities';
-import { TimeService, InventoryService } from './services';
+import { TimeService, InventoryService, CatchingService, FishingService, TalkingService } from './services';
 import { ActionUI, TalkingUI } from './ui';
-import { Item, FishItem } from './items';
+import { Item, FishItem, BugItem } from './items';
 import { FishResourceEntity } from './entities/resources/FishResourceEntity';
+import { BugResourceEntity } from './entities/resources/BugResourceEntity';
+import { InputSignalSender } from './signals/InputSignal';
+import { PlayerService } from './services/PlayerService';
 
 export let camera: HTMLElement = null;
 export let map: HTMLElement = null;
@@ -74,8 +77,8 @@ const onload = () => {
   colliders.push(player);
 
   // services
-  TimeService.init(6,0);
-  InventoryService.init(40, []);
+  TimeService.getInstance().init(6,0);
+  InventoryService.getInstance().init(40, []);
 
   // UI
   TalkingUI.create();
@@ -89,12 +92,23 @@ const onload = () => {
   triggers.push(new TriggerResourceEntity('stone', (box * 7), (box * 4), new Item("pierre")));
   triggers.push(new FishResourceEntity('fish', (box * 4), (box * 9), new FishItem("carpe", 300, 3, 500, 2000, 3000, 0.5, 1)));
   triggers.push(new FishResourceEntity('fish', (box * 0), (box * 4), new FishItem("bar commun", 200, 1, 500, 2000, 3000, 0.5, 1)));
+  triggers.push(new BugResourceEntity('bug', (box * 5), (box * 3), new BugItem("cocinelle", 200, 3000)));
   
   let tree = new ColliderResourceEntity('tree', (box * 2), (box * 7), [{ item: new Item("love u"), rate: 0.01 }, { item: new Item("feuille"), rate: 0.2 }, { item: new Item("branche"), rate: 1 }])
   triggers.push(tree);
   colliders.push(tree);
 
-  window.addEventListener('keypress', player.listenInput);
+  // Start service
+  PlayerService.getInstance().setPlayer(player);
+
+  // Add signal listeners
+  InputSignalSender.getInstance().registerListener(CatchingService.getInstance());
+  InputSignalSender.getInstance().registerListener(FishingService.getInstance());
+  InputSignalSender.getInstance().registerListener(InventoryService.getInstance());
+  InputSignalSender.getInstance().registerListener(TalkingService.getInstance());
+  InputSignalSender.getInstance().registerListener(PlayerService.getInstance());
+
+  window.addEventListener('keypress', InputSignalSender.getInstance().raise);
 } 
 
 window.addEventListener('load', onload);

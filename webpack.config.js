@@ -13,6 +13,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
      title: 'Animal crossing',
+     //favicon: "./src/assets/favicon.ico",
     }),
   ],
   output: {

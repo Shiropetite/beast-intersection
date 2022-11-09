@@ -1,6 +1,7 @@
 import { TimeService } from ".";
 import { player } from "..";
 import { PersonState } from "../entities";
+import { InputSignalListener } from "../signals/InputSignal";
 import { TalkingUI } from "../ui";
 
 export interface DialogElement {
@@ -15,13 +16,31 @@ export interface DialogElement {
   notSkip?: boolean
 }
 
-export class TalkingService {
-  private static dialog: DialogElement[]; 
-  private static currentDialogElement: DialogElement;
-  private static playerAnswerIndex: number;
+export class TalkingService implements InputSignalListener {
+  private static instance: TalkingService;
+
+  private dialog: DialogElement[]; 
+  private currentDialogElement: DialogElement;
+  private playerAnswerIndex: number;
+
+  //#region Singleton
+  private constructor() { }
+
+  public static getInstance(): TalkingService {
+    if (!TalkingService.instance) {
+    TalkingService.instance = new TalkingService();
+    }
+
+    return TalkingService.instance;
+  }
+  //#endregion
+
+  onKeyPressed(keyPressed: string): void {
+    console.log(keyPressed);
+  }
 
   //#region Methods
-  public static start(dialog: DialogElement[], speakerName?: string): void {
+  public start(dialog: DialogElement[], speakerName?: string): void {
     this.dialog = [ ...dialog ];
     this.currentDialogElement = null;
     this.playerAnswerIndex = -1;
@@ -38,21 +57,21 @@ export class TalkingService {
 
     this.talk();
 
-    TimeService.stop();
+    TimeService.getInstance().stop();
   }
 
-  private static end(): void {
+  private end(): void {
     TalkingUI.setSpeakerName('');
     TalkingUI.setText('');
     TalkingUI.hide();
 
     player.setState(PersonState.IDLE);
 
-    TimeService.start();
+    TimeService.getInstance().start();
   }
 
   // returns true if dialog is not over
-  public static talk(): boolean {
+  public talk(): boolean {
     if (this.dialog === undefined) { return; }
 
     // player answer
@@ -92,32 +111,32 @@ export class TalkingService {
     return true;
   }
 
-  private static answer(answers: any[]): void {
+  private answer(answers: any[]): void {
     // display all answers
     for (let i = 0; i < answers.length; i++) {
       TalkingUI.showAnswer(answers[i].playerAnswer, i);
     }
 
     // set indicator on first answer by default
-    TalkingService.playerAnswerIndex = 0;
-    TalkingUI.showAnswerIndicator(TalkingService.playerAnswerIndex);
+    this.playerAnswerIndex = 0;
+    TalkingUI.showAnswerIndicator(this.playerAnswerIndex);
   }
 
   // select answer depending on player input
-  public static selectAnswer(goToNext: boolean) {
+  public selectAnswer(goToNext: boolean) {
     // remove indicator from previous answer
-    TalkingUI.hideAnswerIndicator(TalkingService.playerAnswerIndex);
+    TalkingUI.hideAnswerIndicator(this.playerAnswerIndex);
 
     // select next answer
-    if (goToNext && TalkingService.playerAnswerIndex < this.currentDialogElement.answers.length - 1) {
-      TalkingService.playerAnswerIndex++;
+    if (goToNext && this.playerAnswerIndex < this.currentDialogElement.answers.length - 1) {
+      this.playerAnswerIndex++;
     }
     // select previous answer
-    else if (!goToNext && TalkingService.playerAnswerIndex > 0) {
-      TalkingService.playerAnswerIndex--;
+    else if (!goToNext && this.playerAnswerIndex > 0) {
+      this.playerAnswerIndex--;
     }
 
-    TalkingUI.showAnswerIndicator(TalkingService.playerAnswerIndex);
+    TalkingUI.showAnswerIndicator(this.playerAnswerIndex);
   }
   //#endregion
   

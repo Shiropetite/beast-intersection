@@ -1,22 +1,18 @@
 import { colliders } from "..";
+import { box } from "../utils";
 
 export class ColliderEntity {
   
-  private colliderTop: number;
-  private colliderLeft: number;
-  private colliderHeight: number;
-  private colliderWidth: number;
+  private top: number;
+  private left: number;
+  private height: number;
+  private width: number;
 
-  public constructor(colliderTop: number, colliderLeft: number, colliderHeight: number, colliderWidth: number) {
-    this.colliderTop = colliderTop;
-    this.colliderLeft = colliderLeft;
-    this.colliderHeight = colliderHeight;
-    this.colliderWidth = colliderWidth;
-  }
-
-  public isCollidingWith(other: ColliderEntity): boolean {
-    return (this.colliderLeft + this.colliderWidth) > other.colliderLeft && this.colliderLeft < (other.colliderLeft + other.colliderWidth)
-      && (this.colliderTop + this.colliderHeight) > other.colliderTop && this.colliderTop < (other.colliderTop + other.colliderHeight);
+  public constructor(top: number, left: number, height: number, width: number) {
+    this.top = top;
+    this.left = left;
+    this.height = height;
+    this.width = width;
   }
 
   public isColliding(): boolean {
@@ -26,5 +22,22 @@ export class ColliderEntity {
 
     return false;
   }
+
+  public isCollidingWith(other: ColliderEntity): boolean {
+    return (this.left + this.width) > other.left && this.left < (other.left + other.width)
+      && (this.top + this.height) > other.top && this.top < (other.top + other.height);
+  }
+
+  public getTop(): number { return this.top; }
+
+  public getLeft(): number { return this.left; }
+
+  public moveUp() { this.top -= box; }
+
+  public moveDown() { this.top += box; }
+
+  public moveLeft() { this.left -= box; }
+
+  public moveRight() { this.left += box; }
 
 }

@@ -2,87 +2,87 @@ import { triggers } from '..';
 import { TimeUI } from '../ui';
 
 export class TimeService {
-  private static interval: NodeJS.Timer;
-  private static hours: number;
-  private static minutes: number;
-  private static timeTicking: boolean;
+  private static instance: TimeService;
+
+  private interval: NodeJS.Timer;
+  private hours: number;
+  private minutes: number;
+  private timeTicking: boolean;
+
+  //#region Singleton
+  private constructor() { }
+
+  public static getInstance(): TimeService {
+    if (!TimeService.instance) {
+      TimeService.instance = new TimeService();
+    }
+
+    return TimeService.instance;
+  }
+  //#endregion
 
   //#region Methods
-  public static init(hours: number, minutes: number): void {
-    TimeService.hours = hours;
-    TimeService.minutes = minutes;
+  public init(hours: number, minutes: number): void {
+    this.hours = hours;
+    this.minutes = minutes;
 
     TimeUI.create();
 
-    TimeService.start();
+    this.start();
   }
 
-  public static start(): void {
+  public start(): void {
     TimeUI.resume();
     this.timeTicking = true;
 
-    TimeService.interval = setInterval(() => {
-      if (TimeService.minutes === 50) {
-        if (TimeService.hours === 23) {
-          TimeService.hours = 0;
-        }
-        else {
-          TimeService.hours++;
-        }
-        
-        TimeService.minutes = 0;
-      }
-      else {
-        TimeService.minutes += 10;
-      }
+    this.interval = setInterval(() => {
+      if (this.minutes === 50) {
+        if (this.hours === 23) { this.hours = 0; }
+        else { this.hours++; }
 
-      TimeService.tick();
+        this.minutes = 0;
+      }
+      else { this.minutes += 10; }
+
+      this.tick();
     }, 5000); // time tick every 5s
   }
 
-  public static stop(): void {
-    clearInterval(TimeService.interval);
-
+  public stop(): void {
+    clearInterval(this.interval);
     this.timeTicking = false;
     TimeUI.pause();
   }
 
-  public static tick(): void {
+  //TODO: time signal
+  public tick(): void {
     // notify entities affected by time
-    for (const entity of triggers) {
-      entity.onTimeTick();
-    }
-
+    for (const entity of triggers) { entity.onTimeTick(); }
     // update displayed time
     TimeUI.setTime();
   }
 
-  public static isTimeTicking(): boolean {
+  public isTimeTicking(): boolean {
     return this.timeTicking; 
   }
 
-  public static getCurrentTime(): string {
-    const hours = `${ TimeService.hours < 10 ? '0' : ''}${ TimeService.hours }`;
-    const minutes = `${ TimeService.minutes < 10 ? '0' : ''}${ TimeService.minutes }`;
+  public getCurrentTime(): string {
+    const hours = `${ this.hours < 10 ? '0' : ''}${ this.hours }`;
+    const minutes = `${ this.minutes < 10 ? '0' : ''}${ this.minutes }`;
     return `${ hours }:${ minutes }`;
   }
 
-  public static getPreviousTime(currentTime: string): string {
+  public getPreviousTime(currentTime: string): string {
     let hours = Number.parseInt(currentTime.split(":")[0]);
     let minutes = Number.parseInt(currentTime.split(":")[1]);
     
     if (minutes === 0) {
-      if (hours === 0) {
-        hours = 23;
-      }
-      else {
-        hours--;
-      }
+      if (hours === 0) { hours = 23; }
+      else { hours--; }
+
       minutes = 50;
     }
-    else {
-      minutes -= 10;
-    }
+    else { minutes -= 10; }
     
     return `${ hours < 10 ? '0' : '' }${ hours }:${ minutes < 10 ? '0' : '' }${ minutes }`;
   }

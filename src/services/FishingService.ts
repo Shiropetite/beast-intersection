@@ -3,6 +3,7 @@ import { PersonState, TriggerResourceEntity } from '../entities';
 import { FishItem, FishingToolItem } from './../items';
 import { TimeService } from '../services';
 import { player } from '..';
+import { InputSignalListener } from '../signals/InputSignal';
 
 export enum FishingState {
   ONGOING,
@@ -10,13 +11,31 @@ export enum FishingState {
   LOSE
 }
 
-export class FishingService {
-  private static fishItem: FishItem;
-  private static isFrenzy: boolean;
-  private static regenInterval: NodeJS.Timer;
-  private static frenzyInterval: NodeJS.Timer;
+export class FishingService implements InputSignalListener {
+  private static instance: FishingService;
 
-  public static start(fishEntity: TriggerResourceEntity, fishingRod: FishingToolItem) : void {
+  private fishItem: FishItem;
+  private isFrenzy: boolean;
+  private regenInterval: NodeJS.Timer;
+  private frenzyInterval: NodeJS.Timer;
+
+  //#region Singleton
+  private constructor() { }
+
+  public static getInstance(): FishingService {
+    if (!FishingService.instance) {
+      FishingService.instance = new FishingService();
+    }
+
+    return FishingService.instance;
+  }
+  //#endregion
+
+  onKeyPressed(keyPressed: string): void {
+    console.log(keyPressed);
+  }
+
+  public start(fishEntity: TriggerResourceEntity, fishingRod: FishingToolItem) : void {
     this.isFrenzy = false;
     this.fishItem = fishEntity.getItem() as FishItem;
     FishingUI.create(fishEntity.getSpriteTop(), fishEntity.getSpriteLeft());
@@ -24,7 +43,7 @@ export class FishingService {
     player.setState(PersonState.ACTING);
   
     // interval for fish hp and fishing rod hp regen
-    FishingService.regenInterval = setInterval(() => { 
+    this.regenInterval = setInterval(() => { 
       if (this.fishItem.getHealthPoints() < this.fishItem.getMaxHealthPoints()) {
         this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() + this.fishItem.getRegenPoints());
         
@@ -38,7 +57,7 @@ export class FishingService {
     }, this.fishItem.getRegenSpeed());
 
     // interval for fish frenzy
-    FishingService.frenzyInterval = setInterval(() => {
+    this.frenzyInterval = setInterval(() => {
       this.isFrenzy = true;
       FishingUI.startFrenzy(fishEntity.getSprite());
       setTimeout(() => { 
@@ -47,26 +66,26 @@ export class FishingService {
       }, this.fishItem.getFrenzyDuration());
     }, this.fishItem.getFrenzyFrequency() + this.fishItem.getFrenzyDuration());
 
-    TimeService.stop();
+    TimeService.getInstance().stop();
   }
 
-  public static end(): void {
-    clearInterval(FishingService.regenInterval);
-    clearInterval(FishingService.frenzyInterval);
+  public end(): void {
+    clearInterval(this.regenInterval);
+    clearInterval(this.frenzyInterval);
 
     FishingUI.destroy();
 
-    TimeService.start();
+    TimeService.getInstance().start();
 
     player.setState(PersonState.IDLE);
   }
 
-  public static fail(fishingRod: FishingToolItem): void {
+  public fail(fishingRod: FishingToolItem): void {
     fishingRod.setDurability(0);
     this.fishItem.setHealthPoints(this.fishItem.getMaxHealthPoints());
   }
 
-  public static fish(fishingRod: FishingToolItem): FishingState {
+  public fish(fishingRod: FishingToolItem): FishingState {
     if (this.isFrenzy) {
       this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() - fishingRod.getPower() * this.fishItem.getFrenzyMultiplier());
       fishingRod.setDurability(fishingRod.getDurability() + fishingRod.getResistance() / this.fishItem.getFrenzyMultiplier());
