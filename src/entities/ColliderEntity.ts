@@ -28,9 +28,17 @@ export class ColliderEntity {
       && (this.top + this.height) > other.top && this.top < (other.top + other.height);
   }
 
+  public isOnPosition(positionTop: number, positionLeft: number) {
+    return this.top === (positionTop * box) && this.left === (positionLeft * box);
+  }
+
   public getTop(): number { return this.top; }
 
   public getLeft(): number { return this.left; }
+
+  public getHeight(): number { return this.height; }
+
+  public getWidth(): number { return this.width; }
 
   public moveUp() { this.top -= box; }
 

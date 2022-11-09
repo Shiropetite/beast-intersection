@@ -45,6 +45,8 @@ export class NpcEntity {
 
   public getSprite(): SpriteEntity { return this.sprite; }
 
+  public getTrigger(): TriggerEntity { return this.trigger; }
+
   public getCollider(): ColliderEntity { return this.collider; }
 
   public getName(): string { return this.name; }

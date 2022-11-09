@@ -17,10 +17,6 @@ export class PlayerService implements InputSignalListener {
     return PlayerService.instance;
   }
 
-  /**
-   * Listens to keyboard inputs
-   * @param keyPressed keyboard input
-   */
   onKeyPressed(keyPressed: string): void {
     // Press 'z, q, s, d'
     const directionKey = Object.values(DirectionKeys).find(value =>  value === keyPressed);

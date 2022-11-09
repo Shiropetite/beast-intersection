@@ -1,3 +1,4 @@
+import { ColliderEntity } from ".";
 import { box } from "../utils";
 
 export class TriggerEntity {
@@ -14,9 +15,14 @@ export class TriggerEntity {
     this.width = width;
   }
 
-  public isTriggeredBy(other: TriggerEntity): boolean {
+  public isTriggeredByTrigger(other: TriggerEntity): boolean {
     return (this.left + this.width) > other.left && this.left < (other.left + other.width)
       && (this.top + this.height) > other.top && this.top < (other.top + other.height);
+  }
+
+  public isTriggeredByCollider(other: ColliderEntity): boolean {
+    return (this.left + this.width) > other.getLeft() && this.left < (other.getLeft() + other.getWidth())
+      && (this.top + this.height) > other.getTop() && this.top < (other.getTop() + other.getHeight());
   }
 
   public getTop(): number { return this.top; }
