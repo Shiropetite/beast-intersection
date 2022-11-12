@@ -1,7 +1,8 @@
-import { TimeService } from ".";
+import { TalkingService, TimeService } from ".";
+import { SpriteDirections } from "../components";
 import { NpcEntity, NpcStates, PlayerEntity } from "../entities";
 import { InputSignalListener, TimeSignalListener } from "../signals";
-import { box, SpriteDirections } from "../utils";
+import { ActionKeys } from "../utils";
 
 export class NpcService implements TimeSignalListener, InputSignalListener {
 
@@ -19,7 +20,7 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
     return NpcService.instance;
   }
   
-  onTick(hours: string, minutes: string): void {
+  onTick(hours: number, minutes: number): void {
     const formattedTime = `${hours}:${minutes}`;
 
     this.npcs.forEach((npc) => {
@@ -34,12 +35,12 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
   }
 
   onKeyPressed(keyPressed: string): void {
-    if (keyPressed === 'e') {
+    if (keyPressed === ActionKeys.ACT) {
       this.npcs.forEach((npc) => {
         if (npc.getTrigger().isTriggeredByCollider(PlayerEntity.getInstance().getCollider())) {
-          // act
+          if (npc.getState() === NpcStates.IDLE) { TalkingService.getInstance().start(npc.getRoutine().dialog.dialog, npc.getTrigger()); }
         }
-      })
+      });
     }
   }
 
@@ -50,62 +51,58 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
    * @param targetLeft 
    */
   private move(npc: NpcEntity, targetTop: number, targetLeft: number): void {
-    // time interval between each step
-    const moveInterval = setInterval(() => {
-      // cannot move unless idle
-      if (npc.getState() !== NpcStates.IDLE) { return; }
+  //   // time interval between each step
+  //   const moveInterval = setInterval(() => {
+  //     // cannot move unless idle
+  //     if (npc.getState() !== NpcStates.IDLE) { return; }
 
-      npc.setState(NpcStates.MOVING);
+  //     npc.setState(NpcStates.MOVING);
 
-      // npc is at target position
-      if (npc.getCollider().isOnPosition(targetTop, targetLeft)) {
-        clearInterval(moveInterval);
-      }
+  //     // npc is at target position
+  //     if (npc.getCollider().isOnPosition(targetTop, targetLeft)) {
+  //       clearInterval(moveInterval);
+  //     }
 
-      // npc is below target position
-      if (npc.getCollider().getTop() > (targetTop * box)) { NpcService.getInstance().moveUp(npc); }
-      // npc is above target position
-      else if (npc.getCollider().getTop() < (targetTop * box)) { NpcService.getInstance().moveDown(npc); }
-      // npc is right of target position
-      else if (npc.getCollider().getLeft() > (targetLeft * box)) { NpcService.getInstance().moveLeft(npc); }
-      // npc is left of target position
-      else if (npc.getCollider().getLeft() < (targetLeft * box)) { NpcService.getInstance().moveRight(npc); }
+  //     // npc is below target position
+  //     if (npc.getCollider().getTop() > (targetTop * box)) { NpcService.getInstance().moveUp(npc); }
+  //     // npc is above target position
+  //     else if (npc.getCollider().getTop() < (targetTop * box)) { NpcService.getInstance().moveDown(npc); }
+  //     // npc is right of target position
+  //     else if (npc.getCollider().getLeft() > (targetLeft * box)) { NpcService.getInstance().moveLeft(npc); }
+  //     // npc is left of target position
+  //     else if (npc.getCollider().getLeft() < (targetLeft * box)) { NpcService.getInstance().moveRight(npc); }
 
-      npc.setState(NpcStates.IDLE);
-    }, 500) // move every 0.5s
-  }
+  //     npc.setState(NpcStates.IDLE);
+  //   }, 500) // move every 0.5s
+  // }
 
-  public moveUp(npc: NpcEntity): void {
-    npc.setSpriteDirection(SpriteDirections.UP);
-    npc.getCollider().moveUp();
+  // public moveUp(npc: NpcEntity): void {
+  //   npc.getCollider().moveUp();
 
-    if (npc.getCollider().isColliding()) { npc.getCollider().moveDown(); }
-    else { npc.getSprite().moveUp(); }
-  }
+  //   if (npc.getCollider().isColliding()) { npc.getCollider().moveDown(); }
+  //   else { npc.getSprite().moveUp(); }
+  // }
 
-  public moveDown(npc: NpcEntity): void {
-    npc.setSpriteDirection(SpriteDirections.DOWN);
-    npc.getCollider().moveDown();
+  // public moveDown(npc: NpcEntity): void {
+  //   npc.getCollider().moveDown();
 
-    if (npc.getCollider().isColliding()) { npc.getCollider().moveUp(); }
-    else { npc.getSprite().moveDown(); }
-  }
+  //   if (npc.getCollider().isColliding()) { npc.getCollider().moveUp(); }
+  //   else { npc.getSprite().moveDown(); }
+  // }
 
-  public moveLeft(npc: NpcEntity): void {
-    npc.setSpriteDirection(SpriteDirections.LEFT);
-    npc.getCollider().moveLeft();
+  // public moveLeft(npc: NpcEntity): void {
+  //   npc.getCollider().moveLeft();
 
-    if (npc.getCollider().isColliding()) { npc.getCollider().moveRight(); }
-    else { npc.getSprite().moveLeft(); }
-  }
+  //   if (npc.getCollider().isColliding()) { npc.getCollider().moveRight(); }
+  //   else { npc.getSprite().moveLeft(); }
+  // }
 
-  public moveRight(npc: NpcEntity): void {
-    npc.setSpriteDirection(SpriteDirections.RIGHT);
-    npc.getCollider().moveRight();
+  // public moveRight(npc: NpcEntity): void {
+  //   npc.getCollider().moveRight();
 
-    if (npc.getCollider().isColliding()) { npc.getCollider().moveLeft(); }
-    else { npc.getSprite().moveRight(); }
-  }
+  //   if (npc.getCollider().isColliding()) { npc.getCollider().moveLeft(); }
+  //   else { npc.getSprite().moveRight(); }
+  // }
 
   // public act(): void {
   //   let time = TimeService.getInstance().getCurrentTime();
@@ -135,7 +132,7 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
   //       }
   //     }
   //   }
-  // }
+  }
   //#endregion
   
 }

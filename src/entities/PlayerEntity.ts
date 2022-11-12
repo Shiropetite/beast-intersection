@@ -1,5 +1,4 @@
-import { ColliderEntity, SpriteEntity } from '.';
-import { SpriteDirections } from '../utils';
+import { ColliderComponent, SpriteComponent } from '../components';
 import { ToolItem, FishingToolItem } from './../items';
 
 export enum PlayerStates {
@@ -8,41 +7,44 @@ export enum PlayerStates {
   TALKING,
   FISHING,
   CATCHING,
+  LOCKED,
 }
 
 export class PlayerEntity {
   
   private static instance: PlayerEntity;
 
-  private readonly sprite: SpriteEntity;
-  private readonly collider: ColliderEntity;
+  private readonly sprite: SpriteComponent;
+  private readonly collider: ColliderComponent;
 
   private state: PlayerStates;
-  private spriteDirection: SpriteDirections;
   private toolEquiped: ToolItem | null;
 
-  public constructor(sprite: SpriteEntity, collider: ColliderEntity) {
-    this.sprite = sprite;
-    this.collider = collider;
+  public constructor() {
+    this.sprite = new SpriteComponent('player', 'player', 0, 0, 0, 0);
+    this.collider = null;
 
     this.state = PlayerStates.IDLE;
-    this.spriteDirection = SpriteDirections.DOWN;
     this.toolEquiped = new FishingToolItem('canne à peche en bois', 10, 100, 10);
 
     PlayerEntity.instance = this;
   }
 
-  public static getInstance(): PlayerEntity { return PlayerEntity.instance; }
+  public static getInstance(): PlayerEntity { 
+    if (!PlayerEntity.instance) {
+      PlayerEntity.instance = new PlayerEntity();
+    }
 
-  public getSprite(): SpriteEntity { return this.sprite; }
+    return PlayerEntity.instance; 
+  }
 
-  public getCollider(): ColliderEntity { return this.collider; }
+  public getSprite(): SpriteComponent { return this.sprite; }
+
+  public getCollider(): ColliderComponent { return this.collider; }
 
   public getState(): PlayerStates { return this.state; }
 
   public setState(state: PlayerStates): void { if (this.state !== state) { this.state = state; }}
-
-  public setSpriteDirection(spriteDirection: SpriteDirections): void { this.spriteDirection = spriteDirection; }
 
   public getToolEquiped(): ToolItem { return this.toolEquiped; }
 

@@ -27,27 +27,27 @@ td {
 
 
 .inventory .pierre {
-  background-image: url(../assets/items/stone.png);
+  background-image: url(../assets/sprites/items/stone.png);
 }
 
 .inventory .branche {
-  background-image: url(../assets/items/branch.png);
+  background-image: url(../assets/sprites/items/branch.png);
 }
 
 .inventory .feuille {
-  background-image: url(../assets/items/leaf.png);
+  background-image: url(../assets/sprites/items/leaf.png);
 }
 
 .inventory .bar-commun {
-  background-image: url(../assets/items/bar-commun.png);
+  background-image: url(../assets/sprites/items/bar-commun.png);
 }
 
 .inventory .carpe {
-  background-image: url(../assets/items/carpe.png);
+  background-image: url(../assets/sprites/items/carpe.png);
 }
 
 .inventory .love-u {
-  background-image: url(../assets/items/heart.png);
+  background-image: url(../assets/sprites/items/heart.png);
 }
 
 td .qty {

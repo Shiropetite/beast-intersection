@@ -1,14 +1,14 @@
 
 .fish {
   position: absolute;
-  background-image: url(../assets/entities/fish/fish.png);
+  background-image: url(../assets/sprites/entities/fish/fish.png);
   background-size: cover;
   image-rendering: pixelated;
   transition: transform linear 0.1s;
 }
 
 .frenzy {
-  background-image: url(../assets/entities/fish/fish-frenzy.png);
+  background-image: url(../assets/sprites/entities/fish/fish-frenzy.png);
 }
 
 .fish-bar-container {

@@ -1,7 +1,5 @@
-import { colliders } from "..";
-import { box } from "../utils";
 
-export class ColliderEntity {
+export class ColliderComponent {
   
   private top: number;
   private left: number;
@@ -16,21 +14,22 @@ export class ColliderEntity {
   }
 
   public isColliding(): boolean {
-    for (let collider of colliders) {
-      if (this.isCollidingWith(collider) && this !== collider) { return true; }
-    }
+    //FIXME:
+    // for (let collider of colliders) {
+    //   if (this.isCollidingWith(collider) && this !== collider) { return true; }
+    // }
 
     return false;
   }
 
-  public isCollidingWith(other: ColliderEntity): boolean {
+  public isCollidingWith(other: ColliderComponent): boolean {
     return (this.left + this.width) > other.left && this.left < (other.left + other.width)
       && (this.top + this.height) > other.top && this.top < (other.top + other.height);
   }
 
-  public isOnPosition(positionTop: number, positionLeft: number) {
-    return this.top === (positionTop * box) && this.left === (positionLeft * box);
-  }
+  // public isOnPosition(positionTop: number, positionLeft: number) {
+  //   return this.top === (positionTop * box) && this.left === (positionLeft * box);
+  // }
 
   public getTop(): number { return this.top; }
 
@@ -40,12 +39,12 @@ export class ColliderEntity {
 
   public getWidth(): number { return this.width; }
 
-  public moveUp() { this.top -= box; }
+  // public moveUp() { this.top -= box; }
 
-  public moveDown() { this.top += box; }
+  // public moveDown() { this.top += box; }
 
-  public moveLeft() { this.left -= box; }
+  // public moveLeft() { this.left -= box; }
 
-  public moveRight() { this.left += box; }
+  // public moveRight() { this.left += box; }
 
 }

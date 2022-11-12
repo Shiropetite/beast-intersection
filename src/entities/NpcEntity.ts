@@ -1,6 +1,5 @@
-import { SpriteEntity, TriggerEntity, ColliderEntity  } from '.';
-import { DialogElement } from '../services';
-import { SpriteDirections } from '../utils';
+import { SpriteComponent, TriggerComponent, ColliderComponent } from '../components';
+import { Sentence } from '../services';
 
 export interface NpcRoutine {
   [time: string]: {
@@ -9,7 +8,7 @@ export interface NpcRoutine {
       top: number,
       left: number
     },
-    dialog?: DialogElement[]
+    dialog?: Sentence[]
   }
 }
 
@@ -21,17 +20,16 @@ export enum NpcStates {
 
 export class NpcEntity {
   
-  private readonly sprite: SpriteEntity;
-  private readonly trigger: TriggerEntity;
-  private readonly collider: ColliderEntity;
+  private readonly sprite: SpriteComponent;
+  private readonly trigger: TriggerComponent;
+  private readonly collider: ColliderComponent;
 
   private readonly name: string;
   
   private state: NpcStates;
-  private spriteDirection: SpriteDirections;
   private routine: NpcRoutine;
 
-  public constructor(sprite: SpriteEntity, trigger: TriggerEntity, collider: ColliderEntity, name: string, routine: NpcRoutine) {
+  public constructor(sprite: SpriteComponent, trigger: TriggerComponent, collider: ColliderComponent, name: string, routine: NpcRoutine) {
     this.sprite = sprite;
     this.trigger = trigger;
     this.collider = collider;
@@ -39,23 +37,21 @@ export class NpcEntity {
     this.name = name;
 
     this.state = NpcStates.IDLE;
-    this.spriteDirection = SpriteDirections.DOWN;
+    //TODO: add npc starting cell
     this.routine = routine;
   }
 
-  public getSprite(): SpriteEntity { return this.sprite; }
+  public getSprite(): SpriteComponent { return this.sprite; }
 
-  public getTrigger(): TriggerEntity { return this.trigger; }
+  public getTrigger(): TriggerComponent { return this.trigger; }
 
-  public getCollider(): ColliderEntity { return this.collider; }
+  public getCollider(): ColliderComponent { return this.collider; }
 
   public getName(): string { return this.name; }
 
   public getState(): NpcStates { return this.state; }
 
   public setState(state: NpcStates): void { if (this.state !== state) { this.state = state; }}
-
-  public setSpriteDirection(spriteDirection: SpriteDirections): void { this.spriteDirection = spriteDirection; }
 
   public getRoutine(): NpcRoutine { return this.routine; }
 

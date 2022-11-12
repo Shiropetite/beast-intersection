@@ -31,7 +31,7 @@ body {
   border: solid 3px white
 }
 
-.map {
+/* .map {
   image-rendering: pixelated;
   background-image: url(../assets/map.png);
   background-size: 100%;
@@ -39,8 +39,24 @@ body {
   height: calc(10 * var(--grid-cell));
   position: relative;
   transition: all linear 0.1s;
-}
+} */
 
 .wall{
   position: absolute;
+}
+
+.cell {
+  position: absolute;
+  width: 126px;
+  height: 126px;
+}
+
+.water {
+  background-color: rgb(141, 213, 255);
+  border: solid 1px rgb(0, 118, 187);
+}
+
+.ground {
+  background-color: rgb(96, 205, 62);
+  border: solid 1px rgb(36, 155, 0);
 }

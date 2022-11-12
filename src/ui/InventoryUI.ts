@@ -1,5 +1,4 @@
-import { camera, player } from '..';
-import { PersonState } from '../entities';
+import { camera } from '..';
 import { InventoryService } from '../services';
 
 export class InventoryUI {
@@ -33,12 +32,14 @@ export class InventoryUI {
   }
 
   public static show(): void {
-    player.setState(PersonState.MENUING);
+    //FIXME:
+    // player.setState(PersonState.MENUING);
     InventoryUI.inventory.style.display = 'block';
   }
 
   public static hide(): void {
-    player.setState(PersonState.IDLE);
+    //FIXME:
+    // player.setState(PersonState.IDLE);
     InventoryUI.inventory.style.display = 'none';
   }
 

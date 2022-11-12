@@ -1,7 +1,6 @@
-import { ColliderEntity } from ".";
-import { box } from "../utils";
+import { ColliderComponent } from ".";
 
-export class TriggerEntity {
+export class TriggerComponent {
 
   private top: number;
   private left: number;
@@ -15,12 +14,12 @@ export class TriggerEntity {
     this.width = width;
   }
 
-  public isTriggeredByTrigger(other: TriggerEntity): boolean {
+  public isTriggeredByTrigger(other: TriggerComponent): boolean {
     return (this.left + this.width) > other.left && this.left < (other.left + other.width)
       && (this.top + this.height) > other.top && this.top < (other.top + other.height);
   }
 
-  public isTriggeredByCollider(other: ColliderEntity): boolean {
+  public isTriggeredByCollider(other: ColliderComponent): boolean {
     return (this.left + this.width) > other.getLeft() && this.left < (other.getLeft() + other.getWidth())
       && (this.top + this.height) > other.getTop() && this.top < (other.getTop() + other.getHeight());
   }
@@ -29,12 +28,12 @@ export class TriggerEntity {
 
   public getLeft(): number { return this.left; }
 
-  public moveUp() { this.top -= box; }
+  // public moveUp() { this.top -= box; }
 
-  public moveDown() { this.top += box; }
+  // public moveDown() { this.top += box; }
 
-  public moveLeft() { this.left -= box; }
+  // public moveLeft() { this.left -= box; }
 
-  public moveRight() { this.left += box; }
+  // public moveRight() { this.left += box; }
 
 }

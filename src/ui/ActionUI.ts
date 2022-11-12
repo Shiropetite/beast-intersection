@@ -1,5 +1,4 @@
 import { camera } from "..";
-import { Action } from "../entities";
 
 export class ActionUI {
   private static action: HTMLElement;
@@ -19,13 +18,13 @@ export class ActionUI {
     camera.removeChild(document.getElementById(`action`));
   }
 
-  public static updateAction(action: Action): void {
-    if(this.action.classList.length > 1) {
-      this.action.classList.remove(this.action.classList.item(1));
-    }
-    if(action !== 'none') {
-      this.action.classList.add(`action-${action}`)
-    }
-  }
+  // public static updateAction(action: Action): void {
+  //   if(this.action.classList.length > 1) {
+  //     this.action.classList.remove(this.action.classList.item(1));
+  //   }
+  //   if(action !== 'none') {
+  //     this.action.classList.add(`action-${action}`)
+  //   }
+  // }
 
 }

@@ -1,15 +1,16 @@
 import { CatchingUI } from '../ui';
-import { DirectionKeys, PersonState, TriggerResourceEntity } from '../entities';
 import { CatchingToolItem, BugItem } from './../items';
 import { TimeService } from '../services';
-import { player } from '..';
 import { InputSignalListener } from '../signals/InputSignal';
+import { DirectionKeys } from '../utils';
 
 export enum CatchingState {
   ONGOING,
   WIN,
   LOSE
 }
+
+class TriggerResourceEntity {}
 
 export class CatchingService implements InputSignalListener {
   private static instance: CatchingService;
@@ -37,11 +38,11 @@ export class CatchingService implements InputSignalListener {
 
   public start(bugEntity: TriggerResourceEntity, catchingNet: CatchingToolItem): void {
     this.directionFails = 0;
-    this.bugItem = bugEntity.getItem() as BugItem;
+    // this.bugItem = bugEntity.getItem() as BugItem;
 
-    CatchingUI.create(bugEntity.getSpriteTop(), bugEntity.getSpriteLeft());
+    // CatchingUI.create(bugEntity.getSpriteTop(), bugEntity.getSpriteLeft());
 
-    player.setState(PersonState.ACTING);
+    //player.setState(PersonState.ACTING);
 
     const directionList: any[] = Object.entries(DirectionKeys).map(([_, value]) => value);
 
@@ -62,7 +63,7 @@ export class CatchingService implements InputSignalListener {
 
     TimeService.getInstance().start();
 
-    player.setState(PersonState.IDLE);
+    //player.setState(PersonState.IDLE);
   }
 
   public fail(): void {

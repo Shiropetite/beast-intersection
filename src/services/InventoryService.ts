@@ -2,6 +2,7 @@ import { Item } from "../items";
 import { InventoryUI } from "../ui";
 import { TimeService } from ".";
 import { InputSignalListener } from "../signals/InputSignal";
+import { ActionKeys } from "../utils";
 
 export class InventoryService implements InputSignalListener {
   private static instance: InventoryService;
@@ -22,7 +23,9 @@ export class InventoryService implements InputSignalListener {
   //#endregion
 
   onKeyPressed(keyPressed: string): void {
-    console.log(keyPressed);
+    if (keyPressed === ActionKeys.INVENTORY) { 
+      //TODO: open or close inventory
+    }
   }
 
   public init(capacity: number, content: { item: Item, amount: number }[]) {

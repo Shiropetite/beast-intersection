@@ -1,8 +1,6 @@
 import { FishingUI } from './../ui';
-import { PersonState, TriggerResourceEntity } from '../entities';
 import { FishItem, FishingToolItem } from './../items';
 import { TimeService } from '../services';
-import { player } from '..';
 import { InputSignalListener } from '../signals/InputSignal';
 
 export enum FishingState {
@@ -10,6 +8,9 @@ export enum FishingState {
   WIN,
   LOSE
 }
+
+class TriggerResourceEntity {}
+
 
 export class FishingService implements InputSignalListener {
   private static instance: FishingService;
@@ -37,10 +38,10 @@ export class FishingService implements InputSignalListener {
 
   public start(fishEntity: TriggerResourceEntity, fishingRod: FishingToolItem) : void {
     this.isFrenzy = false;
-    this.fishItem = fishEntity.getItem() as FishItem;
-    FishingUI.create(fishEntity.getSpriteTop(), fishEntity.getSpriteLeft());
+    // this.fishItem = fishEntity.getItem() as FishItem;
+    // FishingUI.create(fishEntity.getSpriteTop(), fishEntity.getSpriteLeft());
 
-    player.setState(PersonState.ACTING);
+    // player.setState(PersonState.ACTING);
   
     // interval for fish hp and fishing rod hp regen
     this.regenInterval = setInterval(() => { 
@@ -59,11 +60,11 @@ export class FishingService implements InputSignalListener {
     // interval for fish frenzy
     this.frenzyInterval = setInterval(() => {
       this.isFrenzy = true;
-      FishingUI.startFrenzy(fishEntity.getSprite());
-      setTimeout(() => { 
-        this.isFrenzy = false;
-        FishingUI.stopFrenzy(fishEntity.getSprite());
-      }, this.fishItem.getFrenzyDuration());
+      // FishingUI.startFrenzy(fishEntity.getSprite());
+      // setTimeout(() => { 
+      //   this.isFrenzy = false;
+      //   FishingUI.stopFrenzy(fishEntity.getSprite());
+      //}, this.fishItem.getFrenzyDuration());
     }, this.fishItem.getFrenzyFrequency() + this.fishItem.getFrenzyDuration());
 
     TimeService.getInstance().stop();
@@ -77,7 +78,7 @@ export class FishingService implements InputSignalListener {
 
     TimeService.getInstance().start();
 
-    player.setState(PersonState.IDLE);
+    //player.setState(PersonState.IDLE);
   }
 
   public fail(fishingRod: FishingToolItem): void {

@@ -1,8 +1,8 @@
 import { SignalSender } from "./SignalSender";
 
 interface TimeConfig {
-  hours: string,
-  minutes: string
+  hours: number,
+  minutes: number
 }
 
 export class TimeSignalSender extends SignalSender<TimeSignalListener, TimeConfig> {
@@ -28,5 +28,5 @@ export class TimeSignalSender extends SignalSender<TimeSignalListener, TimeConfi
 }
 
 export interface TimeSignalListener {
-  onTick(hour: string, minute: string): void;
+  onTick(hour: number, minute: number): void;
 }

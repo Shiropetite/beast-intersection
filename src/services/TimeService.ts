@@ -1,5 +1,5 @@
-import { triggers } from '..';
 import { TimeUI } from '../ui';
+import { TimeSignalSender } from './../signals/TimeSignal';
 
 export class TimeService {
   private static instance: TimeService;
@@ -57,7 +57,8 @@ export class TimeService {
   //TODO: time signal
   public tick(): void {
     // notify entities affected by time
-    for (const entity of triggers) { entity.onTimeTick(); }
+    TimeSignalSender.getInstance().raise({ hours: this.hours, minutes: this.minutes });
+    
     // update displayed time
     TimeUI.setTime();
   }

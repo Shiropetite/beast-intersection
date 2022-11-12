@@ -1,7 +1,6 @@
 import { PlayerEntity, PlayerStates } from "../entities";
-import { InputSignalListener } from "../signals";
-import { PlayerMoveSignalSender } from "../signals/PlayerMoveSignal";
-import { DirectionKeys, SpriteDirections } from "../utils";
+import { InputSignalListener, PlayerMoveSignalSender } from "../signals";
+import { DirectionKeys } from "../utils";
 
 export class PlayerService implements InputSignalListener {
   
@@ -34,17 +33,17 @@ export class PlayerService implements InputSignalListener {
     let moveSuccess: boolean;
     switch (key) {
     case DirectionKeys.UP:
-      moveSuccess = PlayerService.getInstance().moveUp(); break;
+      moveSuccess = this.moveUp(); break;
     case DirectionKeys.DOWN:
-      moveSuccess = PlayerService.getInstance().moveDown(); break;
+      moveSuccess = this.moveDown(); break;
     case DirectionKeys.LEFT:
-      moveSuccess = PlayerService.getInstance().moveLeft(); break;
+      moveSuccess = this.moveLeft(); break;
     case DirectionKeys.RIGHT:
-      moveSuccess = PlayerService.getInstance().moveRight(); break;
+      moveSuccess = this.moveRight(); break;
     }
 
     if (moveSuccess) {
-      // Signal to trigger entities that player has moved
+      // Signal to entities that player has moved
       PlayerMoveSignalSender.getInstance().raise();
     }
     
@@ -53,56 +52,56 @@ export class PlayerService implements InputSignalListener {
 
   //#region Move
   private moveUp(): boolean {
-    PlayerEntity.getInstance().setSpriteDirection(SpriteDirections.UP);
-    PlayerEntity.getInstance().getCollider().moveUp();
-    
-    if (PlayerEntity.getInstance().getCollider().isColliding()) {
-      PlayerEntity.getInstance().getCollider().moveDown();
-      return false;
-    }
+    // if (PlayerEntity.getInstance().getCell().getUp()) {
+    //   if (PlayerEntity.getInstance().getCell().getUp().isTaken()) { return false; }
 
-    PlayerEntity.getInstance().getSprite().moveUp();
-    return true;
+    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getUp());
+    //   //TODO: update sprite position & direction
+
+    //   return true;
+    // }
+    // else { return false; }
+    return false;
   }
 
   private moveDown(): boolean {
-    PlayerEntity.getInstance().setSpriteDirection(SpriteDirections.DOWN);
-    PlayerEntity.getInstance().getCollider().moveDown();
+    // if (PlayerEntity.getInstance().getCell().getDown()) {
+    //   if (PlayerEntity.getInstance().getCell().getDown().isTaken()) { return false; }
 
-    if (PlayerEntity.getInstance().getCollider().isColliding()) {
-      PlayerEntity.getInstance().getCollider().moveUp();
-      return false;
-    }
+    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getDown());
+    //   //TODO: update sprite position & direction
 
-    PlayerEntity.getInstance().getSprite().moveDown();
-    return true;
+    //   return true;
+    // }
+    // else { return false; }
+    return false;
   }
 
   private moveLeft(): boolean  {
-    PlayerEntity.getInstance().setSpriteDirection(SpriteDirections.LEFT);
-    PlayerEntity.getInstance().getCollider().moveLeft();
+    // if (PlayerEntity.getInstance().getCell().getLeft()) {
+    //   if (PlayerEntity.getInstance().getCell().getLeft().isTaken()) { return false; }
 
-    if (PlayerEntity.getInstance().getCollider().isColliding()) {
-      PlayerEntity.getInstance().getCollider().moveRight();
-      return false;
-    }
+    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getLeft());
+    //   //TODO: update sprite position & direction
 
-    PlayerEntity.getInstance().getSprite().moveLeft();
-    return true;
+    //   return true;
+    // }
+    // else { return false; }
+    return false;
   }
 
   private moveRight(): boolean {
-    PlayerEntity.getInstance().setSpriteDirection(SpriteDirections.RIGHT);
-    PlayerEntity.getInstance().getCollider().moveRight();
+    // if (PlayerEntity.getInstance().getCell().getRight()) {
+    //   if (PlayerEntity.getInstance().getCell().getRight().isTaken()) { return false; }
 
-    if (PlayerEntity.getInstance().getCollider().isColliding()) {
-      PlayerEntity.getInstance().getCollider().moveLeft();
-      return false;
-    }
+    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getRight());
+    //   //TODO: update sprite position & direction
 
-    PlayerEntity.getInstance().getSprite().moveRight();
-    return true;
+    //   return true;
+    // }
+    // else { return false; }
+    return false;
   }
   //#endregion
-
+  
 }
