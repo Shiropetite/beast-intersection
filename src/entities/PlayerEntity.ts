@@ -1,5 +1,5 @@
 import { ColliderComponent, SpriteComponent } from '../components';
-import { MapCell } from '.';
+import { MapCell } from '../map/MapCell';
 import { ToolItem, FishingToolItem } from './../items';
 
 export enum PlayerStates {

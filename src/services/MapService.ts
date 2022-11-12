@@ -1,4 +1,5 @@
-import { MapCell, PlayerEntity } from "../entities";
+import { PlayerEntity } from "../entities";
+import { MapCell } from "../map/MapCell";
 import { PlayerMoveSignalListener } from "../signals";
 import { MapUI } from "../ui";
 

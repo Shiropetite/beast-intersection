@@ -1,4 +1,4 @@
-import { PlayerEntity } from ".";
+import { PlayerEntity } from "../entities";
 
 type MapCellContent = PlayerEntity // | NpcEntity;
 
