@@ -49,6 +49,7 @@ body {
   position: absolute;
   width: 126px;
   height: 126px;
+  z-index: 0;
 }
 
 .water {

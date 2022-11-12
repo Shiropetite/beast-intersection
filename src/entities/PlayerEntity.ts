@@ -1,4 +1,5 @@
 import { ColliderComponent, SpriteComponent } from '../components';
+import { MapCell } from '.';
 import { ToolItem, FishingToolItem } from './../items';
 
 export enum PlayerStates {
@@ -17,11 +18,12 @@ export class PlayerEntity {
   private readonly sprite: SpriteComponent;
   private readonly collider: ColliderComponent;
 
+  private currentCell: MapCell;
   private state: PlayerStates;
   private toolEquiped: ToolItem | null;
 
   public constructor() {
-    this.sprite = new SpriteComponent('player', 'player', 0, 0, 0, 0);
+    this.sprite = new SpriteComponent('player');
     this.collider = null;
 
     this.state = PlayerStates.IDLE;
@@ -41,6 +43,10 @@ export class PlayerEntity {
   public getSprite(): SpriteComponent { return this.sprite; }
 
   public getCollider(): ColliderComponent { return this.collider; }
+
+  public getCurrentCell(): MapCell { return this.currentCell; }
+
+  public setCurrentCell(currentCell: MapCell): void { this.currentCell = currentCell; }
 
   public getState(): PlayerStates { return this.state; }
 

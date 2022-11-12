@@ -1,4 +1,4 @@
-import { camera } from "..";
+import { CameraUI } from ".";
 
 export class TalkingUI {
   private static textBox: HTMLElement;
@@ -12,13 +12,13 @@ export class TalkingUI {
     const textBoxHTML = document.createElement("div");
     textBoxHTML.id = "textbox"
     textBoxHTML.classList.add('textbox');
-    camera.appendChild(textBoxHTML);
+    CameraUI.getInstance().add(textBoxHTML);
 
     // create dialog sprite HTML
     const dialogSpriteHtml = document.createElement("div");
     dialogSpriteHtml.id = "textbox-sprite"
     dialogSpriteHtml.classList.add('textbox-sprite');
-    camera.appendChild(dialogSpriteHtml);
+    CameraUI.getInstance().remove(dialogSpriteHtml);
 
     // create name HTML
     const nameHTML = document.createElement("div");

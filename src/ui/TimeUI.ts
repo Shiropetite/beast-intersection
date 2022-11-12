@@ -1,5 +1,5 @@
-import { camera } from "..";
 import { TimeService } from "../services";
+import { CameraUI } from ".";
 
 export class TimeUI {
   private static time: HTMLElement;
@@ -10,7 +10,7 @@ export class TimeUI {
     const timeHTML = document.createElement("div");
     timeHTML.id = "time"
     timeHTML.classList.add('time');
-    camera.appendChild(timeHTML);
+    CameraUI.getInstance().add(timeHTML);
 
     // store HTML
     TimeUI.time = document.getElementById('time');

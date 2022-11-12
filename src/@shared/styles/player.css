@@ -4,9 +4,7 @@
   image-rendering: pixelated;
   background-repeat: no-repeat;
   transition: transform linear 0.1s;
-  z-index: 1000;
-  background-color: aliceblue;
-  border: solid 2px black
+  z-index: 1;
 }
 
 .player-down {

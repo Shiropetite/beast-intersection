@@ -1,4 +1,5 @@
 import { SpriteComponent, TriggerComponent, ColliderComponent } from '../components';
+import { MapCell } from '.';
 import { Sentence } from '../services';
 
 export interface NpcRoutine {
@@ -26,6 +27,7 @@ export class NpcEntity {
 
   private readonly name: string;
   
+  private currentCell: MapCell;
   private state: NpcStates;
   private routine: NpcRoutine;
 
@@ -46,6 +48,10 @@ export class NpcEntity {
   public getTrigger(): TriggerComponent { return this.trigger; }
 
   public getCollider(): ColliderComponent { return this.collider; }
+
+  public getCurrentCell(): MapCell { return this.currentCell; }
+
+  public setCurrentCell(currentCell: MapCell): void { this.currentCell = currentCell; }
 
   public getName(): string { return this.name; }
 

@@ -1,4 +1,4 @@
-import { Map } from "../Map";
+import { MapUI } from ".";
 
 export class FishingUI {
   private static fishBarContainer: HTMLElement;
@@ -13,7 +13,7 @@ export class FishingUI {
     fishBarContainerHTML.classList.add('fish-bar-container');
     fishBarContainerHTML.style.top = `${ fishTop - 30 }px`;
     fishBarContainerHTML.style.left = `${ fishLeft }px`;
-    Map.getInstance().mapHtml.appendChild(fishBarContainerHTML);
+    MapUI.getInstance().add(fishBarContainerHTML);
 
     // create fishHP HTML
     const fishBarHTML = document.createElement('div');
@@ -21,7 +21,7 @@ export class FishingUI {
     fishBarHTML.classList.add('fish-bar');
     fishBarHTML.style.top = `${ fishTop - 30 }px`;
     fishBarHTML.style.left = `${ fishLeft }px`;
-    Map.getInstance().mapHtml.appendChild(fishBarHTML);
+    MapUI.getInstance().add(fishBarHTML);
 
     // create fishingRodHP HTML
     const fishingRodBarContainerHTML = document.createElement('div');
@@ -29,7 +29,7 @@ export class FishingUI {
     fishingRodBarContainerHTML.classList.add('fishing-rod-bar-container');
     fishingRodBarContainerHTML.style.top = `${ fishTop - 40 }px`;
     fishingRodBarContainerHTML.style.left = `${ fishLeft }px`;
-    Map.getInstance().mapHtml.appendChild(fishingRodBarContainerHTML);
+    MapUI.getInstance().add(fishingRodBarContainerHTML);
 
     // create fishingRodHP HTML
     const fishingRodBarHTML = document.createElement('div');
@@ -37,7 +37,7 @@ export class FishingUI {
     fishingRodBarHTML.classList.add('fishing-rod-bar');
     fishingRodBarHTML.style.top = `${ fishTop - 40 }px`;
     fishingRodBarHTML.style.left = `${ fishLeft }px`;
-    Map.getInstance().mapHtml.appendChild(fishingRodBarHTML);
+    MapUI.getInstance().add(fishingRodBarHTML);
 
     // store HTML
     FishingUI.fishBarContainer = document.getElementById('fish-bar-container');
@@ -47,10 +47,10 @@ export class FishingUI {
   }
 
   public static destroy(): void {
-    Map.getInstance().mapHtml.removeChild(document.getElementById(`fish-bar-container`));
-    Map.getInstance().mapHtml.removeChild(document.getElementById(`fish-bar`));
-    Map.getInstance().mapHtml.removeChild(document.getElementById(`fishing-rod-bar-container`));
-    Map.getInstance().mapHtml.removeChild(document.getElementById(`fishing-rod-bar`));
+    MapUI.getInstance().remove(document.getElementById(`fish-bar-container`));
+    MapUI.getInstance().remove(document.getElementById(`fish-bar`));
+    MapUI.getInstance().remove(document.getElementById(`fishing-rod-bar-container`));
+    MapUI.getInstance().remove(document.getElementById(`fishing-rod-bar`));
   }
 
   public static updateFishHP(hp: number, maxHP: number): void {

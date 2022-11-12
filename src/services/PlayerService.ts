@@ -1,3 +1,4 @@
+import { SpriteDirections } from "../components";
 import { PlayerEntity, PlayerStates } from "../entities";
 import { InputSignalListener, PlayerMoveSignalSender } from "../signals";
 import { DirectionKeys } from "../utils";
@@ -6,6 +7,7 @@ export class PlayerService implements InputSignalListener {
   
   private static instance: PlayerService;
 
+  //#region Singleton
   private constructor() { }
 
   public static getInstance(): PlayerService {
@@ -15,7 +17,12 @@ export class PlayerService implements InputSignalListener {
 
     return PlayerService.instance;
   }
+  //#endregion
 
+  /**
+   * Listerner of player input
+   * @param keyPressed player input
+   */
   onKeyPressed(keyPressed: string): void {
     // Press 'z, q, s, d'
     const directionKey = Object.values(DirectionKeys).find(value =>  value === keyPressed);
@@ -33,13 +40,17 @@ export class PlayerService implements InputSignalListener {
     let moveSuccess: boolean;
     switch (key) {
     case DirectionKeys.UP:
-      moveSuccess = this.moveUp(); break;
+      moveSuccess = this.moveUp();
+      break;
     case DirectionKeys.DOWN:
-      moveSuccess = this.moveDown(); break;
+      moveSuccess = this.moveDown();
+      break;
     case DirectionKeys.LEFT:
-      moveSuccess = this.moveLeft(); break;
+      moveSuccess = this.moveLeft();
+      break;
     case DirectionKeys.RIGHT:
-      moveSuccess = this.moveRight(); break;
+      moveSuccess = this.moveRight();
+      break;
     }
 
     if (moveSuccess) {
@@ -50,58 +61,64 @@ export class PlayerService implements InputSignalListener {
     PlayerEntity.getInstance().setState(PlayerStates.IDLE);
   }
 
-  //#region Move
+  /**
+   * Move the player up
+   * @returns is success
+   */
   private moveUp(): boolean {
-    // if (PlayerEntity.getInstance().getCell().getUp()) {
-    //   if (PlayerEntity.getInstance().getCell().getUp().isTaken()) { return false; }
-
-    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getUp());
-    //   //TODO: update sprite position & direction
-
-    //   return true;
-    // }
-    // else { return false; }
+    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.UP);
+    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentUp(PlayerEntity.getInstance());
+    if (newCell) {
+      PlayerEntity.getInstance().getSprite().moveUp();
+      PlayerEntity.getInstance().setCurrentCell(newCell);
+      return true
+    }
     return false;
   }
 
+  /**
+   * Move the player down
+   * @returns is success
+   */
   private moveDown(): boolean {
-    // if (PlayerEntity.getInstance().getCell().getDown()) {
-    //   if (PlayerEntity.getInstance().getCell().getDown().isTaken()) { return false; }
-
-    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getDown());
-    //   //TODO: update sprite position & direction
-
-    //   return true;
-    // }
-    // else { return false; }
+    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.DOWN);
+    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentDown(PlayerEntity.getInstance());
+    if (newCell) {
+      PlayerEntity.getInstance().getSprite().moveDown();
+      PlayerEntity.getInstance().setCurrentCell(newCell);
+      return true
+    }
     return false;
   }
 
-  private moveLeft(): boolean  {
-    // if (PlayerEntity.getInstance().getCell().getLeft()) {
-    //   if (PlayerEntity.getInstance().getCell().getLeft().isTaken()) { return false; }
-
-    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getLeft());
-    //   //TODO: update sprite position & direction
-
-    //   return true;
-    // }
-    // else { return false; }
+  /**
+   * Move the player left
+   * @returns is success
+   */
+  private moveLeft(): boolean {
+    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.LEFT);
+    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentLeft(PlayerEntity.getInstance());
+    if (newCell) {
+      PlayerEntity.getInstance().getSprite().moveLeft();
+      PlayerEntity.getInstance().setCurrentCell(newCell);
+      return true
+    }
     return false;
   }
 
+  /**
+   * Move the player right
+   * @returns is success
+   */
   private moveRight(): boolean {
-    // if (PlayerEntity.getInstance().getCell().getRight()) {
-    //   if (PlayerEntity.getInstance().getCell().getRight().isTaken()) { return false; }
-
-    //   PlayerEntity.getInstance().setCell(PlayerEntity.getInstance().getCell().getRight());
-    //   //TODO: update sprite position & direction
-
-    //   return true;
-    // }
-    // else { return false; }
+    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.RIGHT);
+    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentRight(PlayerEntity.getInstance());
+    if (newCell) {
+      PlayerEntity.getInstance().getSprite().moveRight();
+      PlayerEntity.getInstance().setCurrentCell(newCell);
+      return true
+    }
     return false;
   }
-  //#endregion
   
 }

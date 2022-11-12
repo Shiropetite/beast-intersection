@@ -1,4 +1,4 @@
-import { camera } from "..";
+import { CameraUI } from ".";
 
 export class ActionUI {
   private static action: HTMLElement;
@@ -8,14 +8,14 @@ export class ActionUI {
     const actionHTML = document.createElement('div');
     actionHTML.id = `action`;
     actionHTML.classList.add('action')
-    camera.appendChild(actionHTML);
+    CameraUI.getInstance().add(actionHTML);
 
     // store HTML
     ActionUI.action = document.getElementById('action');
   }
 
   public static destroy(): void {
-    camera.removeChild(document.getElementById(`action`));
+    CameraUI.getInstance().remove(document.getElementById(`action`));
   }
 
   // public static updateAction(action: Action): void {

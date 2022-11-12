@@ -1,5 +1,5 @@
-import { camera } from '..';
 import { InventoryService } from '../services';
+import { CameraUI } from '.';
 
 export class InventoryUI {
   private static inventory: HTMLElement;
@@ -23,7 +23,7 @@ export class InventoryUI {
       inventoryHTML.appendChild(inventoryLineHTML);
     }
 
-    camera.appendChild(inventoryHTML);
+    CameraUI.getInstance().add(inventoryHTML);
 
     // store HTML
     InventoryUI.inventory = document.getElementById("inventory");

@@ -1,4 +1,4 @@
-import { Map } from "../Map";
+import { MapUI } from '.';
 
 export class CatchingUI {
   private static directionContainer: HTMLElement;
@@ -10,7 +10,7 @@ export class CatchingUI {
     directionContainer.classList.add('catch-container');
     directionContainer.style.top = `${ bugTop - 80 }px`;
     directionContainer.style.left = `${ bugLeft }px`;
-    Map.getInstance().mapHtml.appendChild(directionContainer);
+    MapUI.getInstance().add(directionContainer);
 
     const life0HTML = document.createElement('div');
     life0HTML.id = 'catch-life-0';
@@ -33,7 +33,7 @@ export class CatchingUI {
     const lifeContainerHTML = document.createElement('div');
     lifeContainerHTML.classList.add('catch-life-container');
 
-    Map.getInstance().mapHtml.appendChild(lifeContainerHTML);
+    MapUI.getInstance().add(lifeContainerHTML);
 
     CatchingUI.directionContainer = document.getElementById('catch-container');
     const lifeContainerDiv = document.getElementById('catch-life-container');
@@ -62,6 +62,6 @@ export class CatchingUI {
   }
 
   public static destroy(): void {
-    Map.getInstance().mapHtml.removeChild(document.getElementById('catch-container'))
+    MapUI.getInstance().remove(document.getElementById('catch-container'))
   }
 }

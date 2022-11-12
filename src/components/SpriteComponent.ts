@@ -1,4 +1,5 @@
-import { Map } from "../Map";
+import { MapCell } from "../entities";
+import { MapUI } from "../ui";
 
 export enum SpriteDirections {
   UP='up',
@@ -9,80 +10,103 @@ export enum SpriteDirections {
 
 export class SpriteComponent {
   
-  private readonly html: HTMLElement;
+  private html: HTMLElement;
+  private htmlId: string;
 
   private top: number;
   private left: number;
   private height: number;
   private width: number;
+
   private direction: SpriteDirections;
 
   public constructor(
     htmlId: string, 
-    cssClass: string, 
-    top: number, 
-    left: number, 
-    height: number, 
-    width: number
   ) {
-    this.top = top;
-    this.left = left;
-    this.height = height;
-    this.width = width;
+    this.height = MapCell.MAP_CELL_SIZE;
+    this.width = MapCell.MAP_CELL_SIZE;
     this.direction = SpriteDirections.DOWN;
-    
-
-    // create sprite HTML
-    const spriteHTML = document.createElement('div');
-    spriteHTML.id = htmlId;
-    spriteHTML.classList.add(cssClass);
-    spriteHTML.style.height = `124px`;
-    spriteHTML.style.width = `124px`;
-    Map.getInstance().mapHtml.appendChild(spriteHTML);
-
-    // store HTML
-    this.html = document.getElementById(htmlId);
-    this.updateHtml(0, 0);
+    this.htmlId = htmlId;
   }
 
-  public destroy(): void { Map.getInstance().mapHtml.removeChild(this.html); }
+  /**
+   * Create Html sprite on map
+   * @param y 
+   * @param x 
+   */
+  public create(y: number, x: number): void {  
+    this.top = y;
+    this.left = x;
 
-  // public moveUp() { 
-  //   this.top -= box; 
-  //   this.direction = SpriteDirections.UP;
-  //   this.updateHtml(); 
-  // }
+    const spriteHTML = document.createElement('div');
+    spriteHTML.id = this.htmlId;
+    spriteHTML.classList.add(this.htmlId);
+    spriteHTML.style.height = `${this.height}px`;
+    spriteHTML.style.width = `${this.width}px`;
+    MapUI.getInstance().add(spriteHTML);
 
-  // public moveDown() { 
-  //   this.top += box;
-  //   this.direction = SpriteDirections.DOWN; 
-  //   this.updateHtml(); 
-  // }
+    this.html = document.getElementById(this.htmlId);
+    this.lookAt(this.direction);
+    this.moveHtml();
+  }
 
-  // public moveLeft() { 
-  //   this.left -= box; 
-  //   this.direction = SpriteDirections.LEFT; 
-  //   this.updateHtml(); 
-  // }
+  /**
+   * Remove sprite from map
+   */
+  public destroy(): void { MapUI.getInstance().remove(this.html); }
 
-  // public moveRight() { 
-  //   this.left += box;
-  //   this.direction = SpriteDirections.RIGHT;  
-  //   this.updateHtml(); 
-  // }
 
-  private updateHtml(y: number, x: number): void {
-    this.html.style.transform = `translate3d(${ x }px, ${ y }px, 0)`;
+  /**
+   * Chage direction of the sprite
+   * @param direction 
+   */
+  public lookAt(direction: SpriteDirections): void {
+    this.direction = direction;
     if (this.html.classList[1]) {
       this.html.classList.remove(this.html.classList[1]);
     }
     this.html.classList.add(`${this.html.classList[0]}-${this.direction}`);
   }
 
-  public getTop(): number { return this.top; }
+  /**
+   * Move Up the sprite
+   */
+  public moveUp() { 
+    this.top -= MapCell.MAP_CELL_SIZE;
+    this.moveHtml(); 
+  }
 
-  public getLeft(): number { return this.left; }
+  /**
+   * Move Down the sprite
+   */
+  public moveDown() { 
+    this.top += MapCell.MAP_CELL_SIZE;
+    this.moveHtml(); 
+  }
 
-  public getDirection(): SpriteDirections { return this.direction; }
+  /**
+   * Move Left the sprite
+   */
+  public moveLeft() { 
+    this.direction = SpriteDirections.LEFT;  
+    this.left -= MapCell.MAP_CELL_SIZE;
+    this.moveHtml(); 
+  }
+
+  /**
+   * Move Right the sprite
+   */
+  public moveRight() { 
+    this.direction = SpriteDirections.RIGHT;  
+    this.left += MapCell.MAP_CELL_SIZE;
+    this.moveHtml(); 
+  }
+
+  /**
+   * Move sprite html on page
+   */
+  private moveHtml(): void {
+    this.html.style.transform = `translate3d(${ this.left }px, ${ this.top }px, 0)`;
+  }
 
 }
