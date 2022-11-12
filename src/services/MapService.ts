@@ -4,6 +4,11 @@ import { MapTeleporter } from "../map/MapTeleporter";
 import { PlayerMoveSignalListener, PlayerMoveSignalSender } from "../signals";
 import { MapUI } from "../ui";
 
+export type MapConfig = {
+  map: string[][],
+  initMap: () => void
+}
+
 export class MapService implements PlayerMoveSignalListener {
   private static instance: MapService;
   private rootMapCell: MapCell | null = null;
@@ -24,11 +29,12 @@ export class MapService implements PlayerMoveSignalListener {
    * Create map cells and html from array of character
    * @param mapArray 
    */
-  public buildMap(mapArray: string[][]) {
-    this.createMapCells(mapArray);
+  public buildMap(mapArray: MapConfig) {
+    this.createMapCells(mapArray.map);
     if (MapUI.getInstance().isMap()) { MapUI.getInstance().destroy(); }
     MapUI.getInstance().create();
     MapUI.getInstance().build(this.rootMapCell);
+    mapArray.initMap()
   }
 
   /**

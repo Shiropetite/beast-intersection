@@ -1,12 +1,12 @@
-import { MapService } from "../services";
+import { MapConfig, MapService } from "../services";
 
 export class MapTeleporter {
 
-  private readonly destinationMap: string[][];
+  private readonly destinationMap: MapConfig;
   private readonly playerTop: number;
   private readonly playerLeft: number;
 
-  constructor(destinationMap: string[][], playerTop: number, playerLeft: number) {
+  constructor(destinationMap: MapConfig, playerTop: number, playerLeft: number) {
     this.destinationMap = destinationMap;
     this.playerTop = playerTop;
     this.playerLeft = playerLeft;
