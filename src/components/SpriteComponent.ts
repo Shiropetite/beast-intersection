@@ -109,4 +109,10 @@ export class SpriteComponent {
     this.html.style.transform = `translate3d(${ this.left }px, ${ this.top }px, 0)`;
   }
 
+  //#region Getters & Setters
+  public getTop(): number { return this.top; }
+
+  public getLeft(): number { return this.left; }
+  //#endregion
+
 }

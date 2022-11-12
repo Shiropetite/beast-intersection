@@ -1,7 +1,8 @@
 import { MapCell, PlayerEntity } from "../entities";
+import { PlayerMoveSignalListener } from "../signals";
 import { MapUI } from "../ui";
 
-export class MapService {
+export class MapService implements PlayerMoveSignalListener {
 
   private static instance: MapService;
   private rootMapCell: MapCell | null = null;
@@ -88,6 +89,15 @@ export class MapService {
   public initPlayerMapCell(y: number, x: number): void {
     const playerMapCell = this.getMapCell(this.rootMapCell, y, x);
     playerMapCell.createContent(PlayerEntity.getInstance());
+    MapUI.getInstance().move();
+  }
+
+  /**
+   * Listener to player movement
+   * Move the camera when player move (Follow the player)
+   */
+  onMove(): void {
+    MapUI.getInstance().move();
   }
   
 }

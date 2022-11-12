@@ -1,4 +1,4 @@
-import { MapCell } from "../entities";
+import { MapCell, PlayerEntity } from "../entities";
 import { CameraUI } from ".";
 
 export class MapUI {
@@ -83,6 +83,10 @@ export class MapUI {
     this.build(root.getRight(), x + MapCell.MAP_CELL_SIZE, y);
     // Process map column
     if (x < 1) this.build(root.getDown(), x, y + MapCell.MAP_CELL_SIZE);
+  }
+
+  public move() {
+    this.html.style.transform = `translate3d(${ 4 * MapCell.MAP_CELL_SIZE -PlayerEntity.getInstance().getSprite().getLeft() }px, ${ 2 * MapCell.MAP_CELL_SIZE -PlayerEntity.getInstance().getSprite().getTop() }px, 0)`
   }
 
 }

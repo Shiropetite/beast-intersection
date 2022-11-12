@@ -1,6 +1,7 @@
 import { SpriteDirections } from "../components";
 import { PlayerEntity, PlayerStates } from "../entities";
 import { InputSignalListener, PlayerMoveSignalSender } from "../signals";
+import { MapUI } from "../ui";
 import { DirectionKeys } from "../utils";
 
 export class PlayerService implements InputSignalListener {
