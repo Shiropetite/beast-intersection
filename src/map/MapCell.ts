@@ -1,15 +1,19 @@
 import { PlayerEntity } from "../entities";
+import { PlayerMoveSignalListener } from "../signals/PlayerMoveSignal";
+import { sleep } from "../utils";
+import { MapTeleporter } from "./MapTeleporter";
 
 type MapCellContent = PlayerEntity // | NpcEntity;
 
-export class MapCell {
+export class MapCell implements PlayerMoveSignalListener {
 
   public static readonly MAP_CELL_SIZE = 128;
   
   private readonly sprite: string;
   private readonly free: boolean;
   private readonly contents: MapCellContent[]; 
-
+  private teleporter: MapTeleporter | null; 
+  
   private up: MapCell | null;
   private down: MapCell | null;
   private left: MapCell | null;
@@ -29,6 +33,7 @@ export class MapCell {
     this.left = null;
     this.right = null;
     this.contents = [];
+    this.teleporter = null;
   }
 
   /**
@@ -97,8 +102,17 @@ export class MapCell {
     return null;
   }
 
+  async onMove(): Promise<void> {
+    if (PlayerEntity.getInstance().getCurrentCell() === this && this.teleporter) {
+      await sleep(200);
+      this.teleporter.teleport();
+    }
+  }
+
   //#region Getters & Setters
   public getSprite(): string { return this.sprite; }
+
+  public setTeleporter(teleporter: MapTeleporter): void { this.teleporter = teleporter; }
   
   public getUp(): MapCell | null { return this.up; }
 

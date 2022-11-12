@@ -1,10 +1,10 @@
 import { PlayerEntity } from "../entities";
 import { MapCell } from "../map/MapCell";
-import { PlayerMoveSignalListener } from "../signals";
+import { MapTeleporter } from "../map/MapTeleporter";
+import { PlayerMoveSignalListener, PlayerMoveSignalSender } from "../signals";
 import { MapUI } from "../ui";
 
 export class MapService implements PlayerMoveSignalListener {
-
   private static instance: MapService;
   private rootMapCell: MapCell | null = null;
 
@@ -99,6 +99,12 @@ export class MapService implements PlayerMoveSignalListener {
    */
   onMove(): void {
     MapUI.getInstance().move();
+  }
+
+  addTeleporter(teleporter: MapTeleporter, y: number, x: number): void {
+    const teleporterCell = this.getMapCell(this.rootMapCell, y, x);
+    teleporterCell.setTeleporter(teleporter);
+    PlayerMoveSignalSender.getInstance().registerListener(teleporterCell);
   }
   
 }

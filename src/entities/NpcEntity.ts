@@ -1,5 +1,5 @@
 import { SpriteComponent, TriggerComponent, ColliderComponent } from '../components';
-import { MapCell } from '.';
+import { MapCell } from '../map/MapCell';
 import { Sentence } from '../services';
 
 export interface NpcRoutine {

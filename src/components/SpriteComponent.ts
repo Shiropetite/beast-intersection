@@ -1,4 +1,4 @@
-import { MapCell } from "../entities";
+import { MapCell } from "../map/MapCell";
 import { MapUI } from "../ui";
 
 export enum SpriteDirections {

@@ -1,5 +1,6 @@
-import { MapCell, PlayerEntity } from "../entities";
+import { PlayerEntity } from "../entities";
 import { CameraUI } from ".";
+import { MapCell } from "../map/MapCell";
 
 export class MapUI {
 
