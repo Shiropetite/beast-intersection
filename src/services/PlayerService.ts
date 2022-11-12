@@ -1,8 +1,7 @@
 import { SpriteDirections } from "../components";
 import { PlayerEntity, PlayerStates } from "../entities";
 import { InputSignalListener, PlayerMoveSignalSender } from "../signals";
-import { MapUI } from "../ui";
-import { DirectionKeys } from "../utils";
+import { DirectionKeys, sleep } from "../utils";
 
 export class PlayerService implements InputSignalListener {
   
@@ -26,7 +25,7 @@ export class PlayerService implements InputSignalListener {
    */
   onKeyPressed(keyPressed: string): void {
     // Press 'z, q, s, d'
-    const directionKey = Object.values(DirectionKeys).find(value =>  value === keyPressed);
+    const directionKey = Object.values(DirectionKeys).find(value => value === keyPressed);
     if (directionKey && PlayerEntity.getInstance().getState() === PlayerStates.IDLE) { this.move(directionKey); }
   }
 
@@ -34,7 +33,7 @@ export class PlayerService implements InputSignalListener {
    * Moves the player in direction if move is possible
    * @param key the direction key
    */
-  private move(key: DirectionKeys): void {
+  private async move(key: DirectionKeys): Promise<void> {
     PlayerEntity.getInstance().setState(PlayerStates.MOVING);
 
     // move player collider towards input direction
@@ -58,6 +57,8 @@ export class PlayerService implements InputSignalListener {
       // Signal to entities that player has moved
       PlayerMoveSignalSender.getInstance().raise();
     }
+
+    await sleep(100);
     
     PlayerEntity.getInstance().setState(PlayerStates.IDLE);
   }
