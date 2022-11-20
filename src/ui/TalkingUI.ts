@@ -1,4 +1,5 @@
 import { CameraUI } from ".";
+import { NpcEntity } from './../entities/NpcEntity';
 
 export class TalkingUI {
   private static textBox: HTMLElement;
@@ -18,7 +19,7 @@ export class TalkingUI {
     const dialogSpriteHtml = document.createElement("div");
     dialogSpriteHtml.id = "textbox-sprite"
     dialogSpriteHtml.classList.add('textbox-sprite');
-    CameraUI.getInstance().remove(dialogSpriteHtml);
+    CameraUI.getInstance().add(dialogSpriteHtml);
 
     // create name HTML
     const nameHTML = document.createElement("div");
@@ -50,11 +51,21 @@ export class TalkingUI {
     TalkingUI.hide();
   }
 
-  public static show(): void {
+  public static show(npc?: NpcEntity): void {
     TalkingUI.textBox.style.display = 'flex';
+    
+    if (npc) {
+      TalkingUI.setSpeakerName(npc.getName()); 
+      TalkingUI.setSpriteDialog();
+    }
   }
 
-  public static hide(): void {
+  public static hide(npc?: NpcEntity): void {
+    if (npc) {
+      TalkingUI.setSpeakerName('');
+      TalkingUI.setText('');
+    }
+
     TalkingUI.textBox.style.display = 'none';
     TalkingUI.dialogSprite.style.display = 'none';
   }

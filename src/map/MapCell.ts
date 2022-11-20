@@ -1,18 +1,18 @@
-import { PlayerEntity } from "../entities";
+import { NpcEntity, PlayerEntity, FishSpawnerEntity, BugSpawnerEntity, PickableEntity } from "../entities";
 import { PlayerMoveSignalListener } from "../signals/PlayerMoveSignal";
 import { sleep } from "../utils";
 import { MapTeleporter } from "./MapTeleporter";
 
-type MapCellContent = PlayerEntity // | NpcEntity;
+export type MapCellContent = PlayerEntity | NpcEntity | FishSpawnerEntity | BugSpawnerEntity | PickableEntity;
 
 export class MapCell implements PlayerMoveSignalListener {
 
   public static readonly MAP_CELL_SIZE = 128;
   
   private readonly sprite: string;
-  private readonly free: boolean;
-  private readonly contents: MapCellContent[]; 
-  private teleporter: MapTeleporter | null; 
+  private readonly isWall: boolean;
+  private contents: MapCellContent[];
+  private teleporter: MapTeleporter | null;
   
   private up: MapCell | null;
   private down: MapCell | null;
@@ -26,7 +26,7 @@ export class MapCell implements PlayerMoveSignalListener {
     this.y = y * MapCell.MAP_CELL_SIZE;
     this.x = x * MapCell.MAP_CELL_SIZE;
     this.sprite = sprite;
-    this.free = free;
+    this.isWall = free;
 
     this.up = null;
     this.down = null;
@@ -34,6 +34,13 @@ export class MapCell implements PlayerMoveSignalListener {
     this.right = null;
     this.contents = [];
     this.teleporter = null;
+  }
+
+  public async onMove(): Promise<void> {
+    if (PlayerEntity.getInstance().getCurrentCell() === this && this.teleporter) {
+      await sleep(200);
+      this.teleporter.teleport();
+    }
   }
 
   /**
@@ -47,30 +54,32 @@ export class MapCell implements PlayerMoveSignalListener {
   }
 
   /**
-   * Move a content one cell down 
-   * @param content 
-   * @returns 
-   */
-  public moveContentDown(content: MapCellContent): MapCell {
-    if (this.down && this.down.free) {
-      this.contents.filter(c => c !== content);
-      this.down.contents.push(content);
-      return this.down;
-    }
-    return null;
-  }
-
-  /**
    * Move a content one cell up 
    * @param content 
    * @returns 
    */
   public moveContentUp(content: MapCellContent): MapCell {
-    if (this.up && this.up.free) {
-      this.contents.filter(c => c !== content);
+    if (this.up && this.up.isFree()) {
+      this.contents = this.contents.filter(c => c !== content);
       this.up.contents.push(content);
       return this.up;
     }
+
+    return null;
+  }
+
+  /**
+   * Move a content one cell down 
+   * @param content 
+   * @returns 
+   */
+  public moveContentDown(content: MapCellContent): MapCell {
+    if (this.down && this.down.isFree()) {
+      this.contents = this.contents.filter(c => c !== content);
+      this.down.contents.push(content);
+      return this.down;
+    }
+
     return null;
   }
 
@@ -80,11 +89,12 @@ export class MapCell implements PlayerMoveSignalListener {
    * @returns 
    */
   public moveContentLeft(content: MapCellContent): MapCell {
-    if (this.left && this.left.free) {
-      this.contents.filter(c => c !== content);
+    if (this.left && this.left.isFree()) {
+      this.contents = this.contents.filter(c => c !== content);
       this.left.contents.push(content);
       return this.left;
     }
+
     return null;
   }
 
@@ -94,23 +104,21 @@ export class MapCell implements PlayerMoveSignalListener {
    * @returns 
    */
   public moveContentRight(content: MapCellContent): MapCell {
-    if (this.right && this.right.free) {
-      this.contents.filter(c => c !== content);
+    if (this.right && this.right.isFree()) {
+      this.contents = this.contents.filter(c => c !== content);
       this.right.contents.push(content);
       return this.right;
     }
-    return null;
-  }
 
-  async onMove(): Promise<void> {
-    if (PlayerEntity.getInstance().getCurrentCell() === this && this.teleporter) {
-      await sleep(200);
-      this.teleporter.teleport();
-    }
+    return null;
   }
 
   //#region Getters & Setters
   public getSprite(): string { return this.sprite; }
+
+  public isFree(): boolean { 
+    return !this.isWall && !this.contents.find(c => c.constructor.name !== PickableEntity.name);
+   }
 
   public setTeleporter(teleporter: MapTeleporter): void { this.teleporter = teleporter; }
   
@@ -130,9 +138,15 @@ export class MapCell implements PlayerMoveSignalListener {
   
   public setRight(right: MapCell | null): void { this.right = right; }
 
+  public getContents(): MapCellContent[] { return this.contents; }
+
   public getY(): number { return this.y; }
 
   public getX(): number { return this.x; }
+
+  public getCellY(): number { return this.y / MapCell.MAP_CELL_SIZE; }
+
+  public getCellX(): number { return this.x / MapCell.MAP_CELL_SIZE; }
   //#endregion
 
 }

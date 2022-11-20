@@ -1,40 +1,23 @@
-// import { player } from "../..";
-// import { ToolType, BugItem, CatchingToolItem } from "../../items";
-// import { TalkingService, CatchingService, CatchingState } from "../../services";
-// import { PersonState } from "../persons";
-// import { ResourceEntityBehaviour, TriggerResourceEntity } from "./TriggerResourceEntity";
+export class BugEntity {
 
-// export class BugResourceEntity extends TriggerResourceEntity {
+    private readonly maxHealthPoints: number;
+    private readonly directionDuration: number; // time between change of direction
 
-//   constructor(name: string, spriteTop: number, spriteLeft: number, item: BugItem) {
-//     super(name, spriteTop, spriteLeft, item, ResourceEntityBehaviour.CATCHING);
-//   }
+    private healthPoints: number;
+    
+    constructor(maxHealthPoints: number, directionDuration: number) {
+        this.maxHealthPoints = maxHealthPoints;
+        this.directionDuration = directionDuration;
 
-//   public act(): void {
-//     // destroy entity after win
-//     if (player.getState() === PersonState.TALKING) { super.destroy(); return; }
+        this.healthPoints = maxHealthPoints;
+    }
 
-//     // Catching net not equipped
-//     // TODO: When UI for equipment is done
-//     // if (player.getToolEquiped().getToolType() !== ToolType.CATCHING) { return; }
+    public getHealthPoints(): number { return this.healthPoints; }
 
-//     // minigame start
-//     if (player.getState() === PersonState.IDLE) {
-//       CatchingService.getInstance().start(this, player.getToolEquiped() as CatchingToolItem);
-//     }
-//     // minigame ongoing
-//     else {
-//       const minigameState = CatchingService.getInstance().catch();
+    public setHealthPoints(healthPoints: number): void { this.healthPoints = healthPoints; }
+  
+    public getMaxHealthPoints(): number { return this.maxHealthPoints; }
+  
+    public getDirectionDuration(): number { return this.directionDuration; }
 
-//       // minigame won
-//       if (minigameState === CatchingState.WIN) {
-//         super.act();
-//       }
-
-//       // minigame lost
-//       else if (minigameState === CatchingState.LOSE) {
-//         TalkingService.getInstance().start([{ sentence: `L'insecte s'est enfui...`, notSkip: true }]);
-//       }
-//     }
-//   }
-// }
+}

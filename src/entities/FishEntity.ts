@@ -1,39 +1,47 @@
-// import { player } from "../..";
-// import { FishingToolItem, ToolType, FishItem } from "../../items";
-// import { FishingService, FishingState, TalkingService } from "../../services";
-// import { PersonState } from "../persons";
-// import { ResourceEntityBehaviour, TriggerResourceEntity } from "./TriggerResourceEntity";
+export class FishEntity {
 
-// export class FishResourceEntity extends TriggerResourceEntity {
+    private readonly maxHealthPoints: number;
+    private readonly regenPoints: number; // regen per second
+    private readonly regenSpeed: number;
+    private readonly frenzyDuration: number;
+    private readonly frenzyFrequency: number; // time between each frenzy
+    private readonly frenzyMultiplier: number; // damage reduction multiplier on frenzy
 
-//   constructor(name: string, spriteTop: number, spriteLeft: number, item: FishItem) {
-//     super(name, spriteTop, spriteLeft, item, ResourceEntityBehaviour.FISHING);
-//   }
+    private healthPoints: number;
+    private onFrenzy: boolean;
 
-//   public act(): void {
-//     // destroy entity after win
-//     if (player.getState() === PersonState.TALKING) { super.destroy(); return; }
+    constructor(maxHealthPoints: number, regenPoints: number, regenSpeed: number, frenzyDuration: number, frenzyFrequency: number, frenzyMultiplier: number) {
+        this.maxHealthPoints = maxHealthPoints;
+        this.regenPoints = regenPoints;
+        this.regenSpeed = regenSpeed;
+        this.frenzyDuration = frenzyDuration;
+        this.frenzyFrequency = frenzyFrequency;
+        this.frenzyMultiplier = frenzyMultiplier;
 
-//     // fishing rod not equipped
-//     if (player.getToolEquiped().getToolType() !== ToolType.FISHING) { return; }
+        this.healthPoints = maxHealthPoints;
+        this.onFrenzy = false;
+    }
 
-//     // minigame start
-//     if (player.getState() === PersonState.IDLE) {
-//       FishingService.getInstance().start(this, player.getToolEquiped() as FishingToolItem);
-//     }
-//     // minigame ongoing
-//     else {
-//       const minigameState = FishingService.getInstance().fish(player.getToolEquiped() as FishingToolItem);
+    public takeDamage(damage: number) { this.healthPoints -= damage; }
+  
+    public getMaxHealthPoints(): number { return this.maxHealthPoints; }
+  
+    public getRegenPoints(): number { return this.regenPoints; }
+  
+    public getRegenSpeed(): number { return this.regenSpeed }
+  
+    public getFrenzyDuration(): number { return this.frenzyDuration; }
+  
+    public getFrenzyFrequency(): number { return this.frenzyFrequency; }
+  
+    public getFrenzyMultiplier(): number { return this.frenzyMultiplier; }
+  
+    public getHealthPoints(): number { return this.healthPoints; }
 
-//       // minigame won
-//       if (minigameState === FishingState.WIN) {
-//         super.act();
-//       }
+    public setHealthPoints(healthPoints: number): void { this.healthPoints = healthPoints; }
 
-//       // minigame lost
-//       else if (minigameState === FishingState.LOSE) {
-//         TalkingService.getInstance().start([{ sentence: `Le poisson s'est enfui...`, notSkip: true }]);
-//       }
-//     }
-//   }
-// }
+    public isOnFrenzy(): boolean { return this.onFrenzy; }
+
+    public setOnFrenzy(): void { this.onFrenzy = !this.onFrenzy; }
+
+}

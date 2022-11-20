@@ -1,11 +1,6 @@
 import { SignalSender } from "./SignalSender";
 
-interface TimeConfig {
-  hours: number,
-  minutes: number
-}
-
-export class TimeSignalSender extends SignalSender<TimeSignalListener, TimeConfig> {
+export class TimeSignalSender extends SignalSender<TimeSignalListener, string> {
 
   private static instance: TimeSignalSender;
 
@@ -21,12 +16,12 @@ export class TimeSignalSender extends SignalSender<TimeSignalListener, TimeConfi
   }
   //#endregion
 
-  public raise({ hours, minutes }: TimeConfig): void {
-    super.getListerners().forEach((listener) => { listener.onTick(hours, minutes); })
+  public raise(formattedTime: string): void {
+    super.getListerners().forEach((listener) => { listener.onTick(formattedTime); })
   }
 
 }
 
 export interface TimeSignalListener {
-  onTick(hour: number, minute: number): void;
+  onTick(formattedTime: string): void;
 }

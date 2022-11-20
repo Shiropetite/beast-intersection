@@ -1,4 +1,3 @@
-import { SpriteDirections } from "../components";
 import { PlayerEntity, PlayerStates } from "../entities";
 import { InputSignalListener, PlayerMoveSignalSender } from "../signals";
 import { DirectionKeys, sleep } from "../utils";
@@ -23,10 +22,15 @@ export class PlayerService implements InputSignalListener {
    * Listerner of player input
    * @param keyPressed player input
    */
-  onKeyPressed(keyPressed: string): void {
+  public onKeyPressed(keyPressed: string): boolean {
     // Press 'z, q, s, d'
     const directionKey = Object.values(DirectionKeys).find(value => value === keyPressed);
-    if (directionKey && PlayerEntity.getInstance().getState() === PlayerStates.IDLE) { this.move(directionKey); }
+    if (directionKey && PlayerEntity.getInstance().getState() === PlayerStates.IDLE) { 
+      this.move(directionKey);
+      return true; 
+    }
+
+    return false;
   }
 
   /**
@@ -58,8 +62,8 @@ export class PlayerService implements InputSignalListener {
       PlayerMoveSignalSender.getInstance().raise();
     }
 
+    // wait for sprite to sync before setting player state
     await sleep(100);
-    
     PlayerEntity.getInstance().setState(PlayerStates.IDLE);
   }
 
@@ -68,13 +72,15 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveUp(): boolean {
-    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.UP);
+    PlayerEntity.getInstance().getSprite().lookUp();
     const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentUp(PlayerEntity.getInstance());
+    
     if (newCell) {
       PlayerEntity.getInstance().getSprite().moveUp();
       PlayerEntity.getInstance().setCurrentCell(newCell);
-      return true
+      return true;
     }
+
     return false;
   }
 
@@ -83,7 +89,7 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveDown(): boolean {
-    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.DOWN);
+    PlayerEntity.getInstance().getSprite().lookDown();
     const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentDown(PlayerEntity.getInstance());
     if (newCell) {
       PlayerEntity.getInstance().getSprite().moveDown();
@@ -98,7 +104,7 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveLeft(): boolean {
-    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.LEFT);
+    PlayerEntity.getInstance().getSprite().lookLeft();
     const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentLeft(PlayerEntity.getInstance());
     if (newCell) {
       PlayerEntity.getInstance().getSprite().moveLeft();
@@ -113,7 +119,7 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveRight(): boolean {
-    PlayerEntity.getInstance().getSprite().lookAt(SpriteDirections.RIGHT);
+    PlayerEntity.getInstance().getSprite().lookRight();
     const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentRight(PlayerEntity.getInstance());
     if (newCell) {
       PlayerEntity.getInstance().getSprite().moveRight();

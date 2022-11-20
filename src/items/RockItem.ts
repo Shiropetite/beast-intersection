@@ -1,5 +1,5 @@
-export class FishItem {
-  
+export class RockItem {
+
   private readonly name: string
 
   constructor(name: string) {

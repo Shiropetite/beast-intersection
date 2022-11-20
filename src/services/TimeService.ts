@@ -27,8 +27,6 @@ export class TimeService {
     this.minutes = minutes;
 
     TimeUI.create();
-
-    this.start();
   }
 
   public start(): void {
@@ -54,10 +52,9 @@ export class TimeService {
     TimeUI.pause();
   }
 
-  //TODO: time signal
   public tick(): void {
     // notify entities affected by time
-    TimeSignalSender.getInstance().raise({ hours: this.hours, minutes: this.minutes });
+    TimeSignalSender.getInstance().raise(this.getCurrentTime());
     
     // update displayed time
     TimeUI.setTime();

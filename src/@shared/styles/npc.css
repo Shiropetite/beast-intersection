@@ -4,6 +4,7 @@
   image-rendering: pixelated;
   background-repeat: no-repeat;
   transition: transform linear 0.1s;
+  z-index: 1;
 }
 
 .npc-down {

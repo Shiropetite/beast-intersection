@@ -5,8 +5,9 @@
   image-rendering: optimizeSpeed;
 }
 
-.stone {
+.rock {
   position: absolute;
   background-image: url(../assets/sprites/entities/stone.png);
+  image-rendering: pixelated;
   background-size: cover;
 }

@@ -1,22 +1,17 @@
+import { TalkingService, TimeService } from '.';
+import { FishSpawnerEntity, PlayerEntity, PlayerStates } from "../entities";
+import { FishingToolItem } from './../items';
 import { FishingUI } from './../ui';
-import { FishItem, FishingToolItem } from './../items';
-import { TimeService } from '../services';
-import { InputSignalListener } from '../signals/InputSignal';
-
-export enum FishingState {
-  ONGOING,
-  WIN,
-  LOSE
-}
-
-class TriggerResourceEntity {}
-
+import { InputSignalListener } from '../signals';
+import { ActionKeys } from "../utils";
 
 export class FishingService implements InputSignalListener {
+  
   private static instance: FishingService;
 
-  private fishItem: FishItem;
-  private isFrenzy: boolean;
+  private isRunning: boolean;
+  private fishSpawner: FishSpawnerEntity;
+  private fishingRod: FishingToolItem;
   private regenInterval: NodeJS.Timer;
   private frenzyInterval: NodeJS.Timer;
 
@@ -32,87 +27,126 @@ export class FishingService implements InputSignalListener {
   }
   //#endregion
 
-  onKeyPressed(keyPressed: string): void {
-    console.log(keyPressed);
+  public onKeyPressed(keyPressed: string): boolean {
+    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.getInstance().getState() === PlayerStates.FISHING) {
+      this.fish();
+      return true;
+    }
+
+    return false;
   }
 
-  public start(fishEntity: TriggerResourceEntity, fishingRod: FishingToolItem) : void {
-    this.isFrenzy = false;
-    // this.fishItem = fishEntity.getItem() as FishItem;
-    // FishingUI.create(fishEntity.getSpriteTop(), fishEntity.getSpriteLeft());
+  public start(fishSpawner: FishSpawnerEntity, fishingRod: FishingToolItem) : void {
+    PlayerEntity.getInstance().setState(PlayerStates.FISHING);
 
-    // player.setState(PersonState.ACTING);
+    this.isRunning = true;
+    this.fishSpawner = fishSpawner;
+    this.fishingRod = fishingRod;
+
+    FishingUI.create(this.fishSpawner.getSprite());
   
     // interval for fish hp and fishing rod hp regen
     this.regenInterval = setInterval(() => { 
-      if (this.fishItem.getHealthPoints() < this.fishItem.getMaxHealthPoints()) {
-        this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() + this.fishItem.getRegenPoints());
+      if (this.fishSpawner.getFish().getHealthPoints() < this.fishSpawner.getFish().getMaxHealthPoints()) {
+        this.fishSpawner.getFish().setHealthPoints(
+          this.fishSpawner.getFish().getHealthPoints() + 
+          this.fishSpawner.getFish().getRegenPoints()
+        );
         
-        if (fishingRod.getDurability() > 0) {
-          fishingRod.setDurability(fishingRod.getDurability() - fishingRod.getResistance());
+        if (this.fishingRod.getPressure() > 0) {
+          this.fishingRod.setPressure(this.fishingRod.getPressure() - this.fishingRod.getPressureFactor());
         }
         
-        FishingUI.updateFishHP(this.fishItem.getHealthPoints(), this.fishItem.getMaxHealthPoints());
-        FishingUI.updateFishingRodHP(fishingRod.getDurability(), fishingRod.getMaxDurability());
+        FishingUI.updateFishHP(this.fishSpawner.getFish());
+        FishingUI.updateFishingRodHP(this.fishingRod);
       }
-    }, this.fishItem.getRegenSpeed());
+    }, this.fishSpawner.getFish().getRegenSpeed()); /* wtf je comprends meme plus ce code */
 
     // interval for fish frenzy
     this.frenzyInterval = setInterval(() => {
-      this.isFrenzy = true;
-      // FishingUI.startFrenzy(fishEntity.getSprite());
-      // setTimeout(() => { 
-      //   this.isFrenzy = false;
-      //   FishingUI.stopFrenzy(fishEntity.getSprite());
-      //}, this.fishItem.getFrenzyDuration());
-    }, this.fishItem.getFrenzyFrequency() + this.fishItem.getFrenzyDuration());
+      this.fishSpawner.getFish().setOnFrenzy();
+
+      //FIXME:
+      FishingUI.startFrenzy(this.fishSpawner.getSprite());
+
+      setTimeout(() => { 
+        this.fishSpawner.getFish().setOnFrenzy();
+
+        FishingUI.stopFrenzy(this.fishSpawner.getSprite());
+      }, this.fishSpawner.getFish().getFrenzyDuration());
+    }, this.fishSpawner.getFish().getFrenzyFrequency() + this.fishSpawner.getFish().getFrenzyDuration());
 
     TimeService.getInstance().stop();
   }
 
-  public end(): void {
+  private end(): void {
     clearInterval(this.regenInterval);
     clearInterval(this.frenzyInterval);
 
     FishingUI.destroy();
 
-    TimeService.getInstance().start();
+    this.isRunning = false;
+    this.fishSpawner.setEmpty();
+    this.fishSpawner.getSprite().hide();
 
-    //player.setState(PersonState.IDLE);
+    setTimeout(() => {
+      this.fishSpawner.setEmpty();
+      this.fishSpawner.getSprite().show();
+    }, 10000)
   }
 
-  public fail(fishingRod: FishingToolItem): void {
-    fishingRod.setDurability(0);
-    this.fishItem.setHealthPoints(this.fishItem.getMaxHealthPoints());
-  }
+  private fish(): void {
+    if (this.fishSpawner.getFish().isOnFrenzy()) {
+      this.fishSpawner.getFish().takeDamage(
+        this.fishingRod.getPower() * 
+        this.fishSpawner.getFish().getFrenzyMultiplier()
+      );
 
-  public fish(fishingRod: FishingToolItem): FishingState {
-    if (this.isFrenzy) {
-      this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() - fishingRod.getPower() * this.fishItem.getFrenzyMultiplier());
-      fishingRod.setDurability(fishingRod.getDurability() + fishingRod.getResistance() / this.fishItem.getFrenzyMultiplier());
+      this.fishingRod.applyPressure(this.fishingRod.getPressureFactor() / this.fishSpawner.getFish().getFrenzyMultiplier());
     }
     else {
-      this.fishItem.setHealthPoints(this.fishItem.getHealthPoints() - fishingRod.getPower());
-      fishingRod.setDurability(fishingRod.getDurability() + fishingRod.getResistance());
+      this.fishSpawner.getFish().takeDamage(this.fishingRod.getPower());
+      this.fishingRod.applyPressure();
     }
 
+    this.fishSpawner.getFish().takeDamage(this.fishingRod.getPower());
+    this.fishingRod.applyPressure();
+
+    FishingUI.updateFishHP(this.fishSpawner.getFish());
+    FishingUI.updateFishingRodHP(this.fishingRod);
+
     // minigame won
-    if (this.fishItem.getHealthPoints() <= 0) {
+    if (this.fishSpawner.getFish().getHealthPoints() <= 0) {
+      this.win();
       this.end();
-      return FishingState.WIN;
     }
 
     // minigame lost
-    if (fishingRod.getDurability() >= fishingRod.getMaxDurability()) {
-      this.fail(fishingRod);
+    if (this.fishingRod.getPressure() >= this.fishingRod.getMaxPressure()) {
+      this.lose();
       this.end();
-      return FishingState.LOSE;
     }
 
-    FishingUI.updateFishHP(this.fishItem.getHealthPoints(), this.fishItem.getMaxHealthPoints());
-    FishingUI.updateFishingRodHP(fishingRod.getDurability(), fishingRod.getMaxDurability());
+  }
 
-    return FishingState.ONGOING;
+  private win(): void {
+    //TODO: add fish item to inventory
+    //TODO: set spawner on recharge
+
+    TalkingService.getInstance().start([{ 
+      text: "Vous avez attrapé 1 " + this.fishSpawner.getItem().getName() + " !",
+      isLock: true,
+    }]);
+  }
+
+  private lose(): void {
+    TalkingService.getInstance().start([{ 
+      text: "Le poisson s'est enfui...",
+      isLock: true,
+    }]);
+
+    this.fishingRod.setPressure(0);
+    this.fishSpawner.getFish().setHealthPoints(this.fishSpawner.getFish().getMaxHealthPoints());
   }
 
 }

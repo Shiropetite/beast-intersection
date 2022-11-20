@@ -1,26 +1,11 @@
-import { Item } from "./Item";
+export class BugItem {
 
-export class BugItem extends Item {
-  private healthPoints: number;
-  private readonly maxHealthPoints: number;
-  private readonly directionDuration: number; // time between change of direction
+  private readonly name: string
 
-  constructor(
-    name: string,
-    maxHealthPoints: number,
-    directionDuration: number,
-  ) {
-    super(name);
-    this.healthPoints = maxHealthPoints;
-    this.maxHealthPoints = maxHealthPoints;
-    this.directionDuration = directionDuration;
+  constructor(name: string) {
+    this.name = name;
   }
 
-  public getHealthPoints(): number { return this.healthPoints; }
+  public getName(): string { return this.name; }
 
-  public setHealthPoints(healthPoints: number): void { this.healthPoints = healthPoints; }
-
-  public getMaxHealthPoints(): number { return this.maxHealthPoints; }
-
-  public getDirectionDuration(): number { return this.directionDuration; }
 }

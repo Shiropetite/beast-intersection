@@ -22,11 +22,14 @@ export class InputSignalSender extends SignalSender<InputSignalListener, InputCo
   //#endregion
 
   public raise({ key }: InputConfig): void {
-    InputSignalSender.getInstance().getListerners().forEach((listener) => { listener.onKeyPressed(key); });
+    let signalReceived = false;
+    InputSignalSender.getInstance().getListerners().forEach((listener) => { 
+      if (!signalReceived) { signalReceived = listener.onKeyPressed(key); } 
+    });
   }
 
 }
 
 export interface InputSignalListener {
-  onKeyPressed(keyPressed: string): void;
+  onKeyPressed(keyPressed: string): boolean;
 }

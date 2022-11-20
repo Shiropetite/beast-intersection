@@ -8,7 +8,7 @@ export enum SpriteDirections {
   DOWN='down',
 }
 
-export class SpriteComponent {
+export class MapSprite {
   
   private html: HTMLElement;
   private htmlId: string;
@@ -46,65 +46,67 @@ export class SpriteComponent {
     MapUI.getInstance().add(spriteHTML);
 
     this.html = document.getElementById(this.htmlId);
-    this.lookAt(this.direction);
+    this.lookHtml(this.direction);
     this.moveHtml();
   }
 
-  /**
-   * Remove sprite from map
-   */
-  public destroy(): void { MapUI.getInstance().remove(this.html); }
-
-
-  /**
-   * Chage direction of the sprite
-   * @param direction 
-   */
-  public lookAt(direction: SpriteDirections): void {
-    this.direction = direction;
-    if (this.html.classList[1]) {
-      this.html.classList.remove(this.html.classList[1]);
-    }
-    this.html.classList.add(`${this.html.classList[0]}-${this.direction}`);
+  public addClass(className: string) {
+    this.html.classList.add(className);
   }
 
-  /**
-   * Move Up the sprite
-   */
+  public removeClass(className: string) {
+    this.html.classList.remove(className);
+  }
+
+  public show(): void { this.html.style.display = 'block'; }
+
+  public hide(): void { this.html.style.display = 'none'; }
+ 
+  public destroy(): void { MapUI.getInstance().remove(this.html); }
+
+  public lookUp() {
+    this.lookHtml(SpriteDirections.UP);
+  }
+
+  public lookDown() {
+    this.lookHtml(SpriteDirections.DOWN);
+  }
+
+  public lookLeft() {
+    this.lookHtml(SpriteDirections.LEFT);
+  }
+
+  public lookRight() {
+    this.lookHtml(SpriteDirections.RIGHT);
+  }
+
+  private lookHtml(direction: SpriteDirections): void {
+    if (this.html.classList[1]) { this.html.classList.remove(this.html.classList[1]); }
+    this.html.classList.add(`${ this.html.classList[0] }-${ direction }`);
+  }
+
   public moveUp() { 
     this.top -= MapCell.MAP_CELL_SIZE;
     this.moveHtml(); 
   }
 
-  /**
-   * Move Down the sprite
-   */
   public moveDown() { 
     this.top += MapCell.MAP_CELL_SIZE;
     this.moveHtml(); 
   }
 
-  /**
-   * Move Left the sprite
-   */
   public moveLeft() { 
     this.direction = SpriteDirections.LEFT;  
     this.left -= MapCell.MAP_CELL_SIZE;
     this.moveHtml(); 
   }
 
-  /**
-   * Move Right the sprite
-   */
   public moveRight() { 
     this.direction = SpriteDirections.RIGHT;  
     this.left += MapCell.MAP_CELL_SIZE;
     this.moveHtml(); 
   }
 
-  /**
-   * Move sprite html on page
-   */
   private moveHtml(): void {
     this.html.style.transform = `translate3d(${ this.left }px, ${ this.top }px, 0)`;
   }

@@ -1,37 +1,34 @@
-import { ToolItem, ToolType } from './ToolItem';
+export class FishingToolItem {
 
-export class FishingToolItem extends ToolItem {
-  private power: number;
-  private durability: number;
-  private maxDurability: number;
-  private resistance: number;
+  private readonly name: string;
+  private readonly power: number; // damage inflicted when reeling
+  private readonly maxPressure: number;
+  private readonly pressureFactor: number; // how much pressure goes up or down during minigame
 
-  constructor(name: string, power: number, maxDurability: number, resistance: number) {
-    super(name, ToolType.FISHING);
+  private pressure: number; // limit before fishing rod breaks during minigame
+
+
+  constructor(name: string, power: number, maxPressure: number, pressureFactor: number) {
+    this.name = name;
     this.power = power;
-    this.durability = 0;
-    this.maxDurability = maxDurability;
-    this.resistance = resistance;
+    this.maxPressure = maxPressure;
+    this.pressureFactor = pressureFactor;
+
+    this.pressure = 0;
   }
 
-  public getDurability(): number {
-    return this.durability;
-  }
+  public applyPressure(pressure: number = 0) { this.pressure += this.pressureFactor + pressure }
 
-  public getMaxDurability(): number {
-    return this.maxDurability;
-  }
+  public getName(): string { return this.name; }
 
-  public getPower(): number {
-    return this.power;
-  }
+  public getPower(): number { return this.power; }
 
-  public getResistance(): number {
-    return this.resistance;
-  }
+  public getMaxPressure(): number { return this.maxPressure; }
 
-  public setDurability(durability: number): void {
-    this.durability = durability;
-  }
+  public getPressureFactor(): number { return this.pressureFactor; }
+
+  public getPressure(): number { return this.pressure; }
+
+  public setPressure(durability: number): void { this.pressure = durability; }
 
 }

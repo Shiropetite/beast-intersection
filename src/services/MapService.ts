@@ -1,5 +1,5 @@
 import { PlayerEntity } from "../entities";
-import { MapCell } from "../map/MapCell";
+import { MapCell, MapCellContent } from "../map/MapCell";
 import { MapTeleporter } from "../map/MapTeleporter";
 import { PlayerMoveSignalListener, PlayerMoveSignalSender } from "../signals";
 import { MapUI } from "../ui";
@@ -49,7 +49,7 @@ export class MapService implements PlayerMoveSignalListener {
     for (let i = 0; i < mapArray.length; i++) {
       cells.push([]);
       for (let j = 0; j < mapArray[i].length; j++) {
-        cells[i].push(new MapCell(i, j, mapArray[i][j], mapArray[i][j] === 'G'));
+        cells[i].push(new MapCell(i, j, mapArray[i][j], mapArray[i][j] === 'W'));
       }
     }
   
@@ -93,9 +93,13 @@ export class MapService implements PlayerMoveSignalListener {
     if (root.getY() === 0) { return this.getMapCell(root.getRight(), y, x); }
   }
 
+  public initEntityMapCell(content: MapCellContent, y: number, x: number): void {
+    const entitiesCell = this.getMapCell(this.rootMapCell, y, x);
+    entitiesCell.createContent(content);
+  }
+
   public initPlayerMapCell(y: number, x: number): void {
-    const playerMapCell = this.getMapCell(this.rootMapCell, y, x);
-    playerMapCell.createContent(PlayerEntity.getInstance());
+    this.initEntityMapCell(PlayerEntity.getInstance(), y, x);
     MapUI.getInstance().move();
   }
 

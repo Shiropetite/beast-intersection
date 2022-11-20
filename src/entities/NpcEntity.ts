@@ -1,15 +1,14 @@
-import { SpriteComponent, TriggerComponent, ColliderComponent } from '../components';
-import { MapCell } from '../map/MapCell';
-import { Sentence } from '../services';
+import { MapCell, MapSprite } from '../map';
+import { MapConfig, Sentence } from '../services';
 
 export interface NpcRoutine {
   [time: string]: {
-    text?: string,
+    map?: MapConfig,
     position?: {
       top: number,
       left: number
     },
-    dialog?: Sentence[]
+    dialog?: Sentence[], 
   }
 }
 
@@ -21,33 +20,22 @@ export enum NpcStates {
 
 export class NpcEntity {
   
-  private readonly sprite: SpriteComponent;
-  private readonly trigger: TriggerComponent;
-  private readonly collider: ColliderComponent;
-
+  private readonly sprite: MapSprite;
   private readonly name: string;
   
   private currentCell: MapCell;
   private state: NpcStates;
   private routine: NpcRoutine;
 
-  public constructor(sprite: SpriteComponent, trigger: TriggerComponent, collider: ColliderComponent, name: string, routine: NpcRoutine) {
+  public constructor(sprite: MapSprite, name: string, routine: NpcRoutine) {
     this.sprite = sprite;
-    this.trigger = trigger;
-    this.collider = collider;
-    
     this.name = name;
 
     this.state = NpcStates.IDLE;
-    //TODO: add npc starting cell
     this.routine = routine;
   }
-
-  public getSprite(): SpriteComponent { return this.sprite; }
-
-  public getTrigger(): TriggerComponent { return this.trigger; }
-
-  public getCollider(): ColliderComponent { return this.collider; }
+  
+  public getSprite(): MapSprite { return this.sprite; }
 
   public getCurrentCell(): MapCell { return this.currentCell; }
 
