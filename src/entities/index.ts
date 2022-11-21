@@ -5,3 +5,4 @@ export * from './FishSpawnerEntity';
 export * from './BugEntity';
 export * from './BugSpawnerEntity';
 export * from './PickableEntity';
+export * from './GatherableEntity';

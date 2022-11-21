@@ -6,7 +6,7 @@ export class CameraUI {
   //#region Singleton
   private constructor() {}
 
-  public static getInstance(): CameraUI {
+  public static get(): CameraUI {
     if (!CameraUI.instance) {
       CameraUI.instance = new CameraUI();
     }

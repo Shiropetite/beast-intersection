@@ -1,15 +1,15 @@
-export class FishingToolItem {
+import { Item } from ".";
 
-  private readonly name: string;
+export class FishingToolItem extends Item {
+
   private readonly power: number; // damage inflicted when reeling
   private readonly maxPressure: number;
   private readonly pressureFactor: number; // how much pressure goes up or down during minigame
 
   private pressure: number; // limit before fishing rod breaks during minigame
 
-
   constructor(name: string, power: number, maxPressure: number, pressureFactor: number) {
-    this.name = name;
+    super(name);
     this.power = power;
     this.maxPressure = maxPressure;
     this.pressureFactor = pressureFactor;
@@ -18,8 +18,6 @@ export class FishingToolItem {
   }
 
   public applyPressure(pressure: number = 0) { this.pressure += this.pressureFactor + pressure }
-
-  public getName(): string { return this.name; }
 
   public getPower(): number { return this.power; }
 

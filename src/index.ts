@@ -1,58 +1,62 @@
+import { GatherableService } from './services/GatherableService';
 import * as _ from 'lodash';
 import './@shared/styles/index.css';
 
-import { PlayerService, NpcService, MapService, TalkingService, FishingService } from './services';
-import { InputSignalSender, PlayerMoveSignalSender, TimeSignalSender } from './signals';
-import { CameraUI } from './ui';
-import { TimeService } from './services';
-import { FishEntity, FishSpawnerEntity, NpcEntity, PickableEntity } from './entities';
 import { MapSprite } from './map';
+import { FishEntity, FishSpawnerEntity, GatherableEntity, NpcEntity, PickableEntity } from './entities';
+import { MapService, TimeService, PlayerService, NpcService, TalkingService, FishSpawnerService, FishingService, PickableService } from './services';
+import { Item, FishItem } from './items';
+import { CameraUI, TalkingUI } from './ui';
+import { InputSignalSender, PlayerMoveSignalSender, TimeSignalSender } from './signals';
 
 import { testMap } from './@shared/assets/maps/test-map';
-import { monkyRoutine } from './@shared/routines/monky/first-routine';
-import { TalkingUI } from './ui/TalkingUI';
-import { FishSpawnerService } from './services/FishSpawnerService';
-import { FishItem, RockItem } from './items';
-import { PickableService } from './services/PickableService';
+import { monkyRoutine } from './@shared/assets/routines/monky/first-routine';
 
 const onload = async () => {
-  CameraUI.getInstance().create();
-  MapService.getInstance().buildMap(testMap);
-  MapService.getInstance().initPlayerMapCell(1, 4);
+  // Init map
+  CameraUI.get().create();
+  MapService.get().createMap(testMap);
+  MapService.get().initPlayerMapCell(1, 4);
 
-  // Add keypress listerner for each service
-  InputSignalSender.getInstance().registerListener(PlayerService.getInstance());
-  InputSignalSender.getInstance().registerListener(NpcService.getInstance());
-  InputSignalSender.getInstance().registerListener(TalkingService.getInstance());
-  InputSignalSender.getInstance().registerListener(FishSpawnerService.getInstance());
-  InputSignalSender.getInstance().registerListener(FishingService.getInstance());
-  InputSignalSender.getInstance().registerListener(PickableService.getInstance());
+  // Register signals listeners
+  InputSignalSender.get().register(PlayerService.get());
+  InputSignalSender.get().register(NpcService.get());
+  InputSignalSender.get().register(TalkingService.get());
+  InputSignalSender.get().register(FishSpawnerService.get());
+  InputSignalSender.get().register(FishingService.get());
+  InputSignalSender.get().register(PickableService.get());
+  InputSignalSender.get().register(GatherableService.get());
 
-  // Add move player listener
-  PlayerMoveSignalSender.getInstance().registerListener(MapService.getInstance());
+  PlayerMoveSignalSender.get().register(MapService.get());
 
-  // Add time listerner
-  TimeSignalSender.getInstance().registerListener(NpcService.getInstance());
+  TimeSignalSender.get().register(NpcService.get());
 
-  // Services init
-  TimeService.getInstance().init(6,30);
-  NpcService.getInstance().addNpc(
+  // Init services
+  TimeService.get().init(6,30);
+
+  NpcService.get().register(
     new NpcEntity(new MapSprite('npc'), 'Monky', monkyRoutine)
   );
-  FishSpawnerService.getInstance().addSpawner(
+  NpcService.get().init();
+
+  FishSpawnerService.get().register(
     new FishSpawnerEntity(new MapSprite('fish'), new FishItem('carpe'), new FishEntity(300, 3, 500, 200, 3000, 0.5), 2, 9)
-  )
-  PickableService.getInstance().addPickable(
-    new PickableEntity(new MapSprite('rock'), new RockItem("granite"), 7, 1)
   );
-  NpcService.getInstance().initCells();
 
-  TimeService.getInstance().start();
+  PickableService.get().register(
+    new PickableEntity(new MapSprite('rock'), new Item("granite"), 7, 1)
+  );
 
-  // Create UI
+  GatherableService.get().register(
+    new GatherableEntity(new MapSprite('tree'), [ new Item('branche'), new Item('feuille') ], 3, 5)
+  );
+
+  TimeService.get().start();
+
+  // Init UI
   TalkingUI.create();
 
-  window.addEventListener('keypress', InputSignalSender.getInstance().raise);
+  window.addEventListener('keypress', InputSignalSender.get().raise);
 } 
 
 window.addEventListener('load', onload);

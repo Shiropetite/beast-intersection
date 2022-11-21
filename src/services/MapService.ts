@@ -16,7 +16,7 @@ export class MapService implements PlayerMoveSignalListener {
   //#region Singleton
   private constructor() {}
 
-  public static getInstance(): MapService {
+  public static get(): MapService {
     if (!MapService.instance) {
       MapService.instance = new MapService();
     }
@@ -25,15 +25,19 @@ export class MapService implements PlayerMoveSignalListener {
   }
   //#endregion
 
+  onMove(): void {
+    MapUI.get().move();
+  }
+
   /**
    * Create map cells and html from array of character
    * @param mapArray 
    */
-  public buildMap(mapArray: MapConfig) {
+  public createMap(mapArray: MapConfig) {
     this.createMapCells(mapArray.map);
-    if (MapUI.getInstance().isMap()) { MapUI.getInstance().destroy(); }
-    MapUI.getInstance().create();
-    MapUI.getInstance().build(this.rootMapCell);
+    if (MapUI.get().isMap()) { MapUI.get().destroy(); }
+    MapUI.get().create();
+    MapUI.get().build(this.rootMapCell);
     mapArray.initMap()
   }
 
@@ -100,21 +104,13 @@ export class MapService implements PlayerMoveSignalListener {
 
   public initPlayerMapCell(y: number, x: number): void {
     this.initEntityMapCell(PlayerEntity.getInstance(), y, x);
-    MapUI.getInstance().move();
-  }
-
-  /**
-   * Listener to player movement
-   * Move the camera when player move (Follow the player)
-   */
-  onMove(): void {
-    MapUI.getInstance().move();
+    MapUI.get().move();
   }
 
   addTeleporter(teleporter: MapTeleporter, y: number, x: number): void {
     const teleporterCell = this.getMapCell(this.rootMapCell, y, x);
     teleporterCell.setTeleporter(teleporter);
-    PlayerMoveSignalSender.getInstance().registerListener(teleporterCell);
+    PlayerMoveSignalSender.get().register(teleporterCell);
   }
   
 }

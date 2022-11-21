@@ -1,8 +1,22 @@
 import { MapUI } from '.';
 
 export class CatchingUI {
+  
+  private static instance: CatchingUI;
   private static directionContainer: HTMLElement;
   private static lifeContainer: HTMLElement[];
+
+  //#region Singleton
+  private constructor() {}
+
+  public static get(): CatchingUI {
+    if (!CatchingUI.instance) {
+      CatchingUI.instance = new CatchingUI();
+    }
+
+    return CatchingUI.instance;
+  }
+  //#endregion
   
   public static create(bugTop: number, bugLeft: number): void {
     const directionContainer = document.createElement('div');
@@ -10,7 +24,7 @@ export class CatchingUI {
     directionContainer.classList.add('catch-container');
     directionContainer.style.top = `${ bugTop - 80 }px`;
     directionContainer.style.left = `${ bugLeft }px`;
-    MapUI.getInstance().add(directionContainer);
+    MapUI.get().add(directionContainer);
 
     const life0HTML = document.createElement('div');
     life0HTML.id = 'catch-life-0';
@@ -33,7 +47,7 @@ export class CatchingUI {
     const lifeContainerHTML = document.createElement('div');
     lifeContainerHTML.classList.add('catch-life-container');
 
-    MapUI.getInstance().add(lifeContainerHTML);
+    MapUI.get().add(lifeContainerHTML);
 
     CatchingUI.directionContainer = document.getElementById('catch-container');
     const lifeContainerDiv = document.getElementById('catch-life-container');
@@ -62,6 +76,6 @@ export class CatchingUI {
   }
 
   public static destroy(): void {
-    MapUI.getInstance().remove(document.getElementById('catch-container'))
+    MapUI.get().remove(document.getElementById('catch-container'))
   }
 }

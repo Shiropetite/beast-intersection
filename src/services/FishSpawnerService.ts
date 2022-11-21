@@ -13,7 +13,7 @@ export class FishSpawnerService implements InputSignalListener {
     //#region Singleton
     private constructor() { }
 
-    public static getInstance(): FishSpawnerService {
+    public static get(): FishSpawnerService {
         if (!FishSpawnerService.instance) {
             FishSpawnerService.instance = new FishSpawnerService();
         }
@@ -22,9 +22,7 @@ export class FishSpawnerService implements InputSignalListener {
     }
     //#endregion
 
-    public addSpawner(spawner: FishSpawnerEntity): void {
-        this.spawners.push(spawner);
-    }
+    public register(spawner: FishSpawnerEntity): void { this.spawners.push(spawner); }
 
     public onKeyPressed(keyPressed: string): boolean {
         if (keyPressed === ActionKeys.ACT && PlayerEntity.getInstance().getState() === PlayerStates.IDLE) {
@@ -60,7 +58,6 @@ export class FishSpawnerService implements InputSignalListener {
     }
 
     private fishing(spawner: FishSpawnerEntity): void {
-        //FIXME:
-        FishingService.getInstance().start(spawner, PlayerEntity.getInstance().getToolEquiped() as FishingToolItem);
+        FishingService.get().start(spawner, PlayerEntity.getInstance().getToolEquiped() as FishingToolItem);
     }
 }

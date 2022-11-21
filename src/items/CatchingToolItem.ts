@@ -1,19 +1,17 @@
-export class CatchingToolItem {
+import { Item } from ".";
 
-  private readonly name: string;
+export class CatchingToolItem extends Item {
 
-  private power: number;
-  private catchRadius: number; // radius for catching bugs to start minigame
-  private directionDurationBonus: number; // time added between direction changes during minigame
+  private readonly power: number;
+  private readonly catchRadius: number; // radius for catching bugs to start minigame
+  private readonly directionDurationBonus: number; // time added between direction changes during minigame
 
   constructor(name: string, power: number, catchRadius: number, directionDurationBonus: number) {
-    this.name = name;
+    super(name);
     this.power = power;
     this.catchRadius = catchRadius;
     this.directionDurationBonus = directionDurationBonus;
   }
-
-  public getName(): string { return this.name; }
 
   public getPower(): number { return this.power; }
 

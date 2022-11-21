@@ -1,4 +1,4 @@
-import { SignalSender } from "./SignalSender";
+import { SignalSender } from ".";
 
 interface InputConfig {
   key: string
@@ -12,7 +12,7 @@ export class InputSignalSender extends SignalSender<InputSignalListener, InputCo
     super(); 
   }
 
-  public static getInstance(): InputSignalSender {
+  public static get(): InputSignalSender {
     if (!InputSignalSender.instance) {
       InputSignalSender.instance = new InputSignalSender();
     }
@@ -23,7 +23,7 @@ export class InputSignalSender extends SignalSender<InputSignalListener, InputCo
 
   public raise({ key }: InputConfig): void {
     let signalReceived = false;
-    InputSignalSender.getInstance().getListerners().forEach((listener) => { 
+    InputSignalSender.get().getListerners().forEach((listener) => { 
       if (!signalReceived) { signalReceived = listener.onKeyPressed(key); } 
     });
   }

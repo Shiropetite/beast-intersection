@@ -15,7 +15,7 @@ export const testMap2 = {
     ['W', 'W', 'W', 'G', 'G', 'W'],
   ],
   initMap: () => {
-    MapService.getInstance().addTeleporter(new MapTeleporter(testMap, 1, 12), 8, 3)
-    MapService.getInstance().addTeleporter(new MapTeleporter(testMap, 1, 13), 8, 4)
+    MapService.get().addTeleporter(new MapTeleporter(testMap, 1, 12), 8, 3)
+    MapService.get().addTeleporter(new MapTeleporter(testMap, 1, 13), 8, 4)
   }
 }

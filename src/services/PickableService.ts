@@ -10,7 +10,7 @@ export class PickableService implements InputSignalListener {
 
   private constructor() {}
 
-  public static getInstance(): PickableService {
+  public static get(): PickableService {
     if (!PickableService.instance) {
       PickableService.instance = new PickableService();
     }
@@ -18,7 +18,7 @@ export class PickableService implements InputSignalListener {
     return PickableService.instance;
   }
 
-  public addPickable(pickable: PickableEntity): void { this.pickables.push(pickable); }
+  public register(pickable: PickableEntity): void { this.pickables.push(pickable); }
 
   public onKeyPressed(keyPressed: string): boolean {
     let signalReceived = false
@@ -30,7 +30,6 @@ export class PickableService implements InputSignalListener {
         }
       });
     }
-    
     return signalReceived;
   }
 
@@ -45,7 +44,7 @@ export class PickableService implements InputSignalListener {
     //pickable.destroy();
     pickable.getSprite().destroy();
 
-    TalkingService.getInstance().start([{ 
+    TalkingService.get().start([{ 
       text: "Vous avez rammassé 1 " + pickable.getItem().getName() + " !",
     }]);
   }

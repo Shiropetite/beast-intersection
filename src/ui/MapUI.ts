@@ -1,6 +1,6 @@
-import { PlayerEntity } from "../entities";
 import { CameraUI } from ".";
-import { MapCell } from "../map/MapCell";
+import { MapCell } from "../map";
+import { PlayerEntity } from "../entities";
 
 export class MapUI {
 
@@ -10,7 +10,7 @@ export class MapUI {
   //#region Singleton
   private constructor() {}
 
-  public static getInstance(): MapUI {
+  public static get(): MapUI {
     if (!MapUI.instance) {
       MapUI.instance = new MapUI();
     }
@@ -27,7 +27,7 @@ export class MapUI {
     cameraHTML.id = 'map';
     cameraHTML.classList.add('map');
     
-    CameraUI.getInstance().add(cameraHTML);
+    CameraUI.get().add(cameraHTML);
   
     // store camera HTML
     this.html = document.getElementById('map');
@@ -37,7 +37,7 @@ export class MapUI {
    * remove map from camera
    */
   public destroy(): void {
-    CameraUI.getInstance().remove(this.html);
+    CameraUI.get().remove(this.html);
     this.html = null;
   }
 

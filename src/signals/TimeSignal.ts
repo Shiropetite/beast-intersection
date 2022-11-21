@@ -1,4 +1,4 @@
-import { SignalSender } from "./SignalSender";
+import { SignalSender } from ".";
 
 export class TimeSignalSender extends SignalSender<TimeSignalListener, string> {
 
@@ -7,7 +7,7 @@ export class TimeSignalSender extends SignalSender<TimeSignalListener, string> {
   //#region Singleton
   private constructor() { super(); }
 
-  public static getInstance(): TimeSignalSender {
+  public static get(): TimeSignalSender {
     if (!TimeSignalSender.instance) {
       TimeSignalSender.instance = new TimeSignalSender();
     }

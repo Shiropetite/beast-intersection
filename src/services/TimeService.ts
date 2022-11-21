@@ -12,7 +12,7 @@ export class TimeService {
   //#region Singleton
   private constructor() { }
 
-  public static getInstance(): TimeService {
+  public static get(): TimeService {
     if (!TimeService.instance) {
       TimeService.instance = new TimeService();
     }
@@ -54,7 +54,7 @@ export class TimeService {
 
   public tick(): void {
     // notify entities affected by time
-    TimeSignalSender.getInstance().raise(this.getCurrentTime());
+    TimeSignalSender.get().raise(this.getCurrentTime());
     
     // update displayed time
     TimeUI.setTime();

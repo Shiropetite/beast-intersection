@@ -9,7 +9,7 @@ export class PlayerService implements InputSignalListener {
   //#region Singleton
   private constructor() { }
 
-  public static getInstance(): PlayerService {
+  public static get(): PlayerService {
     if (!PlayerService.instance) {
       PlayerService.instance = new PlayerService();
     }
@@ -59,7 +59,7 @@ export class PlayerService implements InputSignalListener {
 
     if (moveSuccess) {
       // Signal to entities that player has moved
-      PlayerMoveSignalSender.getInstance().raise();
+      PlayerMoveSignalSender.get().raise();
     }
 
     // wait for sprite to sync before setting player state

@@ -7,7 +7,7 @@ export class PlayerMoveSignalSender extends SignalSender<PlayerMoveSignalListene
   //#region Singleton
   private constructor() { super(); }
 
-  public static getInstance(): PlayerMoveSignalSender {
+  public static get(): PlayerMoveSignalSender {
     if (!PlayerMoveSignalSender.instance) {
       PlayerMoveSignalSender.instance = new PlayerMoveSignalSender();
     }

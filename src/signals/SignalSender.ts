@@ -18,7 +18,7 @@ export abstract class SignalSender<T, U> {
    * Register a new listener
    * @param listener : the listener to register
    */
-  public registerListener(listener: T): void { this.listeners.push(listener); }
+  public register(listener: T): void { this.listeners.push(listener); }
 
   /**
    * Get all listerners registers

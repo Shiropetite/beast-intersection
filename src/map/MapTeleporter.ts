@@ -13,8 +13,8 @@ export class MapTeleporter {
   }
 
   teleport(): void {
-    MapService.getInstance().buildMap(this.destinationMap);
-    MapService.getInstance().initPlayerMapCell(this.playerTop, this.playerLeft);
+    MapService.get().createMap(this.destinationMap);
+    MapService.get().initPlayerMapCell(this.playerTop, this.playerLeft);
   } 
 
 }

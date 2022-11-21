@@ -1,9 +1,10 @@
+import { GatherableEntity } from './../entities/GatherableEntity';
 import { NpcEntity, PlayerEntity, FishSpawnerEntity, BugSpawnerEntity, PickableEntity } from "../entities";
 import { PlayerMoveSignalListener } from "../signals/PlayerMoveSignal";
 import { sleep } from "../utils";
 import { MapTeleporter } from "./MapTeleporter";
 
-export type MapCellContent = PlayerEntity | NpcEntity | FishSpawnerEntity | BugSpawnerEntity | PickableEntity;
+export type MapCellContent = PlayerEntity | NpcEntity | FishSpawnerEntity | BugSpawnerEntity | PickableEntity | GatherableEntity;
 
 export class MapCell implements PlayerMoveSignalListener {
 

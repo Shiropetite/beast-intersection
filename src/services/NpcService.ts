@@ -1,6 +1,5 @@
 import { MapService, TalkingService, TimeService } from ".";
-import { NpcEntity, NpcRoutine, NpcStates, PlayerEntity, PlayerStates } from "../entities";
-import { SpriteDirections } from "../map";
+import { NpcEntity, NpcStates, PlayerEntity, PlayerStates } from "../entities";
 import { InputSignalListener, TimeSignalListener } from "../signals";
 import { ActionKeys } from "../utils";
 
@@ -12,7 +11,7 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
 
   private constructor() {}
 
-  public static getInstance(): NpcService {
+  public static get(): NpcService {
     if (!NpcService.instance) {
       NpcService.instance = new NpcService();
     }
@@ -20,12 +19,12 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
     return NpcService.instance;
   }
 
-  public addNpc(npc: NpcEntity): void { this.npcs.push(npc); }
+  public register(npc: NpcEntity): void { this.npcs.push(npc); }
 
-  public initCells() {
+  public init() {
     this.npcs.forEach((npc) => {
       const time = this.getLastPosition(npc);
-      MapService.getInstance().initEntityMapCell(npc,
+      MapService.get().initEntityMapCell(npc,
         npc.getRoutine()[time].position.top,
         npc.getRoutine()[time].position.left,
       );
@@ -37,7 +36,7 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
       if (Object.keys(npc.getRoutine()).includes(formattedTime) && 
           npc.getRoutine()[formattedTime].position && 
           npc.getState() === NpcStates.IDLE) {
-            NpcService.getInstance().move(npc,
+            NpcService.get().move(npc,
               npc.getRoutine()[formattedTime].position.top,
               npc.getRoutine()[formattedTime].position.left
             );
@@ -85,20 +84,20 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
   }
 
   private getLastPosition(npc: NpcEntity) {
-    let time = TimeService.getInstance().getCurrentTime();
-    while (npc.getRoutine()[time]?.position === undefined) { time = TimeService.getInstance().getPreviousTime(time); }
+    let time = TimeService.get().getCurrentTime();
+    while (npc.getRoutine()[time]?.position === undefined) { time = TimeService.get().getPreviousTime(time); }
     return time;
   }
 
   private getLastDialog(npc: NpcEntity) {
-    let time = TimeService.getInstance().getCurrentTime();
-    while (npc.getRoutine()[time]?.dialog === undefined) { time = TimeService.getInstance().getPreviousTime(time); }
+    let time = TimeService.get().getCurrentTime();
+    while (npc.getRoutine()[time]?.dialog === undefined) { time = TimeService.get().getPreviousTime(time); }
     return time;
   }
 
   private talk(npc: NpcEntity) {
     const time = this.getLastDialog(npc);
-    TalkingService.getInstance().start(npc.getRoutine()[time].dialog, npc);
+    TalkingService.get().start(npc.getRoutine()[time].dialog, npc);
   }
 
   private move(npc: NpcEntity, targetTop: number, targetLeft: number): void {
@@ -114,13 +113,13 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
         npc.setState(NpcStates.MOVING);
 
         // Npc is below target position
-        if (npc.getCurrentCell().getCellY() > targetTop) { NpcService.getInstance().moveUp(npc); }
+        if (npc.getCurrentCell().getCellY() > targetTop) { NpcService.get().moveUp(npc); }
         // Npc is above target position
-        else if (npc.getCurrentCell().getCellY() < targetTop) { NpcService.getInstance().moveDown(npc); }
+        else if (npc.getCurrentCell().getCellY() < targetTop) { NpcService.get().moveDown(npc); }
         // Npc is right of target position
-        else if (npc.getCurrentCell().getCellX() > targetLeft) { NpcService.getInstance().moveLeft(npc); }
+        else if (npc.getCurrentCell().getCellX() > targetLeft) { NpcService.get().moveLeft(npc); }
         // Npc is left of target position
-        else if (npc.getCurrentCell().getCellX() < targetLeft) { NpcService.getInstance().moveRight(npc); }
+        else if (npc.getCurrentCell().getCellX() < targetLeft) { NpcService.get().moveRight(npc); }
 
         npc.setState(NpcStates.IDLE);
       }
@@ -167,35 +166,4 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
     }
   }
 
-  // public act(): void {
-  //   let time = TimeService.getInstance().getCurrentTime();
-    
-  //   // routine do not contain a dialog for current time
-  //   while (this.routine[time]?.dialog === undefined) {
-  //     time = TimeService.getInstance().getPreviousTime(time);
-  //   }
-    
-  //   // start of dialog
-  //   if (this.getState() !== PersonState.TALKING) {
-  //     this.setState(PersonState.TALKING);
-
-  //     lookAt(this, player);
-  //     lookAt(player, this);
-
-  //     TalkingService.getInstance().start(this.routine[time].dialog, this.getName());
-  //   }
-  //   // dialog ongoing
-  //   else {
-  //     if (this.getState() === PersonState.TALKING) {
-  //       const dialogNext: boolean = TalkingService.getInstance().talk();
-
-  //       // end of dialog
-  //       if (!dialogNext) {
-  //         this.setState(PersonState.IDLE);
-  //       }
-  //     }
-  //   }
-  // }
-  //#endregion
-  
 }

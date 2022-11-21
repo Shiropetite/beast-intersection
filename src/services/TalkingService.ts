@@ -27,7 +27,7 @@ export class TalkingService implements InputSignalListener {
   //#region Singleton
   private constructor() { }
 
-  public static getInstance(): TalkingService {
+  public static get(): TalkingService {
     if (!TalkingService.instance) {
       TalkingService.instance = new TalkingService();
     }
@@ -90,7 +90,7 @@ export class TalkingService implements InputSignalListener {
 
     TalkingUI.show(this.npc);
 
-    TimeService.getInstance().stop();
+    TimeService.get().stop();
     
     if (this.npc) { this.npc.setState(NpcStates.TALKING); }
 
@@ -132,7 +132,7 @@ export class TalkingService implements InputSignalListener {
   private end(): void {
     TalkingUI.hide(this.npc);
 
-    TimeService.getInstance().start();
+    TimeService.get().start();
 
     if (this.npc) { this.npc.setState(NpcStates.IDLE); }
 

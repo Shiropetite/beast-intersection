@@ -1,11 +1,7 @@
-export class BugItem {
+import { Item } from ".";
 
-  private readonly name: string
+export class BugItem extends Item {
 
-  constructor(name: string) {
-    this.name = name;
-  }
-
-  public getName(): string { return this.name; }
+  constructor(name: string) { super(name); }
 
 }

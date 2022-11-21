@@ -1,11 +1,7 @@
-export class FishItem {
-  
-  private readonly name: string
+import { Item } from ".";
 
-  constructor(name: string) {
-    this.name = name;
-  }
+export class FishItem extends Item {
 
-  public getName(): string { return this.name; }
+  constructor(name: string) { super(name); }
 
 }

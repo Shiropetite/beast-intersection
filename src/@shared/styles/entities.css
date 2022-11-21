@@ -1,8 +1,8 @@
 .tree {
   position: absolute;
   background-image: url(../assets/sprites/entities/tree.png);
+  image-rendering: pixelated;
   background-size: cover;
-  image-rendering: optimizeSpeed;
 }
 
 .rock {

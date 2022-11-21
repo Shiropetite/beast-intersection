@@ -1,8 +1,22 @@
-import { TimeService } from "../services";
 import { CameraUI } from ".";
+import { TimeService } from "../services";
 
 export class TimeUI {
+
+  private static instance: TimeUI;
   private static time: HTMLElement;
+
+  //#region Singleton
+  private constructor() {}
+
+  public static get(): TimeUI {
+    if (!TimeUI.instance) {
+      TimeUI.instance = new TimeUI();
+    }
+
+    return TimeUI.instance;
+  }
+  //#endregion
 
   //#region Methods
   public static create(): void {
@@ -10,7 +24,7 @@ export class TimeUI {
     const timeHTML = document.createElement("div");
     timeHTML.id = "time"
     timeHTML.classList.add('time');
-    CameraUI.getInstance().add(timeHTML);
+    CameraUI.get().add(timeHTML);
 
     // store HTML
     TimeUI.time = document.getElementById('time');
@@ -41,7 +55,7 @@ export class TimeUI {
   }
 
   public static setTime(): void {
-    TimeUI.time.innerText = TimeService.getInstance().getCurrentTime();
+    TimeUI.time.innerText = TimeService.get().getCurrentTime();
   }
   //#endregion
 }

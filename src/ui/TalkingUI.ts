@@ -1,11 +1,25 @@
 import { CameraUI } from ".";
-import { NpcEntity } from './../entities/NpcEntity';
+import { NpcEntity } from '../entities';
 
 export class TalkingUI {
+
+  private static instance: TalkingUI;
   private static textBox: HTMLElement;
   private static speakerName: HTMLElement;
   private static dialogSprite: HTMLElement;
   private static text: HTMLElement;
+
+  //#region Singleton
+  private constructor() {}
+
+  public static get(): TalkingUI {
+    if (!TalkingUI.instance) {
+      TalkingUI.instance = new TalkingUI();
+    }
+
+    return TalkingUI.instance;
+  }
+  //#endregion
 
   //#region Methods
   public static create(): void {
@@ -13,13 +27,13 @@ export class TalkingUI {
     const textBoxHTML = document.createElement("div");
     textBoxHTML.id = "textbox"
     textBoxHTML.classList.add('textbox');
-    CameraUI.getInstance().add(textBoxHTML);
+    CameraUI.get().add(textBoxHTML);
 
     // create dialog sprite HTML
     const dialogSpriteHtml = document.createElement("div");
     dialogSpriteHtml.id = "textbox-sprite"
     dialogSpriteHtml.classList.add('textbox-sprite');
-    CameraUI.getInstance().add(dialogSpriteHtml);
+    CameraUI.get().add(dialogSpriteHtml);
 
     // create name HTML
     const nameHTML = document.createElement("div");

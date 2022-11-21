@@ -43,7 +43,7 @@ export class MapSprite {
     spriteHTML.classList.add(this.htmlId);
     spriteHTML.style.height = `${this.height}px`;
     spriteHTML.style.width = `${this.width}px`;
-    MapUI.getInstance().add(spriteHTML);
+    MapUI.get().add(spriteHTML);
 
     this.html = document.getElementById(this.htmlId);
     this.lookHtml(this.direction);
@@ -62,23 +62,15 @@ export class MapSprite {
 
   public hide(): void { this.html.style.display = 'none'; }
  
-  public destroy(): void { MapUI.getInstance().remove(this.html); }
+  public destroy(): void { MapUI.get().remove(this.html); }
 
-  public lookUp() {
-    this.lookHtml(SpriteDirections.UP);
-  }
+  public lookUp() { this.lookHtml(SpriteDirections.UP); }
 
-  public lookDown() {
-    this.lookHtml(SpriteDirections.DOWN);
-  }
+  public lookDown() { this.lookHtml(SpriteDirections.DOWN); }
 
-  public lookLeft() {
-    this.lookHtml(SpriteDirections.LEFT);
-  }
+  public lookLeft() { this.lookHtml(SpriteDirections.LEFT); }
 
-  public lookRight() {
-    this.lookHtml(SpriteDirections.RIGHT);
-  }
+  public lookRight() { this.lookHtml(SpriteDirections.RIGHT); }
 
   private lookHtml(direction: SpriteDirections): void {
     if (this.html.classList[1]) { this.html.classList.remove(this.html.classList[1]); }

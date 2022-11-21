@@ -18,7 +18,7 @@ export class FishingService implements InputSignalListener {
   //#region Singleton
   private constructor() { }
 
-  public static getInstance(): FishingService {
+  public static get(): FishingService {
     if (!FishingService.instance) {
       FishingService.instance = new FishingService();
     }
@@ -32,7 +32,6 @@ export class FishingService implements InputSignalListener {
       this.fish();
       return true;
     }
-
     return false;
   }
 
@@ -76,7 +75,7 @@ export class FishingService implements InputSignalListener {
       }, this.fishSpawner.getFish().getFrenzyDuration());
     }, this.fishSpawner.getFish().getFrenzyFrequency() + this.fishSpawner.getFish().getFrenzyDuration());
 
-    TimeService.getInstance().stop();
+    TimeService.get().stop();
   }
 
   private end(): void {
@@ -126,27 +125,26 @@ export class FishingService implements InputSignalListener {
       this.lose();
       this.end();
     }
-
   }
 
   private win(): void {
     //TODO: add fish item to inventory
     //TODO: set spawner on recharge
 
-    TalkingService.getInstance().start([{ 
+    TalkingService.get().start([{ 
       text: "Vous avez attrapé 1 " + this.fishSpawner.getItem().getName() + " !",
       isLock: true,
     }]);
   }
 
   private lose(): void {
-    TalkingService.getInstance().start([{ 
+    this.fishingRod.setPressure(0);
+    this.fishSpawner.getFish().setHealthPoints(this.fishSpawner.getFish().getMaxHealthPoints());
+
+    TalkingService.get().start([{ 
       text: "Le poisson s'est enfui...",
       isLock: true,
     }]);
-
-    this.fishingRod.setPressure(0);
-    this.fishSpawner.getFish().setHealthPoints(this.fishSpawner.getFish().getMaxHealthPoints());
   }
 
 }

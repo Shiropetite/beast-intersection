@@ -1,5 +1,5 @@
-import { NpcRoutine } from './../../../entities/NpcEntity';
-import { testMap } from './../../assets/maps/test-map';
+import { NpcRoutine } from '../../../../entities/NpcEntity';
+import { testMap } from '../../maps/test-map';
 
 export const monkyRoutine: NpcRoutine = {
   "06:00": {
