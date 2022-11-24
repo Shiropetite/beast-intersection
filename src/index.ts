@@ -1,12 +1,11 @@
-import { GatherableService } from './services/GatherableService';
 import * as _ from 'lodash';
 import './@shared/styles/index.css';
 
 import { MapSprite } from './map';
 import { FishEntity, FishSpawnerEntity, GatherableEntity, NpcEntity, PickableEntity } from './entities';
-import { MapService, TimeService, PlayerService, NpcService, TalkingService, FishSpawnerService, FishingService, PickableService } from './services';
+import { MapService, TimeService, PlayerService, NpcService, TalkingService, InventoryService, FishSpawnerService, FishingService, PickableService, GatherableService } from './services';
 import { Item, FishItem } from './items';
-import { CameraUI, TalkingUI } from './ui';
+import { CameraUI, TalkingUI, InventoryUI } from './ui';
 import { InputSignalSender, PlayerMoveSignalSender, TimeSignalSender } from './signals';
 
 import { testMap } from './@shared/assets/maps/test-map';
@@ -22,14 +21,15 @@ const onload = async () => {
   InputSignalSender.get().register(PlayerService.get());
   InputSignalSender.get().register(NpcService.get());
   InputSignalSender.get().register(TalkingService.get());
+  InputSignalSender.get().register(InventoryService.get());
   InputSignalSender.get().register(FishSpawnerService.get());
   InputSignalSender.get().register(FishingService.get());
   InputSignalSender.get().register(PickableService.get());
   InputSignalSender.get().register(GatherableService.get());
 
-  PlayerMoveSignalSender.get().register(MapService.get());
-
   TimeSignalSender.get().register(NpcService.get());
+  
+  PlayerMoveSignalSender.get().register(MapService.get());
 
   // Init services
   TimeService.get().init(6,30);
@@ -38,6 +38,8 @@ const onload = async () => {
     new NpcEntity(new MapSprite('npc'), 'Monky', monkyRoutine)
   );
   NpcService.get().init();
+
+  InventoryService.get().init(40, []);
 
   FishSpawnerService.get().register(
     new FishSpawnerEntity(new MapSprite('fish'), new FishItem('carpe'), new FishEntity(300, 3, 500, 200, 3000, 0.5), 2, 9)
@@ -54,7 +56,7 @@ const onload = async () => {
   TimeService.get().start();
 
   // Init UI
-  TalkingUI.create();
+  TalkingUI.get().create();
 
   window.addEventListener('keypress', InputSignalSender.get().raise);
 } 

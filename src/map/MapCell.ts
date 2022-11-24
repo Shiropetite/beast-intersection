@@ -38,7 +38,7 @@ export class MapCell implements PlayerMoveSignalListener {
   }
 
   public async onMove(): Promise<void> {
-    if (PlayerEntity.getInstance().getCurrentCell() === this && this.teleporter) {
+    if (PlayerEntity.get().getCurrentCell() === this && this.teleporter) {
       await sleep(200);
       this.teleporter.teleport();
     }

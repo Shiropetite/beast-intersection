@@ -1,4 +1,4 @@
-import { TalkingService, TimeService } from '.';
+import { TimeService, TalkingService, InventoryService } from '.';
 import { FishSpawnerEntity, PlayerEntity, PlayerStates } from "../entities";
 import { FishingToolItem } from './../items';
 import { FishingUI } from './../ui';
@@ -28,7 +28,7 @@ export class FishingService implements InputSignalListener {
   //#endregion
 
   public onKeyPressed(keyPressed: string): boolean {
-    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.getInstance().getState() === PlayerStates.FISHING) {
+    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.FISHING) {
       this.fish();
       return true;
     }
@@ -36,13 +36,13 @@ export class FishingService implements InputSignalListener {
   }
 
   public start(fishSpawner: FishSpawnerEntity, fishingRod: FishingToolItem) : void {
-    PlayerEntity.getInstance().setState(PlayerStates.FISHING);
+    PlayerEntity.get().setState(PlayerStates.FISHING);
 
     this.isRunning = true;
     this.fishSpawner = fishSpawner;
     this.fishingRod = fishingRod;
 
-    FishingUI.create(this.fishSpawner.getSprite());
+    FishingUI.get().create(this.fishSpawner.getSprite());
   
     // interval for fish hp and fishing rod hp regen
     this.regenInterval = setInterval(() => { 
@@ -56,8 +56,8 @@ export class FishingService implements InputSignalListener {
           this.fishingRod.setPressure(this.fishingRod.getPressure() - this.fishingRod.getPressureFactor());
         }
         
-        FishingUI.updateFishHP(this.fishSpawner.getFish());
-        FishingUI.updateFishingRodHP(this.fishingRod);
+        FishingUI.get().updateFishHP(this.fishSpawner.getFish());
+        FishingUI.get().updateFishingRodHP(this.fishingRod);
       }
     }, this.fishSpawner.getFish().getRegenSpeed()); /* wtf je comprends meme plus ce code */
 
@@ -65,13 +65,12 @@ export class FishingService implements InputSignalListener {
     this.frenzyInterval = setInterval(() => {
       this.fishSpawner.getFish().setOnFrenzy();
 
-      //FIXME:
-      FishingUI.startFrenzy(this.fishSpawner.getSprite());
+      FishingUI.get().startFrenzy(this.fishSpawner.getSprite());
 
       setTimeout(() => { 
         this.fishSpawner.getFish().setOnFrenzy();
 
-        FishingUI.stopFrenzy(this.fishSpawner.getSprite());
+        FishingUI.get().stopFrenzy(this.fishSpawner.getSprite());
       }, this.fishSpawner.getFish().getFrenzyDuration());
     }, this.fishSpawner.getFish().getFrenzyFrequency() + this.fishSpawner.getFish().getFrenzyDuration());
 
@@ -82,7 +81,7 @@ export class FishingService implements InputSignalListener {
     clearInterval(this.regenInterval);
     clearInterval(this.frenzyInterval);
 
-    FishingUI.destroy();
+    FishingUI.get().destroy();
 
     this.isRunning = false;
     this.fishSpawner.setEmpty();
@@ -111,8 +110,8 @@ export class FishingService implements InputSignalListener {
     this.fishSpawner.getFish().takeDamage(this.fishingRod.getPower());
     this.fishingRod.applyPressure();
 
-    FishingUI.updateFishHP(this.fishSpawner.getFish());
-    FishingUI.updateFishingRodHP(this.fishingRod);
+    FishingUI.get().updateFishHP(this.fishSpawner.getFish());
+    FishingUI.get().updateFishingRodHP(this.fishingRod);
 
     // minigame won
     if (this.fishSpawner.getFish().getHealthPoints() <= 0) {
@@ -128,8 +127,7 @@ export class FishingService implements InputSignalListener {
   }
 
   private win(): void {
-    //TODO: add fish item to inventory
-    //TODO: set spawner on recharge
+    InventoryService.get().add(this.fishSpawner.getItem());
 
     TalkingService.get().start([{ 
       text: "Vous avez attrapé 1 " + this.fishSpawner.getItem().getName() + " !",

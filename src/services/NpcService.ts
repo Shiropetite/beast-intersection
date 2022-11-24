@@ -46,7 +46,7 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
 
   public onKeyPressed(keyPressed: string): boolean {
     let signalReceived = false
-    if (keyPressed === ActionKeys.ACT && PlayerEntity.getInstance().getState() === PlayerStates.IDLE) {
+    if (keyPressed === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
       this.npcs.forEach((npc) => {
         if (this.isTriggeredByPlayer(npc) && npc.getState() === NpcStates.IDLE) { 
           this.talk(npc);
@@ -59,24 +59,24 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
   }
 
   private isTriggeredByPlayer(npc: NpcEntity): boolean {
-    if (npc.getCurrentCell().getUp().getContents().find(c => c === PlayerEntity.getInstance())) {
+    if (npc.getCurrentCell().getUp().getContents().find(c => c === PlayerEntity.get())) {
       npc.getSprite().lookUp(); 
-      PlayerEntity.getInstance().getSprite().lookDown();
+      PlayerEntity.get().getSprite().lookDown();
       return true;
     }
-    else if (npc.getCurrentCell().getRight().getContents().find(c => c === PlayerEntity.getInstance())) {
+    else if (npc.getCurrentCell().getRight().getContents().find(c => c === PlayerEntity.get())) {
       npc.getSprite().lookRight(); 
-      PlayerEntity.getInstance().getSprite().lookLeft();
+      PlayerEntity.get().getSprite().lookLeft();
       return true;
     }
-    else if (npc.getCurrentCell().getDown().getContents().find(c => c === PlayerEntity.getInstance())) {
+    else if (npc.getCurrentCell().getDown().getContents().find(c => c === PlayerEntity.get())) {
       npc.getSprite().lookDown(); 
-      PlayerEntity.getInstance().getSprite().lookUp();
+      PlayerEntity.get().getSprite().lookUp();
       return true;
     }
-    else if (npc.getCurrentCell().getLeft().getContents().find(c => c === PlayerEntity.getInstance())) {
+    else if (npc.getCurrentCell().getLeft().getContents().find(c => c === PlayerEntity.get())) {
       npc.getSprite().lookLeft(); 
-      PlayerEntity.getInstance().getSprite().lookRight();
+      PlayerEntity.get().getSprite().lookRight();
       return true;
     }
 

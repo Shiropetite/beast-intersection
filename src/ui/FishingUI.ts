@@ -6,10 +6,11 @@ import { FishingToolItem } from '../items';
 export class FishingUI {
 
   private static instance: FishingUI;
-  private static fishBarContainer: HTMLElement;
-  private static fishBar: HTMLElement;
-  private static fishingRodBarContainer: HTMLElement;
-  private static fishingRodBar: HTMLElement;
+
+  private fishBarContainer: HTMLElement | null = null;
+  private fishBar: HTMLElement | null = null;
+  private fishingRodBarContainer: HTMLElement | null = null;
+  private fishingRodBar: HTMLElement | null = null;
 
   //#region Singleton
   private constructor() {}
@@ -23,7 +24,7 @@ export class FishingUI {
   }
   //#endregion
 
-  public static create(fishSprite: MapSprite): void {
+  public create(fishSprite: MapSprite): void {
     // create fishHP container HTML
     const fishBarContainerHTML = document.createElement('div');
     fishBarContainerHTML.id = `fish-bar-container`;
@@ -57,47 +58,31 @@ export class FishingUI {
     MapUI.get().add(fishingRodBarHTML);
 
     // store HTML
-    FishingUI.fishBarContainer = document.getElementById('fish-bar-container');
-    FishingUI.fishBar = document.getElementById('fish-bar');
-    FishingUI.fishingRodBarContainer = document.getElementById('fishing-rod-bar-container');
-    FishingUI.fishingRodBar = document.getElementById('fishing-rod-bar')
+    this.fishBarContainer = document.getElementById('fish-bar-container');
+    this.fishBar = document.getElementById('fish-bar');
+    this.fishingRodBarContainer = document.getElementById('fishing-rod-bar-container');
+    this.fishingRodBar = document.getElementById('fishing-rod-bar');
   }
 
-  public static destroy(): void {
-    MapUI.get().remove(document.getElementById(`fish-bar-container`));
-    MapUI.get().remove(document.getElementById(`fish-bar`));
-    MapUI.get().remove(document.getElementById(`fishing-rod-bar-container`));
-    MapUI.get().remove(document.getElementById(`fishing-rod-bar`));
+  public destroy(): void {
+    MapUI.get().remove(this.fishBarContainer);
+    MapUI.get().remove(this.fishBar);
+    MapUI.get().remove(this.fishingRodBarContainer);
+    MapUI.get().remove(this.fishingRodBar);
   }
 
-  public static updateFishHP(fish: FishEntity): void {
-    const element = document.getElementById(`fish-bar`);
+  public updateFishHP(fish: FishEntity): void {
+    if (fish.getHealthPoints() < 20 / 100 * fish.getMaxHealthPoints()) { this.fishBar.style.backgroundColor = 'red'; }
+    else if (fish.getHealthPoints() < 66 / 100 * fish.getMaxHealthPoints()) { this.fishBar.style.backgroundColor = 'yellow'; }
+    else { this.fishBar.style.backgroundColor = 'green'; }
 
-    if (fish.getHealthPoints() < 20 / 100 * fish.getMaxHealthPoints()) {
-      element.style.backgroundColor = 'red';
-    }
-    else if (fish.getHealthPoints() < 66 / 100 * fish.getMaxHealthPoints()) {
-      element.style.backgroundColor = 'yellow';
-    }
-    else {
-      element.style.backgroundColor = 'green';
-    }
-
-    element.style.width = `${ 128 * fish.getHealthPoints() / fish.getMaxHealthPoints() }px`;
+    this.fishBar.style.width = `${ 128 * fish.getHealthPoints() / fish.getMaxHealthPoints() }px`;
   }
 
-  public static updateFishingRodHP(fishingRod: FishingToolItem): void {
-    const element = document.getElementById(`fishing-rod-bar`);
+  public updateFishingRodHP(fishingRod: FishingToolItem): void { this.fishingRodBar.style.width = `${ 128 * fishingRod.getPressure() / fishingRod.getMaxPressure() }px`; }
 
-    element.style.width = `${ 128 * fishingRod.getPressure() / fishingRod.getMaxPressure() }px`;
-  }
+  public startFrenzy(fishSprite: MapSprite) { fishSprite.addClass('frenzy'); }
 
-  public static startFrenzy(fishSprite: MapSprite) {
-    fishSprite.addClass('frenzy');
-  }
-
-  public static stopFrenzy(fishSprite: MapSprite) {
-    fishSprite.removeClass('frenzy');
-  }
+  public stopFrenzy(fishSprite: MapSprite) { fishSprite.removeClass('frenzy'); }
 
 }

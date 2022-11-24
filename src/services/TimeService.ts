@@ -2,12 +2,12 @@ import { TimeUI } from '../ui';
 import { TimeSignalSender } from './../signals/TimeSignal';
 
 export class TimeService {
+  
   private static instance: TimeService;
 
-  private interval: NodeJS.Timer;
   private hours: number;
   private minutes: number;
-  private timeTicking: boolean;
+  private interval: NodeJS.Timer;
 
   //#region Singleton
   private constructor() { }
@@ -26,12 +26,12 @@ export class TimeService {
     this.hours = hours;
     this.minutes = minutes;
 
-    TimeUI.create();
+    TimeUI.get().create();
+    TimeUI.get().set(this.getCurrentTime());
   }
 
   public start(): void {
-    TimeUI.resume();
-    this.timeTicking = true;
+    TimeUI.get().resume();
 
     this.interval = setInterval(() => {
       if (this.minutes === 50) {
@@ -48,20 +48,12 @@ export class TimeService {
 
   public stop(): void {
     clearInterval(this.interval);
-    this.timeTicking = false;
-    TimeUI.pause();
+    TimeUI.get().pause();
   }
 
   public tick(): void {
-    // notify entities affected by time
     TimeSignalSender.get().raise(this.getCurrentTime());
-    
-    // update displayed time
-    TimeUI.setTime();
-  }
-
-  public isTimeTicking(): boolean {
-    return this.timeTicking; 
+    TimeUI.get().set(this.getCurrentTime());
   }
 
   public getCurrentTime(): string {

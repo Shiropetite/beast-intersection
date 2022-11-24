@@ -37,35 +37,35 @@ export class TalkingService implements InputSignalListener {
   //#endregion
 
   public onKeyPressed(keyPressed: string): boolean {
-    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.getInstance().getState() === PlayerStates.TALKING) {
+    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
       this.talk();
       return true;
     }
 
-    if (this.isRunning && PlayerEntity.getInstance().getState() === PlayerStates.TALKING) {
+    if (this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
       if (this.dialog[0]?.isQuestion) {
         if (keyPressed === DirectionKeys.UP) {
           if (this.answerIndex > 0) {
-            TalkingUI.hideAnswerIndicator(this.answerIndex);
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
             this.answerIndex--;
-            TalkingUI.showAnswerIndicator(this.answerIndex); 
+            TalkingUI.get().showAnswerIndicator(this.answerIndex); 
           }
           else {
-            TalkingUI.hideAnswerIndicator(this.answerIndex);
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
             this.answerIndex = this.dialog[0]?.answers.length - 1;
-            TalkingUI.showAnswerIndicator(this.answerIndex);
+            TalkingUI.get().showAnswerIndicator(this.answerIndex);
           }
         }
         else if (keyPressed === DirectionKeys.DOWN) {
           if (this.answerIndex < this.dialog[0]?.answers.length - 1) {
-            TalkingUI.hideAnswerIndicator(this.answerIndex);
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
             this.answerIndex++;
-            TalkingUI.showAnswerIndicator(this.answerIndex); 
+            TalkingUI.get().showAnswerIndicator(this.answerIndex); 
           }
           else {
-            TalkingUI.hideAnswerIndicator(this.answerIndex);
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
             this.answerIndex = 0;
-            TalkingUI.showAnswerIndicator(this.answerIndex); 
+            TalkingUI.get().showAnswerIndicator(this.answerIndex); 
           }
         }
         
@@ -82,13 +82,13 @@ export class TalkingService implements InputSignalListener {
    * @param dialog the complete dialog to display
    */
   public start(dialog: Sentence[], npc?: NpcEntity): void {
-    PlayerEntity.getInstance().setState(PlayerStates.TALKING);
+    PlayerEntity.get().setState(PlayerStates.TALKING);
 
     this.isRunning = true;
     this.dialog = [ ...dialog];
     this.npc = npc;
 
-    TalkingUI.show(this.npc);
+    TalkingUI.get().show(this.npc);
 
     TimeService.get().stop();
     
@@ -105,7 +105,7 @@ export class TalkingService implements InputSignalListener {
     // Player answers
     if (this.dialog[0].isQuestion && this.answerIndex >= 0) {
       // Npc answers
-      TalkingUI.setText(this.dialog[0].answers[this.answerIndex].npcAnswer);
+      TalkingUI.get().setText(this.dialog[0].answers[this.answerIndex].npcAnswer);
       this.answerIndex = undefined; 
       this.dialog.shift();
       return;
@@ -113,13 +113,13 @@ export class TalkingService implements InputSignalListener {
 
     // Display next sentence
     const nextSentence = this.dialog[0];
-    TalkingUI.setText(nextSentence.text);
+    TalkingUI.get().setText(nextSentence.text);
 
     // Next sentence is not skippable
     if (nextSentence.isLock) {
-      PlayerEntity.getInstance().setState(PlayerStates.LOCKED);
+      PlayerEntity.get().setState(PlayerStates.LOCKED);
       setTimeout(() => {
-        PlayerEntity.getInstance().setState(PlayerStates.TALKING);
+        PlayerEntity.get().setState(PlayerStates.TALKING);
         this.talk();
       }, 3000)
     }
@@ -130,7 +130,7 @@ export class TalkingService implements InputSignalListener {
   }
 
   private end(): void {
-    TalkingUI.hide(this.npc);
+    TalkingUI.get().hide(this.npc);
 
     TimeService.get().start();
 
@@ -138,18 +138,18 @@ export class TalkingService implements InputSignalListener {
 
     this.isRunning = false;  
 
-    PlayerEntity.getInstance().setState(PlayerStates.IDLE);
+    PlayerEntity.get().setState(PlayerStates.IDLE);
   }
 
   private question(answers: any[]): void {
     // display all answers
     for (let i = 0; i < answers.length; i++) {
-      TalkingUI.showAnswer(answers[i].playerAnswer, i);
+      TalkingUI.get().showAnswer(answers[i].playerAnswer, i);
     }
 
     // set indicator on first answer by default
     this.answerIndex = 0;
-    TalkingUI.showAnswerIndicator(this.answerIndex);
+    TalkingUI.get().showAnswerIndicator(this.answerIndex);
   }
   //#endregion
   

@@ -10,7 +10,9 @@ export type MapConfig = {
 }
 
 export class MapService implements PlayerMoveSignalListener {
+  
   private static instance: MapService;
+  
   private rootMapCell: MapCell | null = null;
 
   //#region Singleton
@@ -103,7 +105,7 @@ export class MapService implements PlayerMoveSignalListener {
   }
 
   public initPlayerMapCell(y: number, x: number): void {
-    this.initEntityMapCell(PlayerEntity.getInstance(), y, x);
+    this.initEntityMapCell(PlayerEntity.get(), y, x);
     MapUI.get().move();
   }
 

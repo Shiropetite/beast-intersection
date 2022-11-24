@@ -5,17 +5,17 @@ import { testMap } from "./test-map";
 export const testMap2 = {
   map: [
     ['W', 'W', 'W', 'W', 'W', 'W'],
-    ['W', 'W', 'G', 'G', 'G', 'W'],
-    ['W', 'G', 'G', 'W', 'W', 'W'],
+    ['W', 'W', 'W', 'W', 'W', 'W'],
+    ['W', 'W', 'W', 'W', 'W', 'W'],
+    ['W', 'W', 'W', 'W', 'W', 'W'],
+    ['W', 'W', 'W', 'W', 'W', 'W'],
+    ['W', 'G', 'W', 'G', 'G', 'W'],
+    ['W', 'G', 'W', 'G', 'W', 'W'],
     ['W', 'G', 'G', 'G', 'G', 'W'],
-    ['W', 'W', 'G', 'W', 'G', 'W'],
-    ['W', 'W', 'G', 'G', 'G', 'W'],
-    ['W', 'W', 'G', 'G', 'G', 'W'],
-    ['W', 'W', 'G', 'G', 'G', 'W'],
-    ['W', 'W', 'W', 'G', 'G', 'W'],
+    ['W', 'W', 'G', 'G', 'W', 'W'],
   ],
   initMap: () => {
-    MapService.get().addTeleporter(new MapTeleporter(testMap, 1, 12), 8, 3)
-    MapService.get().addTeleporter(new MapTeleporter(testMap, 1, 13), 8, 4)
+    MapService.get().addTeleporter(new MapTeleporter(testMap, 1, 12), 8, 2)
+    MapService.get().addTeleporter(new MapTeleporter(testMap, 1, 13), 8, 3)
   }
 }

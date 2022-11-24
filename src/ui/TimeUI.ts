@@ -1,10 +1,10 @@
 import { CameraUI } from ".";
-import { TimeService } from "../services";
 
 export class TimeUI {
 
   private static instance: TimeUI;
-  private static time: HTMLElement;
+
+  private time: HTMLElement | null = null;
 
   //#region Singleton
   private constructor() {}
@@ -19,7 +19,7 @@ export class TimeUI {
   //#endregion
 
   //#region Methods
-  public static create(): void {
+  public create(): void {
     // create time HTML
     const timeHTML = document.createElement("div");
     timeHTML.id = "time"
@@ -27,35 +27,21 @@ export class TimeUI {
     CameraUI.get().add(timeHTML);
 
     // store HTML
-    TimeUI.time = document.getElementById('time');
-
-    TimeUI.setTime();
+    this.time = document.getElementById('time');
   }
 
-  public static show(): void {
-    TimeUI.time.style.display = 'block';
-  }
+  public show(): void { this.time.style.display = 'block'; }
 
-  public static hide(): void {
-    TimeUI.time.style.display = 'none';
-  }
+  public hide(): void { this.time.style.display = 'none'; }
 
-  public static pause(): void {
-    TimeUI.time.classList.add('pause');
-  }
-
-  public static resume(): void {
-    if (TimeUI.time.classList.contains('pause')) {
-      TimeUI.time.classList.remove('pause');
+  public resume(): void {
+    if (this.time.classList.contains('pause')) {
+      this.time.classList.remove('pause');
     }
   }
 
-  public static isVisible(): boolean {
-    return TimeUI.time.style.display === 'block';
-  }
+  public pause(): void { this.time.classList.add('pause'); }
 
-  public static setTime(): void {
-    TimeUI.time.innerText = TimeService.get().getCurrentTime();
-  }
+  public set(time: string): void { this.time.innerText = time; }
   //#endregion
 }

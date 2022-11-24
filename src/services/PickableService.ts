@@ -1,9 +1,10 @@
-import { TalkingService } from ".";
+import { TalkingService, InventoryService } from ".";
 import { PickableEntity, PlayerEntity, PlayerStates } from "../entities";
 import { InputSignalListener } from "../signals";
 import { ActionKeys } from "../utils";
 
 export class PickableService implements InputSignalListener {
+  
   private static instance: PickableService;
   
   private pickables: PickableEntity[] = [];
@@ -22,10 +23,10 @@ export class PickableService implements InputSignalListener {
 
   public onKeyPressed(keyPressed: string): boolean {
     let signalReceived = false
-    if (keyPressed === ActionKeys.ACT && PlayerEntity.getInstance().getState() === PlayerStates.IDLE) {
+    if (keyPressed === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
       this.pickables.forEach((pickable) => {
         if (this.isTriggeredByPlayer(pickable)) { 
-          this.pickUp(pickable);
+          this.pick(pickable);
           signalReceived = true;
         }
       });
@@ -34,15 +35,15 @@ export class PickableService implements InputSignalListener {
   }
 
   private isTriggeredByPlayer(pickable: PickableEntity): boolean {
-    if (pickable.getCurrentCell().getContents().find(c => c === PlayerEntity.getInstance())) { return true; }
+    if (pickable.getCurrentCell().getContents().find(c => c === PlayerEntity.get())) { return true; }
     return false;
   }
 
-  private pickUp(pickable: PickableEntity): void {
-    //TODO: add item to inventory
-    //TODO: remove from map
-    //pickable.destroy();
+  private pick(pickable: PickableEntity): void {
     pickable.getSprite().destroy();
+
+    InventoryService.get().add(pickable.getItem());
+    this.pickables.filter(p => p !== pickable);
 
     TalkingService.get().start([{ 
       text: "Vous avez rammassé 1 " + pickable.getItem().getName() + " !",

@@ -25,7 +25,7 @@ export class PlayerService implements InputSignalListener {
   public onKeyPressed(keyPressed: string): boolean {
     // Press 'z, q, s, d'
     const directionKey = Object.values(DirectionKeys).find(value => value === keyPressed);
-    if (directionKey && PlayerEntity.getInstance().getState() === PlayerStates.IDLE) { 
+    if (directionKey && PlayerEntity.get().getState() === PlayerStates.IDLE) { 
       this.move(directionKey);
       return true; 
     }
@@ -38,7 +38,7 @@ export class PlayerService implements InputSignalListener {
    * @param key the direction key
    */
   private async move(key: DirectionKeys): Promise<void> {
-    PlayerEntity.getInstance().setState(PlayerStates.MOVING);
+    PlayerEntity.get().setState(PlayerStates.MOVING);
 
     // move player collider towards input direction
     let moveSuccess: boolean;
@@ -64,7 +64,7 @@ export class PlayerService implements InputSignalListener {
 
     // wait for sprite to sync before setting player state
     await sleep(100);
-    PlayerEntity.getInstance().setState(PlayerStates.IDLE);
+    PlayerEntity.get().setState(PlayerStates.IDLE);
   }
 
   /**
@@ -72,12 +72,12 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveUp(): boolean {
-    PlayerEntity.getInstance().getSprite().lookUp();
-    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentUp(PlayerEntity.getInstance());
+    PlayerEntity.get().getSprite().lookUp();
+    const newCell = PlayerEntity.get().getCurrentCell().moveContentUp(PlayerEntity.get());
     
     if (newCell) {
-      PlayerEntity.getInstance().getSprite().moveUp();
-      PlayerEntity.getInstance().setCurrentCell(newCell);
+      PlayerEntity.get().getSprite().moveUp();
+      PlayerEntity.get().setCurrentCell(newCell);
       return true;
     }
 
@@ -89,11 +89,11 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveDown(): boolean {
-    PlayerEntity.getInstance().getSprite().lookDown();
-    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentDown(PlayerEntity.getInstance());
+    PlayerEntity.get().getSprite().lookDown();
+    const newCell = PlayerEntity.get().getCurrentCell().moveContentDown(PlayerEntity.get());
     if (newCell) {
-      PlayerEntity.getInstance().getSprite().moveDown();
-      PlayerEntity.getInstance().setCurrentCell(newCell);
+      PlayerEntity.get().getSprite().moveDown();
+      PlayerEntity.get().setCurrentCell(newCell);
       return true
     }
     return false;
@@ -104,11 +104,11 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveLeft(): boolean {
-    PlayerEntity.getInstance().getSprite().lookLeft();
-    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentLeft(PlayerEntity.getInstance());
+    PlayerEntity.get().getSprite().lookLeft();
+    const newCell = PlayerEntity.get().getCurrentCell().moveContentLeft(PlayerEntity.get());
     if (newCell) {
-      PlayerEntity.getInstance().getSprite().moveLeft();
-      PlayerEntity.getInstance().setCurrentCell(newCell);
+      PlayerEntity.get().getSprite().moveLeft();
+      PlayerEntity.get().setCurrentCell(newCell);
       return true
     }
     return false;
@@ -119,11 +119,11 @@ export class PlayerService implements InputSignalListener {
    * @returns is success
    */
   private moveRight(): boolean {
-    PlayerEntity.getInstance().getSprite().lookRight();
-    const newCell = PlayerEntity.getInstance().getCurrentCell().moveContentRight(PlayerEntity.getInstance());
+    PlayerEntity.get().getSprite().lookRight();
+    const newCell = PlayerEntity.get().getCurrentCell().moveContentRight(PlayerEntity.get());
     if (newCell) {
-      PlayerEntity.getInstance().getSprite().moveRight();
-      PlayerEntity.getInstance().setCurrentCell(newCell);
+      PlayerEntity.get().getSprite().moveRight();
+      PlayerEntity.get().setCurrentCell(newCell);
       return true
     }
     return false;

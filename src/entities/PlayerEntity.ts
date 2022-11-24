@@ -5,6 +5,7 @@ export enum PlayerStates {
   IDLE,
   MOVING,
   TALKING,
+  MENUING,
   FISHING,
   CATCHING,
   LOCKED,
@@ -31,7 +32,7 @@ export class PlayerEntity {
     PlayerEntity.instance = this;
   }
 
-  public static getInstance(): PlayerEntity { 
+  public static get(): PlayerEntity { 
     if (!PlayerEntity.instance) {
       PlayerEntity.instance = new PlayerEntity();
     }
