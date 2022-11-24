@@ -6,6 +6,7 @@ export * from './TalkingService';
 export * from './InventoryService';
 export * from './FishSpawnerService';
 export * from './FishingService';
-//export * from './CatchingService';
+export * from './BugSpawnerService';
+export * from './CatchingService';
 export * from './PickableService';
 export * from './GatherableService';

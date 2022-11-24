@@ -1,7 +1,7 @@
 import { TimeService, TalkingService, InventoryService } from '.';
 import { FishSpawnerEntity, PlayerEntity, PlayerStates } from "../entities";
-import { FishingToolItem } from './../items';
-import { FishingUI } from './../ui';
+import { FishingToolItem } from '../items';
+import { FishingUI } from '../ui';
 import { InputSignalListener } from '../signals';
 import { ActionKeys } from "../utils";
 
@@ -84,9 +84,10 @@ export class FishingService implements InputSignalListener {
     FishingUI.get().destroy();
 
     this.isRunning = false;
+
+    //FIXME: marche pas si on commence à jouer avec un autre spawner avant que le timeout se termine
     this.fishSpawner.setEmpty();
     this.fishSpawner.getSprite().hide();
-
     setTimeout(() => {
       this.fishSpawner.setEmpty();
       this.fishSpawner.getSprite().show();

@@ -1,6 +1,6 @@
-import { Item } from "../items";
 import { MapCell, MapSprite } from "../map";
 import { MapService } from "../services";
+import { Item } from "../items";
 
 export class GatherableEntity {
     

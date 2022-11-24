@@ -118,8 +118,9 @@ export class MapCell implements PlayerMoveSignalListener {
   public getSprite(): string { return this.sprite; }
 
   public isFree(): boolean { 
-    return !this.isWall && !this.contents.find(c => c.constructor.name !== PickableEntity.name);
-   }
+    return !this.isWall 
+    && !this.contents.find(c => c.constructor.name !== PickableEntity.name && c.constructor.name !== BugSpawnerEntity.name);
+  }
 
   public setTeleporter(teleporter: MapTeleporter): void { this.teleporter = teleporter; }
   

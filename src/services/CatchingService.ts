@@ -1,89 +1,110 @@
-// import { CatchingUI } from '../ui';
-// import { CatchingToolItem, BugItem } from './../items';
-// import { TimeService } from '../services';
-// import { InputSignalListener } from '../signals/InputSignal';
-// import { DirectionKeys } from '../utils';
+import { TimeService, TalkingService, InventoryService } from '.';
+import { BugSpawnerEntity, PlayerEntity, PlayerStates } from '../entities';
+import { CatchingToolItem } from '../items';
+import { CatchingUI } from '../ui';
+import { InputSignalListener } from '../signals';
+import { ActionKeys, DirectionKeys } from "../utils";
 
-// export enum CatchingState {
-//   ONGOING,
-//   WIN,
-//   LOSE
-// }
+export class CatchingService implements InputSignalListener {
+  
+    private static instance: CatchingService;
 
-// class TriggerResourceEntity {}
+    private isRunning: boolean;
+    private bugSpawner: BugSpawnerEntity;
+    private catchingNet: CatchingToolItem;
+    private direction: string;
+    private directionFails: number;
+    private directionInterval: NodeJS.Timer;
 
-// export class CatchingService implements InputSignalListener {
-//   private static instance: CatchingService;
+    //#region Singleton
+    private constructor() { }
 
-//   private bugItem: BugItem;
-//   private directionFails: number;
-//   private directionInterval: NodeJS.Timer;
+    public static get(): CatchingService {
+        if (!CatchingService.instance) {
+            CatchingService.instance = new CatchingService();
+        }
 
-//   //#region Singleton
-//   private constructor() { }
+        return CatchingService.instance;
+    }
+    //#endregion
 
-//   public static getInstance(): CatchingService {
-//     if (!CatchingService.instance) {
-//       CatchingService.instance = new CatchingService();
-//     }
+    // Key listener
+    public onKeyPressed(keyPressed: string): boolean {
+        if (this.isRunning && PlayerEntity.get().getState() === PlayerStates.CATCHING) {
+            this.catch(keyPressed);
+            return true;
+        }
+        return false;
+    }
 
-//     return CatchingService.instance;
-//   }
-//   //#endregion
+    public start(bugSpawner: BugSpawnerEntity, catchingNet: CatchingToolItem): void {
+        PlayerEntity.get().setState(PlayerStates.CATCHING);
 
-//   // Key listener
-//   onKeyPressed(keyPressed: string): void {
-//     console.log(keyPressed);
-//   }
+        this.isRunning = true;
+        this.bugSpawner = bugSpawner;
+        this.catchingNet = catchingNet;
+        this.directionFails = 0;
 
-//   public start(bugEntity: TriggerResourceEntity, catchingNet: CatchingToolItem): void {
-//     this.directionFails = 0;
-//     // this.bugItem = bugEntity.getItem() as BugItem;
+        CatchingUI.get().create(this.bugSpawner.getSprite());
 
-//     // CatchingUI.create(bugEntity.getSpriteTop(), bugEntity.getSpriteLeft());
+        const directionList: any[] = Object.entries(DirectionKeys).map(([_, value]) => value);
 
-//     //player.setState(PersonState.ACTING);
+        // switch direction interval
+        this.directionInterval = setInterval(() => {
+            this.direction = directionList[Math.floor(Math.random() * directionList.length)];
+            CatchingUI.get().updateDirection(this.direction);
+        }, this.bugSpawner.getBug().getDirectionDuration() /*+ catchingNet.getDirectionDurationBonus()*/);
+    }
 
-//     const directionList: any[] = Object.entries(DirectionKeys).map(([_, value]) => value);
+    private end(): void {
+        clearInterval(this.directionInterval);
 
-//     const randomDirection = directionList[Math.floor(Math.random() * directionList.length)];
-//     CatchingUI.updateDirection(randomDirection);
+        CatchingUI.get().destroy();
 
-//     // switch direction interval
-//     this.directionInterval = setInterval(() => {
-//       const randomDirection = directionList[Math.floor(Math.random() * directionList.length)];
-//       CatchingUI.updateDirection(randomDirection);
-//     }, this.bugItem.getDirectionDuration() /*+ catchingNet.getDirectionDurationBonus()*/);
-//   }
+        this.isRunning = false;
 
-//   public end(): void {
-//     clearInterval(this.directionInterval);
+        //FIXME: marche pas si on commence à jouer avec un autre spawner avant que le timeout se termine
+        this.bugSpawner.setEmpty();
+        this.bugSpawner.getSprite().hide();
+        setTimeout(() => {
+            this.bugSpawner.setEmpty();
+            this.bugSpawner.getSprite().show();
+        }, 10000)
+    }
 
-//     CatchingUI.destroy();
+    private catch(keyPressed: string): void {
+        if (keyPressed === this.direction) {
+            this.bugSpawner.getBug().setHealthPoints(this.bugSpawner.getBug().getHealthPoints() - this.catchingNet.getPower());
+        }
 
-//     TimeService.getInstance().start();
+        // minigame won
+        if (this.bugSpawner.getBug().getHealthPoints() <= 0) { 
+            this.win();
+            this.end(); 
+        }
 
-//     //player.setState(PersonState.IDLE);
-//   }
+        // minigame lost
+        if (this.directionFails >= 3) { 
+            this.lose();
+            this.end(); 
+        }
+    }
 
-//   public fail(): void {
-//     this.bugItem.setHealthPoints(this.bugItem.getMaxHealthPoints());
-//   }
+    private win(): void {
+        InventoryService.get().add(this.bugSpawner.getItem());
 
-//   public catch(): CatchingState {
-//     // minigame won
-//     if (this.bugItem.getHealthPoints() <= 0) {
-//       this.end();
-//       return CatchingState.WIN;
-//     }
+        TalkingService.get().start([{ 
+          text: "Vous avez attrapé 1 " + this.bugSpawner.getItem().getName() + " !",
+          isLock: true,
+        }]);
+    }
 
-//     // minigame lost
-//     if (this.directionFails >= 3) {
-//       this.end();
-//       return CatchingState.LOSE;
-//     }
+    private lose(): void {
+        this.bugSpawner.getBug().setHealthPoints(this.bugSpawner.getBug().getMaxHealthPoints());
 
-//     return CatchingState.ONGOING;
-//   }
-
-// }
+        TalkingService.get().start([{ 
+            text: "L'insecte s'est enfui...",
+            isLock: true,
+        }]);
+    }
+}

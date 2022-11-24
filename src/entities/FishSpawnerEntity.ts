@@ -1,7 +1,7 @@
 import { FishEntity } from '.';
-import { FishItem } from '../items';
 import { MapSprite, MapCell } from '../map';
 import { MapService } from '../services';
+import { FishItem } from '../items';
 
 export class FishSpawnerEntity {
 

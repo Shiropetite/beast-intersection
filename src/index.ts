@@ -2,9 +2,9 @@ import * as _ from 'lodash';
 import './@shared/styles/index.css';
 
 import { MapSprite } from './map';
-import { FishEntity, FishSpawnerEntity, GatherableEntity, NpcEntity, PickableEntity } from './entities';
-import { MapService, TimeService, PlayerService, NpcService, TalkingService, InventoryService, FishSpawnerService, FishingService, PickableService, GatherableService } from './services';
-import { Item, FishItem } from './items';
+import { BugEntity, BugSpawnerEntity, FishEntity, FishSpawnerEntity, GatherableEntity, NpcEntity, PickableEntity } from './entities';
+import { MapService, TimeService, PlayerService, NpcService, TalkingService, InventoryService, FishSpawnerService, FishingService, BugSpawnerService, CatchingService, PickableService, GatherableService } from './services';
+import { Item, FishItem, BugItem } from './items';
 import { CameraUI, TalkingUI, InventoryUI } from './ui';
 import { InputSignalSender, PlayerMoveSignalSender, TimeSignalSender } from './signals';
 
@@ -24,6 +24,8 @@ const onload = async () => {
   InputSignalSender.get().register(InventoryService.get());
   InputSignalSender.get().register(FishSpawnerService.get());
   InputSignalSender.get().register(FishingService.get());
+  InputSignalSender.get().register(BugSpawnerService.get());
+  InputSignalSender.get().register(CatchingService.get());
   InputSignalSender.get().register(PickableService.get());
   InputSignalSender.get().register(GatherableService.get());
 
@@ -43,6 +45,10 @@ const onload = async () => {
 
   FishSpawnerService.get().register(
     new FishSpawnerEntity(new MapSprite('fish'), new FishItem('carpe'), new FishEntity(300, 3, 500, 200, 3000, 0.5), 2, 9)
+  );
+
+  BugSpawnerService.get().register(
+    new BugSpawnerEntity(new MapSprite('bug'), new BugItem('papillon'), new BugEntity(200, 3), 5, 2)
   );
 
   PickableService.get().register(

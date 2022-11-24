@@ -1,5 +1,5 @@
 import { MapCell, MapSprite } from '../map';
-import { FishingToolItem, CatchingToolItem } from './../items';
+import { FishingToolItem, CatchingToolItem } from '../items';
 
 export enum PlayerStates {
   IDLE,
