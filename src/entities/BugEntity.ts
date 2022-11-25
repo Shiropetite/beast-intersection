@@ -5,7 +5,7 @@ export class BugEntity {
 
     private healthPoints: number;
     
-    constructor(maxHealthPoints: number, directionDuration: number) {
+    public constructor(maxHealthPoints: number, directionDuration: number) {
         this.maxHealthPoints = maxHealthPoints;
         this.directionDuration = directionDuration;
 

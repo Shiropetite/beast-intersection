@@ -128,6 +128,9 @@ export class FishingService implements InputSignalListener {
   }
 
   private win(): void {
+    this.fishingRod.setPressure(0);
+    this.fishSpawner.getFish().setHealthPoints(this.fishSpawner.getFish().getMaxHealthPoints());
+    
     InventoryService.get().add(this.fishSpawner.getItem());
 
     TalkingService.get().start([{ 

@@ -49,6 +49,9 @@ export class CatchingService implements InputSignalListener {
 
         const directionList: any[] = Object.entries(DirectionKeys).map(([_, value]) => value);
 
+        this.direction = directionList[Math.floor(Math.random() * directionList.length)];
+        CatchingUI.get().updateDirection(this.direction);
+
         // switch direction interval
         this.directionInterval = setInterval(() => {
             this.direction = directionList[Math.floor(Math.random() * directionList.length)];
@@ -91,6 +94,8 @@ export class CatchingService implements InputSignalListener {
     }
 
     private win(): void {
+        this.bugSpawner.getBug().setHealthPoints(this.bugSpawner.getBug().getMaxHealthPoints());
+        
         InventoryService.get().add(this.bugSpawner.getItem());
 
         TalkingService.get().start([{ 

@@ -48,7 +48,7 @@ const onload = async () => {
   );
 
   BugSpawnerService.get().register(
-    new BugSpawnerEntity(new MapSprite('bug'), new BugItem('papillon'), new BugEntity(200, 3), 5, 2)
+    new BugSpawnerEntity(new MapSprite('bug'), new BugItem('papillon'), new BugEntity(200, 3000), 5, 3)
   );
 
   PickableService.get().register(

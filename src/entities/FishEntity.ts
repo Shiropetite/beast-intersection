@@ -10,7 +10,7 @@ export class FishEntity {
     private healthPoints: number;
     private onFrenzy: boolean;
 
-    constructor(maxHealthPoints: number, regenPoints: number, regenSpeed: number, frenzyDuration: number, frenzyFrequency: number, frenzyMultiplier: number) {
+    public constructor(maxHealthPoints: number, regenPoints: number, regenSpeed: number, frenzyDuration: number, frenzyFrequency: number, frenzyMultiplier: number) {
         this.maxHealthPoints = maxHealthPoints;
         this.regenPoints = regenPoints;
         this.regenSpeed = regenSpeed;

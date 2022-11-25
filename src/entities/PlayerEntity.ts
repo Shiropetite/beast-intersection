@@ -27,7 +27,8 @@ export class PlayerEntity {
     this.sprite = new MapSprite('player');
 
     this.state = PlayerStates.IDLE;
-    this.toolEquiped = new FishingToolItem('canne à peche en bois', 10, 100, 10);
+    //this.toolEquiped = new FishingToolItem('canne à peche en bois', 10, 100, 10);
+    this.toolEquiped = new CatchingToolItem('filet en bois', 50, 1, 0);
 
     PlayerEntity.instance = this;
   }

@@ -18,8 +18,8 @@ export class BugSpawnerEntity {
         this.bug = bug;
 
         //FIXME: set currentCell here instead
-        MapService.get().initEntityMapCell(this, y, x)
-        this.empty = true;
+        MapService.get().initEntityMapCell(this, y, x);
+        this.empty = false;
     }
 
     public getSprite(): MapSprite { return this.sprite; }

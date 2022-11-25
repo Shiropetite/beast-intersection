@@ -18,7 +18,7 @@ export class FishSpawnerEntity {
         this.fish = fish;
 
         //FIXME: set currentCell here instead
-        MapService.get().initEntityMapCell(this, y, x)
+        MapService.get().initEntityMapCell(this, y, x);
         this.empty = false;
     }
 

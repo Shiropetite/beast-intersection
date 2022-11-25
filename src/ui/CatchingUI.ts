@@ -6,7 +6,7 @@ export class CatchingUI {
   private static instance: CatchingUI;
 
   private directionContainer: HTMLElement | null = null;
-  private lifeContainer: HTMLElement[] | null = null;
+  private lifeContainer: HTMLElement[] = [];
 
   //#region Singleton
   private constructor() {}
@@ -47,13 +47,14 @@ export class CatchingUI {
     life2HTML.style.left = `${ bugSprite.getLeft() }px`;
 
     const lifeContainerHTML = document.createElement('div');
+    lifeContainerHTML.id = 'catch-life-container';
     lifeContainerHTML.classList.add('catch-life-container');
 
     MapUI.get().add(lifeContainerHTML);
 
     this.directionContainer = document.getElementById('catch-container');
+
     const lifeContainerDiv = document.getElementById('catch-life-container');
-    
     lifeContainerDiv.appendChild(life0HTML);
     lifeContainerDiv.appendChild(life1HTML);
     lifeContainerDiv.appendChild(life2HTML);
@@ -63,13 +64,9 @@ export class CatchingUI {
     this.lifeContainer.push(document.getElementById('catch-life-2'));
   }
 
-  public destroy(): void {
-    MapUI.get().remove(document.getElementById('catch-container'))
-  }
+  public destroy(): void { MapUI.get().remove(document.getElementById('catch-container')); }
 
-  public updateDirection(newDirection: string): void {
-    this.directionContainer.innerHTML = newDirection;
-  }
+  public updateDirection(newDirection: string): void { this.directionContainer.innerHTML = newDirection; }
 
   public resetLives(): void  {
     this.lifeContainer.forEach((life) => {
@@ -77,8 +74,6 @@ export class CatchingUI {
     });
   }
 
-  public updateLives(nbFail: number): void {
-    this.lifeContainer[nbFail].classList.add('dead');
-  }
+  public updateLives(nbFail: number): void { this.lifeContainer[nbFail].classList.add('dead'); }
 
 }
