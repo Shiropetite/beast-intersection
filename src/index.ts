@@ -1,100 +1,70 @@
 import * as _ from 'lodash';
 import './@shared/styles/index.css';
 
-import { box } from './utils';
-import { 
-  TriggerEntity, 
-  ColliderEntity,
-  NpcEntity,
-  PlayerEntity,
-  TriggerResourceEntity,
-  ColliderResourceEntity,
-  Action
-} from './entities';
-import { TimeService, InventoryService } from './services';
-import { ActionUI, TalkingUI } from './ui';
-import { Item, FishItem } from './items';
-import { FishResourceEntity } from './entities/resources/FishResourceEntity';
+import { MapSprite } from './map';
+import { BugEntity, BugSpawnerEntity, FishEntity, FishSpawnerEntity, GatherableEntity, NpcEntity, PickableEntity } from './entities';
+import { MapService, TimeService, PlayerService, NpcService, TalkingService, InventoryService, FishSpawnerService, FishingService, BugSpawnerService, CatchingService, PickableService, GatherableService } from './services';
+import { Item, FishItem, BugItem } from './items';
+import { CameraUI, TalkingUI, InventoryUI } from './ui';
+import { InputSignalSender, PlayerMoveSignalSender, TimeSignalSender } from './signals';
 
-export let camera: HTMLElement = null;
-export let map: HTMLElement = null;
+import { testMap } from './@shared/assets/maps/test-map';
+import { monkyRoutine } from './@shared/assets/routines/monky/first-routine';
 
-export let player: PlayerEntity = null;
+const onload = async () => {
+  // Init map
+  CameraUI.get().create();
+  MapService.get().createMap(testMap);
+  MapService.get().initPlayerMapCell(1, 4);
 
-export let nook: NpcEntity = null;
-export const nookRoutine = require('./@shared/routines/nook/first-routine.json');
+  // Register signals listeners
+  InputSignalSender.get().register(PlayerService.get());
+  InputSignalSender.get().register(NpcService.get());
+  InputSignalSender.get().register(TalkingService.get());
+  InputSignalSender.get().register(InventoryService.get());
+  InputSignalSender.get().register(FishSpawnerService.get());
+  InputSignalSender.get().register(FishingService.get());
+  InputSignalSender.get().register(BugSpawnerService.get());
+  InputSignalSender.get().register(CatchingService.get());
+  InputSignalSender.get().register(PickableService.get());
+  InputSignalSender.get().register(GatherableService.get());
 
-export let triggers: TriggerEntity[] = [];
-
-export let colliders: ColliderEntity[] = [];
-
-export const removeFromTrigger = (trigger: TriggerEntity) => {
-  triggers = triggers.filter(e => e.getSprite() !== trigger.getSprite()) 
-}
-
-const init = () => {
-  // create camera HTML
-  const cameraHTML = document.createElement('div');
-  cameraHTML.id = 'camera';
-  cameraHTML.classList.add('camera');
+  TimeSignalSender.get().register(NpcService.get());
   
-  document.body.appendChild(cameraHTML);
+  PlayerMoveSignalSender.get().register(MapService.get());
 
-  // store camera HTML
-  camera = document.getElementById('camera');
+  // Init services
+  TimeService.get().init(6,30);
 
-  // create map HTML
-  const mapHTML = document.createElement('div');
-  mapHTML.id = 'map';
-  mapHTML.classList.add('map');
-  
-  camera.appendChild(mapHTML);
+  NpcService.get().register(
+    new NpcEntity(new MapSprite('npc'), 'Monky', monkyRoutine)
+  );
+  NpcService.get().init();
 
-  // store map HTML
-  map = document.getElementById('map');
-}
+  InventoryService.get().init(40, []);
 
-const onload = () => {
-  init();
+  FishSpawnerService.get().register(
+    new FishSpawnerEntity(new MapSprite('fish'), new FishItem('carpe'), new FishEntity(300, 3, 500, 200, 3000, 0.5), 2, 9)
+  );
 
-  colliders = [
-    // main island top wall
-    new ColliderEntity('wall-1', 'wall', Action.NONE, box * 14 - 6, box, 0, box),
-    // main island bottom wall
-    new ColliderEntity('wall-2', 'wall', Action.NONE, box * 14 - 6, box, box * 9, box),
-    // main island left wall
-    new ColliderEntity('wall-3', 'wall', Action.NONE, box, box * 10, 0, 0),
-    // main island right wall
-    new ColliderEntity('wall-4', 'wall', Action.NONE, box, box * 10, 0, box * 15),
-    // river
-    new ColliderEntity('wall-5', 'wall', Action.NONE, box * 2, box * 10, 0, box * 9)
-  ];
+  BugSpawnerService.get().register(
+    new BugSpawnerEntity(new MapSprite('bug'), new BugItem('papillon'), new BugEntity(200, 3000), 5, 3)
+  );
 
-  player = new PlayerEntity('pipette', box * 2, box * 4);
-  colliders.push(player);
+  PickableService.get().register(
+    new PickableEntity(new MapSprite('rock'), new Item("granite"), 7, 1)
+  );
 
-  // services
-  TimeService.init(6,0);
-  InventoryService.init(40, []);
+  GatherableService.get().register(
+    new GatherableEntity(new MapSprite('tree'), [ new Item('branche'), new Item('feuille') ], 3, 5)
+  );
 
-  // UI
-  TalkingUI.create();
-  ActionUI.create();
+  TimeService.get().start();
 
-  // nook npc
-  nook = new NpcEntity('Monky', box * 3, box * 2, nookRoutine);
-  triggers.push(nook);
-  colliders.push(nook);
+  // Init UI
+  TalkingUI.get().create();
 
-  triggers.push(new TriggerResourceEntity('stone', (box * 7), (box * 4), new Item("pierre")));
-  triggers.push(new FishResourceEntity('fish', (box * 4), (box * 9), new FishItem("carpe", 300, 3, 500, 2000, 3000, 0.5, 1)));
-  triggers.push(new FishResourceEntity('fish', (box * 0), (box * 4), new FishItem("bar commun", 200, 1, 500, 2000, 3000, 0.5, 1)));
-  
-  let tree = new ColliderResourceEntity('tree', (box * 2), (box * 7), [{ item: new Item("love u"), rate: 0.01 }, { item: new Item("feuille"), rate: 0.2 }, { item: new Item("branche"), rate: 1 }])
-  triggers.push(tree);
-  colliders.push(tree);
-
-  window.addEventListener('keypress', player.listenInput);
+  window.addEventListener('keypress', InputSignalSender.get().raise);
 } 
 
 window.addEventListener('load', onload);

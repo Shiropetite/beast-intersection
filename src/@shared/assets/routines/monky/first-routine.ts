@@ -1,30 +1,36 @@
-{
+import { NpcRoutine } from '../../../../entities/NpcEntity';
+import { testMap } from '../../maps/test-map';
+
+export const monkyRoutine: NpcRoutine = {
   "06:00": {
-    "text": "Se réveille",
+    map: testMap,
     "dialog": [
       {
-        "sentence": "J'ai mal dormi... 😴",
+        "text": "J'ai mal dormi... 😴",
         "isQuestion": false
       },
       {
-        "sentence": "Pourtant on dit que dormir au sol, c'est bon pour le dos 🥱",
+        "text": "Pourtant on dit que dormir au sol, c'est bon pour le dos 🥱",
         "isQuestion": false
       },
       {
-        "sentence": "Il me faut un café... 😫",
+        "text": "Il me faut un café... 😫",
         "isQuestion": false
       }
-    ]
+    ],
+    "position": {
+      "top": 2,
+      "left": 2
+    }
   },
   "06:50": {
-    "text": "Se dirige vers la plage",
     "dialog": [
       {
-        "sentence": "J'ai vraiment besoin d'un café... 😵",
+        "text": "J'ai vraiment besoin d'un café... 😵",
         "isQuestion": false
       },
       {
-        "sentence": "J'en ai rêvé cette nuit tu sais ? 🤩",
+        "text": "J'en ai rêvé cette nuit tu sais ? 🤩",
         "isQuestion": false
       }
     ],
@@ -33,15 +39,14 @@
       "left": 2
     }
   },
-  "07:30": {
-    "text": "Veut un café",
+  "07:00": {
     "dialog": [
       {
-        "sentence": "Ah te voila ! 😁",
+        "text": "Ah te voila ! 😁",
         "isQuestion": false
       },
       {
-        "sentence": "Tu préfères le café ou le thé ? ",
+        "text": "Tu préfères le café ou le thé ? ",
         "isQuestion": true,
         "answers": [
           { 
@@ -59,20 +64,23 @@
         ]
       },
       {
-        "sentence": "J'ai mal au dos... 😖",
+        "text": "J'ai mal au dos... 😖",
         "isQuestion": false
       }
-    ]
+    ],
+    "position": {
+      "top": 2,
+      "left": 4
+    }
   },
   "08:30": {
-    "text": "Veut une pomme",
     "dialog": [
       {
-        "sentence": "Je mangerais bien une pomme 🍎",
+        "text": "Je mangerais bien une pomme 🍎",
         "isQuestion": false
       },
       {
-        "sentence": "Ça va très bien avec le café 😋",
+        "text": "Ça va très bien avec le café 😋",
         "isQuestion": false
       }
     ],
@@ -82,10 +90,9 @@
     }
   },
   "10:30": {
-    "text": "Travaille",
     "dialog": [
       {
-        "sentence": "Je ne peux pas te parler, je suis très occupé... 🤓",
+        "text": "Je ne peux pas te parler, je suis très occupé... 🤓",
         "isQuestion": false
       }
     ],
@@ -95,14 +102,13 @@
     }
   },
   "13:30": {
-    "text": "Va bronzer",
     "dialog": [
       {
-        "sentence": "Ah ! J'adore ce soleil ! 😎",
+        "text": "Ah ! J'adore ce soleil ! 😎",
         "isQuestion": false
       },
       {
-        "sentence": "Rien de meilleur contre mes rhumatismes 👴",
+        "text": "Rien de meilleur contre mes rhumatismes 👴",
         "isQuestion": true,
         "answers": [
           { 
@@ -111,7 +117,7 @@
           },
           { 
             "playerAnswer": "Mon papi aussi à des rhumatismes",
-            "npcAnswer": "Hé bah qu'il bronze tient ! 😛"
+            "npcAnswer": "Tu verras quand t'auras mon âge ! 💀"
           }
         ]
       }
@@ -122,10 +128,9 @@
     }
   },
   "17:00": {
-    "text": "Va à la pêche",
     "dialog": [
       {
-        "sentence": "*sifflote sifflote 🎵*",
+        "text": "*sifflote sifflote 🎵*",
         "isQuestion": false
       }
     ],
@@ -135,14 +140,13 @@
     }
   },
   "18:00": {
-    "text": "Fier de son poisson",
     "dialog": [
       {
-        "sentence": "Je viens de pêcher un sacré bestiau ! 🐟",
+        "text": "Je viens de pêcher un sacré bestiau ! 🐟",
         "isQuestion": false
       },
       {
-        "sentence": "Je parie que t'as jamais ferré un truc pareil 😎",
+        "text": "Je parie que t'as jamais ferré un truc pareil 😎",
         "isQuestion": true,
         "answers": [
           { 
@@ -162,14 +166,13 @@
     ]
   },
   "20:00": {
-    "text": "Va diner",
     "dialog": [
       {
-        "sentence": "J'ai faim 🤤",
+        "text": "J'ai faim 🤤",
         "isQuestion": false
       },
       {
-        "sentence": "Allez un dernier café avant d'aller dormir 😁",
+        "text": "Allez un dernier café avant d'aller dormir 😁",
         "isQuestion": false
       }
     ],
@@ -179,22 +182,21 @@
     }
   },
   "23:30": {
-    "text": "Dort",
     "dialog": [
       {
-        "sentence": ". 😴",
+        "text": ". 😴",
         "isQuestion": false
       },
       {
-        "sentence": ".. 😴",
+        "text": ".. 😴",
         "isQuestion": false
       },
       {
-        "sentence": "... 😴",
+        "text": "... 😴",
         "isQuestion": false
       },
       {
-        "sentence": "Café...",
+        "text": "Café...",
         "isQuestion": false
       }
     ]

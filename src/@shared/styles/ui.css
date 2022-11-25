@@ -1,6 +1,7 @@
 /* Time */
 .time {
   position: absolute;
+  z-index: 1;
   top: 0;
   right: 0;
   margin: 20px;
@@ -41,7 +42,7 @@
 .textbox-sprite {
   width: 130px;
   height: 120px;
-  background-image: url(../assets/entities/npc/npc-dialog.png);
+  background-image: url(../assets/sprites/entities/npc/npc-dialog.png);
   background-repeat: no-repeat;
   background-size: cover;
   margin-right: 28px;
@@ -62,13 +63,13 @@
 }
 
 .action-fish {
-  background-image: url(../assets/ui/hint-fishing.png);
+  background-image: url(../assets/sprites/ui/hint-fishing.png);
 }
 
 .action-catching {
-  background-image: url(../assets/ui/hint-catching.png);
+  background-image: url(../assets/sprites/ui/hint-catching.png);
 }
 
 .action-talk {
-  background-image: url(../assets/ui/hint-talking.png);
+  background-image: url(../assets/sprites/ui/hint-talking.png);
 }

@@ -1,123 +1,155 @@
 import { TimeService } from ".";
-import { player } from "..";
-import { PersonState } from "../entities";
+import { NpcEntity, NpcStates, PlayerEntity, PlayerStates } from "../entities";
 import { TalkingUI } from "../ui";
+import { InputSignalListener } from "../signals";
+import { ActionKeys, DirectionKeys } from "../utils";
 
-export interface DialogElement {
-  sentence: string, 
+export interface Sentence {
+  text: string, 
   isQuestion?: boolean, 
-  answers?: [
-    {
-      playerAnswer: string, // player answer to the question
-      npcAnswer: string // npc answer to the player
-    }
-  ],
-  notSkip?: boolean
+  answers?:
+  {
+    playerAnswer: string, // player answer to the question
+    npcAnswer: string, // npc answer to the player
+  }[],
+  isLock?: boolean,
 }
 
-export class TalkingService {
-  private static dialog: DialogElement[]; 
-  private static currentDialogElement: DialogElement;
-  private static playerAnswerIndex: number;
+export class TalkingService implements InputSignalListener {
+  
+  private static instance: TalkingService;
+  
+  private isRunning: boolean;
+  private dialog: Sentence[];
+  private npc: NpcEntity | null;
+  private answerIndex: number | null;
 
-  //#region Methods
-  public static start(dialog: DialogElement[], speakerName?: string): void {
-    this.dialog = [ ...dialog ];
-    this.currentDialogElement = null;
-    this.playerAnswerIndex = -1;
+  //#region Singleton
+  private constructor() { }
 
-    TalkingUI.show();
-    
-    // talking to person
-    if (speakerName) { 
-      TalkingUI.setSpeakerName(speakerName); 
-      TalkingUI.setSpriteDialog();
+  public static get(): TalkingService {
+    if (!TalkingService.instance) {
+      TalkingService.instance = new TalkingService();
     }
 
-    player.setState(PersonState.TALKING);
-
-    this.talk();
-
-    TimeService.stop();
+    return TalkingService.instance;
   }
+  //#endregion
 
-  private static end(): void {
-    TalkingUI.setSpeakerName('');
-    TalkingUI.setText('');
-    TalkingUI.hide();
-
-    player.setState(PersonState.IDLE);
-
-    TimeService.start();
-  }
-
-  // returns true if dialog is not over
-  public static talk(): boolean {
-    if (this.dialog === undefined) { return; }
-
-    // player answer
-    if (this.playerAnswerIndex >= 0) {
-      // npc answer
-      TalkingUI.setText(this.currentDialogElement.answers[this.playerAnswerIndex].npcAnswer);
-      
-      this.playerAnswerIndex = -1;
+  public onKeyPressed(keyPressed: string): boolean {
+    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
+      this.talk();
       return true;
     }
 
-    // dialog end
-    if (this.dialog.length === 0) {
-      this.end();
-      return false;
+    if (this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
+      if (this.dialog[0]?.isQuestion) {
+        if (keyPressed === DirectionKeys.UP) {
+          if (this.answerIndex > 0) {
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
+            this.answerIndex--;
+            TalkingUI.get().showAnswerIndicator(this.answerIndex); 
+          }
+          else {
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
+            this.answerIndex = this.dialog[0]?.answers.length - 1;
+            TalkingUI.get().showAnswerIndicator(this.answerIndex);
+          }
+        }
+        else if (keyPressed === DirectionKeys.DOWN) {
+          if (this.answerIndex < this.dialog[0]?.answers.length - 1) {
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
+            this.answerIndex++;
+            TalkingUI.get().showAnswerIndicator(this.answerIndex); 
+          }
+          else {
+            TalkingUI.get().hideAnswerIndicator(this.answerIndex);
+            this.answerIndex = 0;
+            TalkingUI.get().showAnswerIndicator(this.answerIndex); 
+          }
+        }
+        
+        return true;
+      }
     }
 
-    // next dialog element
-    this.currentDialogElement = this.dialog.shift();
-    TalkingUI.setText(this.currentDialogElement.sentence);
-
-    // dialog not skip
-    if (this.currentDialogElement.notSkip) {
-      player.setState(PersonState.LOCKED)
-      setTimeout(() => {
-        player.setState(PersonState.TALKING)
-        this.talk();
-      }, 3000); // wait for 3000
-    }
-
-    // player need to answer
-    if (this.currentDialogElement.isQuestion) {
-      this.answer(this.currentDialogElement.answers);
-    }
-    
-    // end dialog element but not end dialog
-    return true;
+    return false;
   }
 
-  private static answer(answers: any[]): void {
+  //#region Methods
+  /**
+   * Start talk between player and interlocutor
+   * @param dialog the complete dialog to display
+   */
+  public start(dialog: Sentence[], npc?: NpcEntity): void {
+    PlayerEntity.get().setState(PlayerStates.TALKING);
+
+    this.isRunning = true;
+    this.dialog = [ ...dialog];
+    this.npc = npc;
+
+    TalkingUI.get().show(this.npc);
+
+    TimeService.get().stop();
+    
+    if (this.npc) { this.npc.setState(NpcStates.TALKING); }
+
+    this.talk()
+  }
+
+  private talk(): void {
+    // Dialog is over
+    if (this.dialog.length === 0) { this.end(); return; }
+
+    //FIXME: handle player response
+    // Player answers
+    if (this.dialog[0].isQuestion && this.answerIndex >= 0) {
+      // Npc answers
+      TalkingUI.get().setText(this.dialog[0].answers[this.answerIndex].npcAnswer);
+      this.answerIndex = undefined; 
+      this.dialog.shift();
+      return;
+    }
+
+    // Display next sentence
+    const nextSentence = this.dialog[0];
+    TalkingUI.get().setText(nextSentence.text);
+
+    // Next sentence is not skippable
+    if (nextSentence.isLock) {
+      PlayerEntity.get().setState(PlayerStates.LOCKED);
+      setTimeout(() => {
+        PlayerEntity.get().setState(PlayerStates.TALKING);
+        this.talk();
+      }, 3000)
+    }
+
+    // Next sentence is a question
+    if (nextSentence.isQuestion) { this.question(nextSentence.answers); return; } 
+    else { this.dialog.shift(); }
+  }
+
+  private end(): void {
+    TalkingUI.get().hide(this.npc);
+
+    TimeService.get().start();
+
+    if (this.npc) { this.npc.setState(NpcStates.IDLE); }
+
+    this.isRunning = false;  
+
+    PlayerEntity.get().setState(PlayerStates.IDLE);
+  }
+
+  private question(answers: any[]): void {
     // display all answers
     for (let i = 0; i < answers.length; i++) {
-      TalkingUI.showAnswer(answers[i].playerAnswer, i);
+      TalkingUI.get().showAnswer(answers[i].playerAnswer, i);
     }
 
     // set indicator on first answer by default
-    TalkingService.playerAnswerIndex = 0;
-    TalkingUI.showAnswerIndicator(TalkingService.playerAnswerIndex);
-  }
-
-  // select answer depending on player input
-  public static selectAnswer(goToNext: boolean) {
-    // remove indicator from previous answer
-    TalkingUI.hideAnswerIndicator(TalkingService.playerAnswerIndex);
-
-    // select next answer
-    if (goToNext && TalkingService.playerAnswerIndex < this.currentDialogElement.answers.length - 1) {
-      TalkingService.playerAnswerIndex++;
-    }
-    // select previous answer
-    else if (!goToNext && TalkingService.playerAnswerIndex > 0) {
-      TalkingService.playerAnswerIndex--;
-    }
-
-    TalkingUI.showAnswerIndicator(TalkingService.playerAnswerIndex);
+    this.answerIndex = 0;
+    TalkingUI.get().showAnswerIndicator(this.answerIndex);
   }
   //#endregion
   

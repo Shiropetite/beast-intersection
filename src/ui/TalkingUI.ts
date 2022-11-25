@@ -1,24 +1,40 @@
-import { camera } from "..";
+import { CameraUI } from ".";
+import { NpcEntity } from '../entities';
 
 export class TalkingUI {
-  private static textBox: HTMLElement;
-  private static speakerName: HTMLElement;
-  private static dialogSprite: HTMLElement;
-  private static text: HTMLElement;
+
+  private static instance: TalkingUI;
+
+  private textBox: HTMLElement | null = null;
+  private speakerName: HTMLElement | null = null;
+  private dialogSprite: HTMLElement | null = null;
+  private text: HTMLElement | null = null;
+
+  //#region Singleton
+  private constructor() {}
+
+  public static get(): TalkingUI {
+    if (!TalkingUI.instance) {
+      TalkingUI.instance = new TalkingUI();
+    }
+
+    return TalkingUI.instance;
+  }
+  //#endregion
 
   //#region Methods
-  public static create(): void {
+  public create(): void {
     // create textbox HTML
     const textBoxHTML = document.createElement("div");
     textBoxHTML.id = "textbox"
     textBoxHTML.classList.add('textbox');
-    camera.appendChild(textBoxHTML);
+    CameraUI.get().add(textBoxHTML);
 
     // create dialog sprite HTML
     const dialogSpriteHtml = document.createElement("div");
     dialogSpriteHtml.id = "textbox-sprite"
     dialogSpriteHtml.classList.add('textbox-sprite');
-    camera.appendChild(dialogSpriteHtml);
+    CameraUI.get().add(dialogSpriteHtml);
 
     // create name HTML
     const nameHTML = document.createElement("div");
@@ -30,66 +46,60 @@ export class TalkingUI {
     textHTML.id = "textbox-text"
     textHTML.classList.add('textbox-text');
 
-     // create container for name and text HTML
-     const containerHTML = document.createElement("div");
-     containerHTML.id = "textbox-container"
+    // create container for name and text HTML
+    const containerHTML = document.createElement("div");
+    containerHTML.id = "textbox-container"
 
     // store HTML
-    TalkingUI.textBox = document.getElementById('textbox');
-    TalkingUI.textBox.appendChild(dialogSpriteHtml);
-    TalkingUI.textBox.appendChild(containerHTML);
+    this.textBox = document.getElementById('textbox');
+    this.textBox.appendChild(dialogSpriteHtml);
+    this.textBox.appendChild(containerHTML);
 
     const textBoxContainer = document.getElementById('textbox-container');
     textBoxContainer.appendChild(nameHTML);
     textBoxContainer.appendChild(textHTML);
 
-    TalkingUI.speakerName = document.getElementById('textbox-name');
-    TalkingUI.text = document.getElementById('textbox-text');
-    TalkingUI.dialogSprite = document.getElementById('textbox-sprite');
+    this.speakerName = document.getElementById('textbox-name');
+    this.text = document.getElementById('textbox-text');
+    this.dialogSprite = document.getElementById('textbox-sprite');
 
-    TalkingUI.hide();
+    this.hide();
   }
 
-  public static show(): void {
-    TalkingUI.textBox.style.display = 'flex';
+  public show(npc?: NpcEntity): void {
+    this.textBox.style.display = 'flex';
+    
+    if (npc) {
+      this.setSpeakerName(npc.getName()); 
+      this.setSpriteDialog();
+    }
   }
 
-  public static hide(): void {
-    TalkingUI.textBox.style.display = 'none';
-    TalkingUI.dialogSprite.style.display = 'none';
+  public hide(npc?: NpcEntity): void {
+    if (npc) {
+      this.setSpeakerName('');
+      this.setText('');
+    }
+
+    this.textBox.style.display = 'none';
+    this.dialogSprite.style.display = 'none';
   }
 
-  public static isVisible(): boolean {
-    return TalkingUI.textBox.style.display === 'flex';
-  }
+  public setSpeakerName(name: string): void { this.speakerName.innerHTML = name; }
 
-  public static setSpeakerName(name: string): void {
-    TalkingUI.speakerName.innerHTML = name;
-  }
+  public setSpriteDialog(): void { this.dialogSprite.style.display = 'block'; }
 
-  public static setSpriteDialog(): void {
-    TalkingUI.dialogSprite.style.display = 'block';
-  }
+  public setText(text: string): void { this.text.innerHTML = text; }
 
-  public static setText(text: string): void {
-    TalkingUI.text.innerHTML = text;
-  }
+  public showAnswer(text: string, index: number): void { this.text.innerHTML += `<div id="answer-${ index }">${ text }</div>`; }
 
-  public static showAnswer(text: string, index: number): void {
-    TalkingUI.text.innerHTML += `<div id="answer-${ index }">${ text }</div>`;
-  }
-
-  public static showAnswerIndicator(answerIndex: number): void {
-    // find answer
+  public showAnswerIndicator(answerIndex: number): void {
     const answerHTML = document.getElementById(`answer-${ answerIndex }`);
-    // add indicator
     answerHTML.innerHTML = "- " + answerHTML.innerHTML;
   }
 
-  public static hideAnswerIndicator(answerIndex: number): void {
-    // find answer
+  public hideAnswerIndicator(answerIndex: number): void {
     const answerHTML = document.getElementById(`answer-${ answerIndex }`)
-    // remove indicator
     answerHTML.innerHTML = answerHTML.innerHTML.substring(2);
   }
   //#endregion

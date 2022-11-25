@@ -1,3 +1,4 @@
+@import './bug.css';
 @import './entities.css';
 @import './fish.css';
 @import './inventory.css';
@@ -25,21 +26,30 @@ body {
   width: calc(var(--grid-cell) * 9);
   height: calc(var(--grid-cell) * 5);
   overflow: hidden;
-  background: #000000;
+  background-color: rgb(78, 160, 255);
   position:relative;
   border: solid 3px white
 }
 
 .map {
-  image-rendering: pixelated;
-  background-image: url(../assets/map.png);
-  background-size: 100%;
-  width: calc(16 * var(--grid-cell)); 
-  height: calc(10 * var(--grid-cell));
-  position: relative;
   transition: all linear 0.1s;
 }
 
 .wall{
   position: absolute;
+}
+
+.cell {
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  z-index: 0;
+}
+
+.water {
+  background-color: rgb(78, 160, 255);
+}
+
+.ground {
+  background-color: rgb(115, 222, 82);
 }
