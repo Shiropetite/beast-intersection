@@ -37,12 +37,12 @@ export class CatchingService implements InputSignalListener {
         return false;
     }
 
-    public start(bugSpawner: BugSpawnerEntity, catchingNet: CatchingToolItem): void {
+    public start(bugSpawner: BugSpawnerEntity/*, catchingNet: CatchingToolItem*/): void {
         PlayerEntity.get().setState(PlayerStates.CATCHING);
 
         this.isRunning = true;
         this.bugSpawner = bugSpawner;
-        this.catchingNet = catchingNet;
+        this.catchingNet = new CatchingToolItem('filet en bois', 50, 1, 0); /* catchingNet; */
         this.directionFails = 0;
 
         CatchingUI.get().create(this.bugSpawner.getSprite());

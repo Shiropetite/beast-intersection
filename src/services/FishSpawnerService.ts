@@ -58,6 +58,6 @@ export class FishSpawnerService implements InputSignalListener {
     }
 
     private fishing(spawner: FishSpawnerEntity): void {
-        FishingService.get().start(spawner, PlayerEntity.get().getToolEquiped() as FishingToolItem);
+        FishingService.get().start(spawner/*, PlayerEntity.get().getToolEquiped() as FishingToolItem*/);
     }
 }

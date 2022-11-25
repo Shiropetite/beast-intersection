@@ -35,12 +35,12 @@ export class FishingService implements InputSignalListener {
     return false;
   }
 
-  public start(fishSpawner: FishSpawnerEntity, fishingRod: FishingToolItem) : void {
+  public start(fishSpawner: FishSpawnerEntity/*, fishingRod: FishingToolItem*/) : void {
     PlayerEntity.get().setState(PlayerStates.FISHING);
 
     this.isRunning = true;
     this.fishSpawner = fishSpawner;
-    this.fishingRod = fishingRod;
+    this.fishingRod = new FishingToolItem('canne à peche en bois', 10, 100, 10); /*fishingRod;*/
 
     FishingUI.get().create(this.fishSpawner.getSprite());
   

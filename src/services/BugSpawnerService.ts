@@ -42,6 +42,6 @@ export class BugSpawnerService implements InputSignalListener {
     }
 
     private catching(spawner: BugSpawnerEntity): void {
-        CatchingService.get().start(spawner, PlayerEntity.get().getToolEquiped() as CatchingToolItem);
+        CatchingService.get().start(spawner/*, PlayerEntity.get().getToolEquiped() as CatchingToolItem*/);
     }
 }
