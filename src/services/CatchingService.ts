@@ -29,9 +29,9 @@ export class CatchingService implements InputSignalListener {
     //#endregion
 
     // Key listener
-    public onKeyPressed(keyPressed: string): boolean {
+    public onKeyPressed(key: string): boolean {
         if (this.isRunning && PlayerEntity.get().getState() === PlayerStates.CATCHING) {
-            this.catch(keyPressed);
+            this.catch(key);
             return true;
         }
         return false;

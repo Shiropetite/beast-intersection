@@ -19,6 +19,7 @@ export class TalkingService implements InputSignalListener {
   
   private static instance: TalkingService;
   
+  private keyPressed: boolean = false;
   private isRunning: boolean;
   private dialog: Sentence[];
   private npc: NpcEntity | null;
@@ -36,15 +37,19 @@ export class TalkingService implements InputSignalListener {
   }
   //#endregion
 
-  public onKeyPressed(keyPressed: string): boolean {
-    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
+  public onKeyPressed(key: string): boolean {
+    if (this.keyPressed === true) return false;
+    this.keyPressed = true;
+
+    if (key === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
       this.talk();
+      setTimeout(() => { this.keyPressed = false; }, 500);
       return true;
     }
 
     if (this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
       if (this.dialog[0]?.isQuestion) {
-        if (keyPressed === DirectionKeys.UP) {
+        if (key === DirectionKeys.UP) {
           if (this.answerIndex > 0) {
             TalkingUI.get().hideAnswerIndicator(this.answerIndex);
             this.answerIndex--;
@@ -56,7 +61,7 @@ export class TalkingService implements InputSignalListener {
             TalkingUI.get().showAnswerIndicator(this.answerIndex);
           }
         }
-        else if (keyPressed === DirectionKeys.DOWN) {
+        else if (key === DirectionKeys.DOWN) {
           if (this.answerIndex < this.dialog[0]?.answers.length - 1) {
             TalkingUI.get().hideAnswerIndicator(this.answerIndex);
             this.answerIndex++;
@@ -68,11 +73,12 @@ export class TalkingService implements InputSignalListener {
             TalkingUI.get().showAnswerIndicator(this.answerIndex); 
           }
         }
-        
+        setTimeout(() => { this.keyPressed = false; }, 500);
         return true;
       }
     }
 
+    setTimeout(() => { this.keyPressed = false; }, 500);
     return false;
   }
 

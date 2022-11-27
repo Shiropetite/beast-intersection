@@ -20,11 +20,11 @@ export class PlayerService implements InputSignalListener {
 
   /**
    * Listerner of player input
-   * @param keyPressed player input
+   * @param key player input
    */
-  public onKeyPressed(keyPressed: string): boolean {
+  public onKeyPressed(key: string): boolean {
     // Press 'z, q, s, d'
-    const directionKey = Object.values(DirectionKeys).find(value => value === keyPressed);
+    const directionKey = Object.values(DirectionKeys).find(value => value === key);
     if (directionKey && PlayerEntity.get().getState() === PlayerStates.IDLE) { 
       this.move(directionKey);
       return true; 
@@ -63,7 +63,7 @@ export class PlayerService implements InputSignalListener {
     }
 
     // wait for sprite to sync before setting player state
-    await sleep(100);
+    await sleep(150);
     PlayerEntity.get().setState(PlayerStates.IDLE);
   }
 

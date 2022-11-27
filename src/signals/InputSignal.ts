@@ -31,5 +31,5 @@ export class InputSignalSender extends SignalSender<InputSignalListener, InputCo
 }
 
 export interface InputSignalListener {
-  onKeyPressed(keyPressed: string): boolean;
+  onKeyPressed(key: string): boolean;
 }

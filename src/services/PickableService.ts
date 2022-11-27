@@ -21,9 +21,9 @@ export class PickableService implements InputSignalListener {
 
   public register(pickable: PickableEntity): void { this.pickables.push(pickable); }
 
-  public onKeyPressed(keyPressed: string): boolean {
+  public onKeyPressed(key: string): boolean {
     let signalReceived = false
-    if (keyPressed === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
+    if (key === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
       this.pickables.forEach((pickable) => {
         if (this.isTriggeredByPlayer(pickable)) { 
           this.pick(pickable);

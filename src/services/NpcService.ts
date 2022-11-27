@@ -44,9 +44,9 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
     });
   }
 
-  public onKeyPressed(keyPressed: string): boolean {
-    let signalReceived = false
-    if (keyPressed === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
+  public onKeyPressed(key: string): boolean {
+    let signalReceived = false;
+    if (key === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
       this.npcs.forEach((npc) => {
         if (this.isTriggeredByPlayer(npc) && npc.getState() === NpcStates.IDLE) { 
           this.talk(npc);
@@ -54,7 +54,6 @@ export class NpcService implements TimeSignalListener, InputSignalListener {
         }
       });
     }
-    
     return signalReceived;
   }
 
