@@ -44,7 +44,7 @@ const onload = async () => {
   InventoryService.get().init(40, []);
 
   FishSpawnerService.get().register(
-    new FishSpawnerEntity(new MapSprite('fish'), new FishItem('carpe'), new FishEntity(300, 3, 500, 200, 3000, 0.5), 2, 9)
+    new FishSpawnerEntity(new MapSprite('fish'), new FishItem('carpe'), new FishEntity(200, 5, 500, 200, 3000, 0.5), 2, 9)
   );
 
   BugSpawnerService.get().register(

@@ -24,16 +24,17 @@ export class BugSpawnerService implements InputSignalListener {
 
     public register(spawner: BugSpawnerEntity): void { this.spawners.push(spawner); }
 
-    public onKeyPressed(keyPressed: string): boolean {
-        if (keyPressed === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
+    public onKeyPressed(key: string): boolean {
+        let signalReceived = false;
+        if (key === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
             this.spawners.forEach((spawner) => {
                 if (this.isTriggeredByPlayer(spawner) && !spawner.isEmpty()) { 
                     this.catching(spawner);
-                    return true;
+                    signalReceived = true;
                 }
             });
         }
-        return false;
+        return signalReceived;
     }
 
     private isTriggeredByPlayer(spawner: BugSpawnerEntity): boolean {

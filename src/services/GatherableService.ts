@@ -7,6 +7,7 @@ export class GatherableService implements InputSignalListener {
   
   private static instance: GatherableService;
   
+  private keyPressed: boolean = false;
   private gatherables: GatherableEntity[] = [];
 
   private constructor() {}
@@ -21,9 +22,12 @@ export class GatherableService implements InputSignalListener {
 
   public register(gatherable: GatherableEntity): void { this.gatherables.push(gatherable); }
 
-  public onKeyPressed(keyPressed: string): boolean {
-    let signalReceived = false
-    if (keyPressed === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
+  public onKeyPressed(key: string): boolean {
+    if (this.keyPressed === true) return false; 
+    this.keyPressed = true;
+
+    let signalReceived = false;
+    if (key === ActionKeys.ACT && PlayerEntity.get().getState() === PlayerStates.IDLE) {
       this.gatherables.forEach((gatherable) => {
         if (this.isTriggeredByPlayer(gatherable)) { 
           this.gather(gatherable);
@@ -31,6 +35,7 @@ export class GatherableService implements InputSignalListener {
         }
       });
     }
+    setTimeout(() => { this.keyPressed = false }, 500);
     return signalReceived;
   }
 

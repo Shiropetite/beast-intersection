@@ -8,7 +8,8 @@ import { ActionKeys } from "../utils";
 export class FishingService implements InputSignalListener {
   
   private static instance: FishingService;
-
+  
+  private keyPressed: boolean = false;
   private isRunning: boolean;
   private fishSpawner: FishSpawnerEntity;
   private fishingRod: FishingToolItem;
@@ -27,11 +28,17 @@ export class FishingService implements InputSignalListener {
   }
   //#endregion
 
-  public onKeyPressed(keyPressed: string): boolean {
-    if (keyPressed === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.FISHING) {
+  public onKeyPressed(key: string): boolean {
+    if (this.keyPressed === true) return false;
+    this.keyPressed = true;
+    
+    if (key === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.FISHING) {
       this.fish();
+      setTimeout(() => { this.keyPressed = false; }, 100);
       return true;
     }
+
+    setTimeout(() => { this.keyPressed = false; }, 100);
     return false;
   }
 
@@ -40,7 +47,7 @@ export class FishingService implements InputSignalListener {
 
     this.isRunning = true;
     this.fishSpawner = fishSpawner;
-    this.fishingRod = new FishingToolItem('canne à peche en bois', 10, 100, 10); /*fishingRod;*/
+    this.fishingRod = new FishingToolItem('canne à peche en bois', 3, 300, 3); /*fishingRod;*/
 
     FishingUI.get().create(this.fishSpawner.getSprite());
   
@@ -53,7 +60,7 @@ export class FishingService implements InputSignalListener {
         );
         
         if (this.fishingRod.getPressure() > 0) {
-          this.fishingRod.setPressure(this.fishingRod.getPressure() - this.fishingRod.getPressureFactor());
+          this.fishingRod.setPressure(this.fishingRod.getPressure() - (this.fishingRod.getPressureFactor() * 2));
         }
         
         FishingUI.get().updateFishHP(this.fishSpawner.getFish());

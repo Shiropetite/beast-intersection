@@ -9,6 +9,7 @@ export class InventoryService implements InputSignalListener {
 
   private static instance: InventoryService;
 
+  private keyPressed: boolean = false;
   private capacity: number;
   private content: { item: Item, amount: number }[];
 
@@ -31,12 +32,19 @@ export class InventoryService implements InputSignalListener {
     InventoryUI.get().create(this.capacity);
   }
 
-  public onKeyPressed(keyPressed: string): boolean {
-    if (keyPressed === ActionKeys.INVENTORY) {
+  public onKeyPressed(key: string): boolean {
+    if (this.keyPressed === true) return false;
+    this.keyPressed = true;
+
+    if (key === ActionKeys.INVENTORY) {
         if (PlayerEntity.get().getState() === PlayerStates.IDLE) { this.open(); }
         else if (PlayerEntity.get().getState() === PlayerStates.MENUING) { this.close(); }
+        setTimeout(() => { this.keyPressed = false; }, 500);
         return true;
     }
+
+    setTimeout(() => { this.keyPressed = false; }, 500);
+    return false;
   }
 
   public open(): void {
