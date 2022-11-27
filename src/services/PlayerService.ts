@@ -1,46 +1,39 @@
 import { PlayerEntity, PlayerStates } from "../entities";
 import { InputSignalListener, PlayerMoveSignalSender } from "../signals";
-import { DirectionKeys, sleep } from "../utils";
+import { DirectionKeys } from "../utils";
 
 export class PlayerService implements InputSignalListener {
   
   private static instance: PlayerService;
+  private keyPressed: boolean = false;
 
-  //#region Singleton
   private constructor() { }
 
   public static get(): PlayerService {
-    if (!PlayerService.instance) {
-      PlayerService.instance = new PlayerService();
-    }
-
+    if (!PlayerService.instance) { PlayerService.instance = new PlayerService(); }
     return PlayerService.instance;
   }
-  //#endregion
 
-  /**
-   * Listerner of player input
-   * @param key player input
-   */
   public onKeyPressed(key: string): boolean {
-    // Press 'z, q, s, d'
+    if (this.keyPressed === true) return false;
+    this.keyPressed = true;
     const directionKey = Object.values(DirectionKeys).find(value => value === key);
     if (directionKey && PlayerEntity.get().getState() === PlayerStates.IDLE) { 
       this.move(directionKey);
+      setTimeout(() => { this.keyPressed = false; }, 150);
       return true; 
     }
-
+    setTimeout(() => { this.keyPressed = false; }, 150);
     return false;
   }
 
   /**
-   * Moves the player in direction if move is possible
-   * @param key the direction key
+   * Moves the player towards a direction according to the key pressed by the user
+   * @param key key pressed by user
    */
   private async move(key: DirectionKeys): Promise<void> {
     PlayerEntity.get().setState(PlayerStates.MOVING);
-
-    // move player collider towards input direction
+    // move player towards input direction
     let moveSuccess: boolean;
     switch (key) {
     case DirectionKeys.UP:
@@ -56,38 +49,22 @@ export class PlayerService implements InputSignalListener {
       moveSuccess = this.moveRight();
       break;
     }
-
-    if (moveSuccess) {
-      // Signal to entities that player has moved
-      PlayerMoveSignalSender.get().raise();
-    }
-
-    // wait for sprite to sync before setting player state
-    await sleep(150);
+    // signal to entities that player has moved
+    if (moveSuccess) { PlayerMoveSignalSender.get().raise(); }
     PlayerEntity.get().setState(PlayerStates.IDLE);
   }
 
-  /**
-   * Move the player up
-   * @returns is success
-   */
   private moveUp(): boolean {
     PlayerEntity.get().getSprite().lookUp();
     const newCell = PlayerEntity.get().getCurrentCell().moveContentUp(PlayerEntity.get());
-    
     if (newCell) {
       PlayerEntity.get().getSprite().moveUp();
       PlayerEntity.get().setCurrentCell(newCell);
       return true;
     }
-
     return false;
   }
 
-  /**
-   * Move the player down
-   * @returns is success
-   */
   private moveDown(): boolean {
     PlayerEntity.get().getSprite().lookDown();
     const newCell = PlayerEntity.get().getCurrentCell().moveContentDown(PlayerEntity.get());
@@ -99,10 +76,6 @@ export class PlayerService implements InputSignalListener {
     return false;
   }
 
-  /**
-   * Move the player left
-   * @returns is success
-   */
   private moveLeft(): boolean {
     PlayerEntity.get().getSprite().lookLeft();
     const newCell = PlayerEntity.get().getCurrentCell().moveContentLeft(PlayerEntity.get());
@@ -114,10 +87,6 @@ export class PlayerService implements InputSignalListener {
     return false;
   }
 
-  /**
-   * Move the player right
-   * @returns is success
-   */
   private moveRight(): boolean {
     PlayerEntity.get().getSprite().lookRight();
     const newCell = PlayerEntity.get().getCurrentCell().moveContentRight(PlayerEntity.get());

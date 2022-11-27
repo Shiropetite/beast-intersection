@@ -18,7 +18,6 @@ export interface Sentence {
 export class TalkingService implements InputSignalListener {
   
   private static instance: TalkingService;
-  
   private keyPressed: boolean = false;
   private isRunning: boolean;
   private dialog: Sentence[];
@@ -29,10 +28,7 @@ export class TalkingService implements InputSignalListener {
   private constructor() { }
 
   public static get(): TalkingService {
-    if (!TalkingService.instance) {
-      TalkingService.instance = new TalkingService();
-    }
-
+    if (!TalkingService.instance) { TalkingService.instance = new TalkingService(); }
     return TalkingService.instance;
   }
   //#endregion
@@ -40,13 +36,11 @@ export class TalkingService implements InputSignalListener {
   public onKeyPressed(key: string): boolean {
     if (this.keyPressed === true) return false;
     this.keyPressed = true;
-
     if (key === ActionKeys.ACT && this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
       this.talk();
       setTimeout(() => { this.keyPressed = false; }, 500);
       return true;
     }
-
     if (this.isRunning && PlayerEntity.get().getState() === PlayerStates.TALKING) {
       if (this.dialog[0]?.isQuestion) {
         if (key === DirectionKeys.UP) {
@@ -77,15 +71,14 @@ export class TalkingService implements InputSignalListener {
         return true;
       }
     }
-
     setTimeout(() => { this.keyPressed = false; }, 500);
     return false;
   }
 
-  //#region Methods
   /**
-   * Start talk between player and interlocutor
-   * @param dialog the complete dialog to display
+   * 
+   * @param dialog 
+   * @param npc 
    */
   public start(dialog: Sentence[], npc?: NpcEntity): void {
     PlayerEntity.get().setState(PlayerStates.TALKING);
@@ -103,6 +96,9 @@ export class TalkingService implements InputSignalListener {
     this.talk()
   }
 
+  /**
+   * Display the next sentence of the dialog and monitors the service events
+   */
   private talk(): void {
     // Dialog is over
     if (this.dialog.length === 0) { this.end(); return; }
@@ -135,6 +131,9 @@ export class TalkingService implements InputSignalListener {
     else { this.dialog.shift(); }
   }
 
+  /**
+   * Stops the service
+   */
   private end(): void {
     TalkingUI.get().hide(this.npc);
 
@@ -147,6 +146,10 @@ export class TalkingService implements InputSignalListener {
     PlayerEntity.get().setState(PlayerStates.IDLE);
   }
 
+  /**
+   * Displays the answers to the current question sentence
+   * @param answers 
+   */
   private question(answers: any[]): void {
     // display all answers
     for (let i = 0; i < answers.length; i++) {
@@ -157,6 +160,5 @@ export class TalkingService implements InputSignalListener {
     this.answerIndex = 0;
     TalkingUI.get().showAnswerIndicator(this.answerIndex);
   }
-  //#endregion
   
 }

@@ -42,6 +42,6 @@ export class TimeUI {
 
   public pause(): void { this.time.classList.add('pause'); }
 
-  public set(time: string): void { this.time.innerText = time; }
+  public setTime(time: string): void { this.time.innerText = time; }
   //#endregion
 }
