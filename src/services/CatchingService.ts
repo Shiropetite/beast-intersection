@@ -8,6 +8,7 @@ import { ActionKeys, DirectionKeys } from "../utils";
 export class CatchingService implements InputSignalListener {
   
     private static instance: CatchingService;
+    private static directionList: any[] = Object.entries(DirectionKeys).map(([_, value]) => value);
 
     private isRunning: boolean;
     private bugSpawner: BugSpawnerEntity;
@@ -47,16 +48,17 @@ export class CatchingService implements InputSignalListener {
 
         CatchingUI.get().create(this.bugSpawner.getSprite());
 
-        const directionList: any[] = Object.entries(DirectionKeys).map(([_, value]) => value);
-
-        this.direction = directionList[Math.floor(Math.random() * directionList.length)];
-        CatchingUI.get().updateDirection(this.direction);
+        this.changeDirection(CatchingService.directionList);
 
         // switch direction interval
         this.directionInterval = setInterval(() => {
-            this.direction = directionList[Math.floor(Math.random() * directionList.length)];
-            CatchingUI.get().updateDirection(this.direction);
+            this.changeDirection(CatchingService.directionList);
         }, this.bugSpawner.getBug().getDirectionDuration() /*+ catchingNet.getDirectionDurationBonus()*/);
+    }
+
+    private changeDirection(directionList: any[]): void {
+      this.direction = directionList[Math.floor(Math.random() * directionList.length)];
+      CatchingUI.get().updateDirection(this.direction);
     }
 
     private end(): void {
@@ -78,6 +80,11 @@ export class CatchingService implements InputSignalListener {
     private catch(keyPressed: string): void {
         if (keyPressed === this.direction) {
             this.bugSpawner.getBug().setHealthPoints(this.bugSpawner.getBug().getHealthPoints() - this.catchingNet.getPower());
+            this.changeDirection(CatchingService.directionList);
+            clearInterval(this.directionInterval);
+            this.directionInterval = setInterval(() => {
+              this.changeDirection(CatchingService.directionList);
+            }, this.bugSpawner.getBug().getDirectionDuration());
         }
 
         // minigame won
