@@ -36,6 +36,8 @@ export class PlayerEntity {
   public static get(): PlayerEntity { 
     if (!PlayerEntity.instance) {
       PlayerEntity.instance = new PlayerEntity();
+      this.instance.sprite.setHeight(MapCell.MAP_CELL_SIZE * 2);
+      this.instance.sprite.startIdle();
     }
 
     return PlayerEntity.instance; 
