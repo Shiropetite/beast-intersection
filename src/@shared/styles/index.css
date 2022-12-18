@@ -7,8 +7,7 @@
 @import './ui.css';
 
 :root {
-  --pixel-size: 2px;
-  --grid-cell: calc( var(--pixel-size) * 2 * 32 );
+  --grid-cell: 72px;
 }
 
 body {
@@ -23,8 +22,8 @@ body {
 }
 
 .camera {
-  width: calc(var(--grid-cell) * 9);
-  height: calc(var(--grid-cell) * 5);
+  width: calc(var(--grid-cell) * 15);
+  height: calc(var(--grid-cell) * 10);
   overflow: hidden;
   background-color: rgb(78, 160, 255);
   position:relative;

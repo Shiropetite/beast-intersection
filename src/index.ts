@@ -8,14 +8,14 @@ import { Item, FishItem, BugItem } from './items';
 import { CameraUI, TalkingUI, InventoryUI } from './ui';
 import { InputSignalSender, PlayerMoveSignalSender, TimeSignalSender } from './signals';
 
-import { testMap } from './@shared/assets/maps/test-map';
+import { testMap } from './@shared/assets/maps/test-map3';
 import { monkyRoutine } from './@shared/assets/routines/monky/first-routine';
 
 const onload = async () => {
   // Init map
   CameraUI.get().create();
   MapService.get().createMap(testMap);
-  MapService.get().initPlayerMapCell(1, 4);
+  MapService.get().initPlayerMapCell(6, 8);
 
   // Register signals listeners
   InputSignalSender.get().register(PlayerService.get());

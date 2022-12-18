@@ -8,7 +8,7 @@ export type MapCellContent = PlayerEntity | NpcEntity | FishSpawnerEntity | BugS
 
 export class MapCell implements PlayerMoveSignalListener {
 
-  public static readonly MAP_CELL_SIZE = 128;
+  public static readonly MAP_CELL_SIZE = 72;
   
   private readonly sprite: string;
   private readonly isWall: boolean;
