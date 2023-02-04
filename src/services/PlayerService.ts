@@ -34,6 +34,9 @@ export class PlayerService implements InputSignalListener {
   private async move(key: DirectionKeys): Promise<void> {
     PlayerEntity.get().setState(PlayerStates.MOVING);
     // move player towards input direction
+    PlayerEntity.get().getSprite().stopIdle();
+
+    // move player collider towards input direction
     let moveSuccess: boolean;
     switch (key) {
     case DirectionKeys.UP:
@@ -51,6 +54,16 @@ export class PlayerService implements InputSignalListener {
     }
     // signal to entities that player has moved
     if (moveSuccess) { PlayerMoveSignalSender.get().raise(); }
+    
+    if (moveSuccess) {
+      // Signal to entities that player has moved
+      PlayerMoveSignalSender.get().raise();
+      PlayerEntity.get().getSprite().startMoving();
+    }
+    // wait for sprite to sync before setting player state
+    await sleep(150);
+    
+    PlayerEntity.get().getSprite().startIdle();
     PlayerEntity.get().setState(PlayerStates.IDLE);
   }
 

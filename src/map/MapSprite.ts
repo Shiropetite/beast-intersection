@@ -1,11 +1,18 @@
+import { PlayerEntity } from "../entities";
 import { MapCell } from "../map/MapCell";
 import { MapUI } from "../ui";
+import { sleep } from "../utils";
 
 export enum SpriteDirections {
   UP='up',
   LEFT='left',
   RIGHT='right',
   DOWN='down',
+}
+
+export enum SpriteActions {
+  IDLE='idle',
+  WALK="walk"
 }
 
 export class MapSprite {
@@ -19,6 +26,9 @@ export class MapSprite {
   private width: number;
 
   private direction: SpriteDirections;
+  
+  private idleInterval: NodeJS.Timer;
+  private walkingAnimationFrame = 1;
 
   public constructor(
     htmlId: string, 
@@ -46,7 +56,7 @@ export class MapSprite {
     MapUI.get().add(spriteHTML);
 
     this.html = document.getElementById(this.htmlId);
-    this.lookHtml(this.direction);
+    this.lookHtml();
     this.moveHtml();
   }
 
@@ -64,17 +74,17 @@ export class MapSprite {
  
   public destroy(): void { MapUI.get().remove(this.html); }
 
-  public lookUp() { this.lookHtml(SpriteDirections.UP); }
+  public lookUp() { this.direction = SpriteDirections.UP; this.lookHtml(); }
 
-  public lookDown() { this.lookHtml(SpriteDirections.DOWN); }
+  public lookDown() { this.direction = SpriteDirections.DOWN; this.lookHtml(); }
 
-  public lookLeft() { this.lookHtml(SpriteDirections.LEFT); }
+  public lookLeft() { this.direction = SpriteDirections.LEFT; this.lookHtml(); }
 
-  public lookRight() { this.lookHtml(SpriteDirections.RIGHT); }
+  public lookRight() { this.direction = SpriteDirections.RIGHT; this.lookHtml(); }
 
-  private lookHtml(direction: SpriteDirections): void {
+  private lookHtml(): void {
     if (this.html.classList[1]) { this.html.classList.remove(this.html.classList[1]); }
-    this.html.classList.add(`${ this.html.classList[0] }-${ direction }`);
+    this.html.classList.add(`${ this.html.classList[0] }-${ this.direction }-1`);
   }
 
   public moveUp() { 
@@ -103,10 +113,40 @@ export class MapSprite {
     this.html.style.transform = `translate3d(${ this.left }px, ${ this.top }px, 0)`;
   }
 
+  public updateImage(spriteActions: SpriteActions, animationFrame: number): void {
+    if (this.html.classList[1]) { this.html.classList.remove(this.html.classList[1]); }
+    this.html.classList.add(`${ this.html.classList[0] }-${ spriteActions }-${ this.direction }-${animationFrame}`);
+  }
+
+  public startIdle(): void {
+    let idleAnimationFrame = 1;
+    this.idleInterval = setInterval(() => { 
+      this.updateImage(SpriteActions.IDLE, idleAnimationFrame);
+      if(idleAnimationFrame === 4) { idleAnimationFrame = 1 }
+      else { idleAnimationFrame++; }
+    }, 400)
+  }
+
+  public stopIdle(): void {
+    clearInterval(this.idleInterval);
+  }
+
+  public async startMoving(): Promise<void> {
+    PlayerEntity.get().getSprite().updateImage(SpriteActions.WALK, this.walkingAnimationFrame++) 
+    await sleep(80)
+    PlayerEntity.get().getSprite().updateImage(SpriteActions.WALK, this.walkingAnimationFrame++) 
+
+    if(this.walkingAnimationFrame > 4) {
+      this.walkingAnimationFrame = 1;
+    }
+  }
+
   //#region Getters & Setters
   public getTop(): number { return this.top; }
 
   public getLeft(): number { return this.left; }
+
+  public setHeight(height: number): void { this.height = height; }
   //#endregion
 
 }
