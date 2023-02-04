@@ -1,0 +1,93 @@
+@import './flexbox.css';
+@import './popup.css';
+
+:root {
+  --grid-cell: 72px;
+}
+
+body {
+  background-color: rgb(4, 2, 14);
+  font-family: Arial;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.camera {
+  background-color: rgb(19, 22, 35);
+  width: calc(var(--grid-cell) * 17);
+  height: calc(var(--grid-cell) * 10);
+  overflow: hidden;
+  position:relative;
+  border: solid 3px white;
+  border-radius: 12px;
+}
+
+.camera .button {
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: 600;
+  border: solid 3px rgb(46, 64, 69);
+  width: 180px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color linear 0.15s;
+}
+
+.camera .button:hover {
+  border-color: rgb(71, 145, 165);
+}
+
+.camera .button.active {
+  border-color: rgb(71, 145, 165) !important;
+}
+
+.title {
+  font-size: 42px;
+  margin-bottom: 32px;
+}
+
+.key-input {
+  width: 20px;
+  padding: 6px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  background: none;
+  color: white;
+  text-transform: uppercase;
+  border: solid 3px rgb(19, 22, 35);
+}
+
+.key-input::placeholder {
+  color: white;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+.slider {
+  width: 40%;
+}
+
+.input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 60%;
+  opacity: 0.6;
+}
+
+.input.active {
+  opacity: 1;
+}
+
+input.edition {
+  border: solid 3px white;
+}
