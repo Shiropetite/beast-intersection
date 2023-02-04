@@ -2,14 +2,19 @@ import { SignalSender } from ".";
 import { KeypressSignalListener, KeypressSignalConfig } from "../types";
 
 export class KeypressSignalSender extends SignalSender<KeypressSignalListener, KeypressSignalConfig> {
-  private static instance: KeypressSignalSender;
 
   //#region Singleton
+  private static instance: KeypressSignalSender;
+
+  private constructor() {
+    super();
+  }
+
   public static get(): KeypressSignalSender {
-    if (!KeypressSignalSender.instance) {
-      KeypressSignalSender.instance = new KeypressSignalSender();
+    if (!this.instance) {
+      this.instance = new KeypressSignalSender();
     }
-    return KeypressSignalSender.instance;
+    return this.instance;
   }
   //#endregion
 
