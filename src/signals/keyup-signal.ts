@@ -1,10 +1,7 @@
 import { SignalSender } from ".";
+import { KeyupSignalListener, KeyupSignalConfig } from "../types";
 
-interface KeyupConfig {
-  key: string
-}
-
-export class KeyupSignalSender extends SignalSender<KeyupSignalListener, KeyupConfig> {
+export class KeyupSignalSender extends SignalSender<KeyupSignalListener, KeyupSignalConfig> {
   private static instance: KeyupSignalSender;
 
   //#region Singleton
@@ -17,15 +14,10 @@ export class KeyupSignalSender extends SignalSender<KeyupSignalListener, KeyupCo
   }
   //#endregion
 
-  public raise({ key }: KeyupConfig): void {
+  public raise({ key }: KeyupSignalConfig): void {
     let signalReceived = false;
     KeyupSignalSender.get().getListeners().forEach(listener => { 
       if (!signalReceived) { signalReceived = listener.onKeyup(key); } 
     });
   }
-
-}
-
-export interface KeyupSignalListener {
-  onKeyup(key: string): boolean;
 }

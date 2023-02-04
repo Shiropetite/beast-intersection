@@ -1,10 +1,6 @@
-import { UI } from ".";
-import { app } from "../main";
+import { app } from "../app";
 
-/**
- * Manage title screen HTML
- */
-export class TitleScreenUI implements UI {
+export class TitleScreenUI {
 
   //#region Singleton
   private static instance: TitleScreenUI;
@@ -13,34 +9,27 @@ export class TitleScreenUI implements UI {
     if (!this.instance) {
       this.instance = new TitleScreenUI();
     }
-
     return this.instance;
   }
   //#endregion
 
-  /**
-   * Build the title screen HTML
-   */
-  buildHtml(): void {
-    app.innerHTML = 
+  build(): void {
+    let html = 
     `<div class="camera">
       <div class="fit column justify-center items-center gap-16">
         <div class="title">🍃 Beast Intersection 🍃</div>
         <div id="play" class="button">Jouer</div>
-        <div id="parameter" class="button">Paramètres</div>
+        <div id="settings" class="button">Paramètres</div>
       </div>
     </div>`;
+    app.innerHTML = html;
   }
 
-  /**
-   * Update active class on the selected button
-   * @param id 
-   */
-  active(newId: string, lastId?: string): void {
-    if (lastId) {
-      document.getElementById(lastId)!.classList.remove("active");
-    }
-    document.getElementById(newId)!.classList.add("active");
+  public select(id: string): void {
+    document.getElementById(id)!.classList.add("active");
   }
 
+  public unselect(id: string): void {
+    document.getElementById(id)!.classList.remove("active");
+  }
 }

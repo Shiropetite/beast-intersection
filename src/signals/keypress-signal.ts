@@ -1,10 +1,7 @@
 import { SignalSender } from ".";
+import { KeypressSignalListener, KeypressSignalConfig } from "../types";
 
-interface KeypressConfig {
-  key: string
-}
-
-export class KeypressSignalSender extends SignalSender<KeypressSignalListener, KeypressConfig> {
+export class KeypressSignalSender extends SignalSender<KeypressSignalListener, KeypressSignalConfig> {
   private static instance: KeypressSignalSender;
 
   //#region Singleton
@@ -12,20 +9,14 @@ export class KeypressSignalSender extends SignalSender<KeypressSignalListener, K
     if (!KeypressSignalSender.instance) {
       KeypressSignalSender.instance = new KeypressSignalSender();
     }
-
     return KeypressSignalSender.instance;
   }
   //#endregion
 
-  public raise({ key }: KeypressConfig): void {
+  public raise({ key }: KeypressSignalConfig): void {
     let signalReceived = false;
     KeypressSignalSender.get().getListeners().forEach(listener => { 
       if (!signalReceived) { signalReceived = listener.onKeyPressed(key); } 
     });
   }
-
-}
-
-export interface KeypressSignalListener {
-  onKeyPressed(key: string): boolean;
 }

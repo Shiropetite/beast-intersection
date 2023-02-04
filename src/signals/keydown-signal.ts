@@ -1,4 +1,5 @@
 import { SignalSender } from ".";
+import { KeydownSignalListener } from "../types";
 
 export class KeydownSignalSender extends SignalSender<KeydownSignalListener, Event> {
   private static instance: KeydownSignalSender;
@@ -8,7 +9,6 @@ export class KeydownSignalSender extends SignalSender<KeydownSignalListener, Eve
     if (!KeydownSignalSender.instance) {
       KeydownSignalSender.instance = new KeydownSignalSender();
     }
-
     return KeydownSignalSender.instance;
   }
   //#endregion
@@ -20,9 +20,4 @@ export class KeydownSignalSender extends SignalSender<KeydownSignalListener, Eve
       if (!signalReceived) { signalReceived = listener.onKeydown(event.key); } 
     });
   }
-
-}
-
-export interface KeydownSignalListener {
-  onKeydown(key: string): boolean;
 }
