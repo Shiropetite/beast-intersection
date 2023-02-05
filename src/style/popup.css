@@ -27,6 +27,6 @@
   transition: background-color linear 0.2s;
 }
 
-.popup .button:hover {
+.popup .button.active {
   background-color: rgb(238, 238, 238);
 } 

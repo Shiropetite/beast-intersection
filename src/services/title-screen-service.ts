@@ -1,77 +1,82 @@
-import { ParameterScreenService } from ".";
-import { KeypressSignalListener, KeypressSignalSender } from "../signals";
-import { TitleScreenUI } from '../ui/title-screen-ui';
-import { parameter } from './../parameter';
-import { SoundService } from './sound-service';
+import { settings } from '../settings';
+import { SettingsScreenService, SoundService } from ".";
+import { KeypressSignalSender } from "../signals";
+import { KeypressSignalListener, Field, FieldType } from "../types";
+import { TitleScreenUI } from '../ui';
 
 /**
- * Manage title screen
+ * Handles the title screen
  */
 export class TitleScreenService implements KeypressSignalListener {
 
-  private currentButtonActive: 'play' | 'parameter';
+  private currentFieldIndex: number;
+  private fields: Field[] = [
+    { name: 'play', type: FieldType.REDIRECT},
+    { name: 'settings', type: FieldType.REDIRECT},
+  ];
 
   //#region Singleton
   private static instance: TitleScreenService;
 
   private constructor() {
-    this.currentButtonActive = 'play';
+    this.currentFieldIndex = 0;
   }
 
-  /**
-   * Get the current instance of Title Screen Service
-   * @returns 
-   */
   public static get(): TitleScreenService {
     if (!this.instance) {
       this.instance = new TitleScreenService();
     }
-
     return this.instance;
   }
   //#endregion
 
-  /**
-   * Load title screen
-   */
-  load(): void {
+  //#region Start
+  public start(): void {
+    TitleScreenUI.get().build();
+    TitleScreenUI.get().select(this.getCurrentField().name);
+
     KeypressSignalSender.get().register(TitleScreenService.get());
-    TitleScreenUI.get().buildHtml();
-    TitleScreenUI.get().active(this.currentButtonActive);
   }
 
-  unload(): void {
+  public stop(): void {
     KeypressSignalSender.get().unregister(TitleScreenService.get());
   }
+  //#endregion
 
   /**
-   * Manage key press on title screen
-   * @param key 
-   * @returns 
+   * Handles user's keypresses
+   * @param key key pressed symbol
+   * @returns `true` if the service reacted to the keypress, `false` if not
    */
-  onKeyPressed(key: string): boolean {
-    if (key === parameter.up && this.currentButtonActive === 'parameter') {
-      this.currentButtonActive = 'play';
-      TitleScreenUI.get().active('play', 'parameter');
-      SoundService.get().playSound("button-hover");
+  public onKeyPressed(key: string): boolean {
+    if (key === settings.up && this.currentFieldIndex > 0) {
+      this.navigate(this.currentFieldIndex - 1);
       return true;
     }
 
-    if (key === parameter.down && this.currentButtonActive === 'play') {
-      this.currentButtonActive = 'parameter';
-      TitleScreenUI.get().active('parameter', 'play');
-      SoundService.get().playSound("button-hover");
+    if (key === settings.down && this.currentFieldIndex < this.fields.length - 1) {
+      this.navigate(this.currentFieldIndex + 1);
       return true;
     }
 
-    if (key === parameter.interact && this.currentButtonActive === 'parameter') {
-      SoundService.get().playSound('button-click');
-      this.unload();
-      ParameterScreenService.get().load();
+    if (key === settings.act && this.getCurrentField().name === 'settings') {
+      SoundService.get().play("button-click");
+      this.stop();
+      SettingsScreenService.get().start();
       return true;
     }
     
     return false;
   }
+
+  private navigate(nextIndex: number): void {
+    TitleScreenUI.get().unselect(this.getCurrentField().name);
+    this.currentFieldIndex = nextIndex;
+    TitleScreenUI.get().select(this.getCurrentField().name);
+    SoundService.get().play("button-hover");
+  }
   
+  private getCurrentField(): Field {
+    return this.fields[this.currentFieldIndex];
+  }
 }

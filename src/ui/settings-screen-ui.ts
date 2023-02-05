@@ -1,22 +1,21 @@
-import { app } from "../main";
-import { Field, FieldType } from "../services";
+import { app } from "../app";
+import { Field, FieldType } from "../types/screen-types";
 
-export class ParameterScreenUI {
+export class SettingsScreenUI {
 
   //#region Singleton
-  private static instance: ParameterScreenUI;
+  private static instance: SettingsScreenUI;
 
-  public static get(): ParameterScreenUI {
-    if (!this.instance) {
-      this.instance = new ParameterScreenUI();
+  public static get(): SettingsScreenUI {
+    if (!this.instance) { 
+      this.instance = new SettingsScreenUI();
     }
-
     return this.instance;
   }
   //#endregion
 
-  public buildHtml(fields: Field[]): void {
-    let html = 
+  public build(fields: Field[]): void {
+    let html =
     `<div class="camera">
       <div class="fit column justify-center items-center gap-16">`;
 
@@ -37,8 +36,8 @@ export class ParameterScreenUI {
         </div>`;
       }
 
-      if (f.type === FieldType.SUBMIT) {
-        html += `<div class="button">Confirmer</div>`;
+      if (f.type === FieldType.REDIRECT) {
+        html += `<div id="${f.name}" class="button">Confirmer</div>`;
       }
     })
     
@@ -47,34 +46,29 @@ export class ParameterScreenUI {
     app.innerHTML = html;
   }
 
-  /**
-   * Update active class on the selected button
-   * @param id 
-   */
-  select(newId: string): void {
-    document.getElementById(newId)!.classList.add("active");
+  public select(id: string): void {
+    document.getElementById(id)!.classList.add("active");
   }
 
-  unselect(lastId: string): void {
-    document.getElementById(lastId)!.classList.remove("active");
+  public unselect(id: string): void {
+    document.getElementById(id)!.classList.remove("active");
   }
 
-  enterEditMode(id: string): void {
+  public enterEditMode(id: string): void {
     document.getElementById(`input-${id}`)!.classList.add("edition")
   }
 
-  exitEditMode(id: string): void {
+  public exitEditMode(id: string): void {
     document.getElementById(`input-${id}`)!.classList.remove("edition")
   }
 
-  updateSlide(id: string, value: number): void {
+  public updateSlide(id: string, value: number): void {
     const volume = document.getElementById(`${id}-volume`) as any;
     volume.value = value;
   }
 
-  updateKey(id: string, value: string): void {
+  public updateKey(id: string, value: string): void {
     const field = document.getElementById(`input-${id}`) as any;
     field.value = value;
   }
-
 }

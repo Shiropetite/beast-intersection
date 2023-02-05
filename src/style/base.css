@@ -18,7 +18,7 @@ body {
 .camera {
   background-color: rgb(19, 22, 35);
   width: calc(var(--grid-cell) * 17);
-  height: calc(var(--grid-cell) * 10);
+  height: calc(var(--grid-cell) * 8);
   overflow: hidden;
   position:relative;
   border: solid 3px white;
